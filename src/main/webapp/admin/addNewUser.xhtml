@@ -41,11 +41,13 @@
         <h:outputLabel for="email">#{msg['page.common.email']}:</h:outputLabel>
         <h:inputText
                 id="email"
-                maxlength="25"
                 required="true"
                 label="email"
                 value="${newPersonController.user.email}"
-                requiredMessage="${msg['page.form.field.required']}"/>
+                requiredMessage="${msg['page.form.field.required']}"
+                validatorMessage="${msg['page.form.field.required']}">
+            <f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
+        </h:inputText>
         <h:message for="email" />
 
         <h:outputLabel for="active">#{msg['page.common.active']}:</h:outputLabel>

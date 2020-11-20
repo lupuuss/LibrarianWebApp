@@ -1,6 +1,7 @@
 package pl.lodz.pas.librarianwebapp.services;
 
 import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.DtoAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.DtoNotFoundException;
 import pl.lodz.pas.librarianwebapp.model.repositories.user.User;
 import pl.lodz.pas.librarianwebapp.model.repositories.user.UsersRepository;
 import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
@@ -46,6 +47,23 @@ public class UsersService {
         } catch (DtoAlreadyExistsException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void updateUsersActive(List<UserDto> toUpdate, boolean active) {
+
+        for (var user : toUpdate) {
+            var foundUser = repository.findUserByLogin(user.getLogin());
+
+            foundUser.ifPresent(userToUpdate -> {
+                userToUpdate.setActive(active);
+
+                try {
+                    repository.updateUser(userToUpdate);
+                } catch (DtoNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 }

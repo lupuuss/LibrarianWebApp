@@ -67,7 +67,7 @@ public class LocalUsersRepository implements UsersRepository {
         }
 
         inBaseUser.ifPresent(user -> {
-            users.remove(user);
+            users.removeIf(u -> u.getLogin().equals(user.getLogin()));
             users.add(updatedUser.copy());
         });
     }
