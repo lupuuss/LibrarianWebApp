@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<form action="j_security_check" method="post">
+    <h:panelGrid>
+        <h:outputLabel for="j_username">#{msg['page.common.login']}:</h:outputLabel>
+        <h:inputText
+                id="j_username"
+                maxlength="25"
+                required="true"
+                label="login"
+                requiredMessage="${msg['page.form.field.required']}"/>
+
+        <h:outputLabel for="j_password">#{msg['page.auth.password']}:</h:outputLabel>
+        <h:inputSecret
+                id="j_password"
+                maxlength="25"
+                required="true"
+                label="password"
+                requiredMessage="${msg['page.form.field.required']}"/>
+        <input type="submit" value="#{msg['page.auth.loginAction']}"/>
+    </h:panelGrid>
+</form>
+
+</html>

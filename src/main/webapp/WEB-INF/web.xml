@@ -52,8 +52,8 @@
         </auth-method>
         <realm-name>file</realm-name>
         <form-login-config>
-            <form-login-page>/auth/login.html?faces-redirect=true</form-login-page>
-            <form-error-page>/auth/error.html?faces-redirect=true</form-error-page>
+            <form-login-page>/auth/login.xhtml</form-login-page>
+            <form-error-page>/auth/error.xhtml</form-error-page>
         </form-login-config>
     </login-config>
 </web-app>
