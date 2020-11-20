@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface UsersRepository {
 
-    Optional<UserDto> findUserByLogin(String login);
+    Optional<User> findUserByLogin(String login);
 
-    void addUser(UserDto user) throws DtoAlreadyExistsException;
+    void addUser(User user) throws DtoAlreadyExistsException;
 
-    void updateUser(UserDto user) throws DtoNotFoundException;
+    void updateUser(User user) throws DtoNotFoundException;
 
-    List<UserDto> findAllUsers();
+    List<User> findAllUsers();
 }

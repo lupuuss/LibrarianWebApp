@@ -1,6 +1,6 @@
-package pl.lodz.pas.librarianwebapp.services.data;
+package pl.lodz.pas.librarianwebapp.services.dto;
 
-public class User {
+public class UserDto {
 
     private final String login;
 
@@ -12,7 +12,7 @@ public class User {
 
     private final boolean active;
 
-    public User(String login, String firstName, String lastName, String email, boolean active) {
+    public UserDto(String login, String firstName, String lastName, String email, boolean active) {
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -18,9 +18,9 @@ public class LocalUsersRepository implements UsersRepository {
 
     @Inject
     @UsersRepositoryInitializer
-    private Consumer<List<UserDto>> usersInitializer;
+    private Consumer<List<User>> usersInitializer;
 
-    private final List<UserDto> users;
+    private final List<User> users;
 
     public LocalUsersRepository() {
         this.users = Collections.synchronizedList(new ArrayList<>());
@@ -35,32 +35,32 @@ public class LocalUsersRepository implements UsersRepository {
     }
 
     @Override
-    public Optional<UserDto> findUserByLogin(String login) {
+    public Optional<User> findUserByLogin(String login) {
         return users.stream()
                 .filter(user -> user.getLogin().equals(login))
                 .findFirst()
-                .map(UserDto::copy);
+                .map(User::copy);
     }
 
     @Override
-    public void addUser(UserDto user) throws DtoAlreadyExistsException {
+    public void addUser(User user) throws DtoAlreadyExistsException {
 
         var inBaseUser = findUserByLogin(user.getLogin());
 
         if (inBaseUser.isPresent() &&
                 inBaseUser.get().getLogin().equals(user.getLogin())) {
-            throw new DtoAlreadyExistsException(UserDto.class.getSimpleName(), user.getLogin());
+            throw new DtoAlreadyExistsException(User.class.getSimpleName(), user.getLogin());
         }
 
         users.add(user.copy());
     }
 
     @Override
-    public void updateUser(UserDto updatedUser) throws DtoNotFoundException {
+    public void updateUser(User updatedUser) throws DtoNotFoundException {
         var inBaseUser = findUserByLogin(updatedUser.getLogin());
 
         if (inBaseUser.isEmpty()) {
-            throw new DtoNotFoundException(UserDto.class.getSimpleName(), updatedUser.getLogin());
+            throw new DtoNotFoundException(User.class.getSimpleName(), updatedUser.getLogin());
         }
 
         inBaseUser.ifPresent(user -> {
@@ -70,9 +70,9 @@ public class LocalUsersRepository implements UsersRepository {
     }
 
     @Override
-    public List<UserDto> findAllUsers() {
+    public List<User> findAllUsers() {
         return users.stream()
-                .map(UserDto::copy)
+                .map(User::copy)
                 .collect(Collectors.toList());
     }
 }

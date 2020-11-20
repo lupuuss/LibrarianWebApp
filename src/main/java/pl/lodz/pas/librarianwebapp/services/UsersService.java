@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.services;
 
 import pl.lodz.pas.librarianwebapp.model.repositories.user.UsersRepository;
-import pl.lodz.pas.librarianwebapp.services.data.User;
+import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,10 +14,10 @@ public class UsersService {
     @Inject
     private UsersRepository repository;
 
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return repository.findAllUsers()
                 .stream()
-                .map(userDto -> new User(
+                .map(userDto -> new UserDto(
                         userDto.getLogin(),
                         userDto.getFirstName(),
                         userDto.getLastName(),

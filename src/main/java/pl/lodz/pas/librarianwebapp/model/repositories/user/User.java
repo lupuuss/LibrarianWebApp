@@ -2,7 +2,7 @@ package pl.lodz.pas.librarianwebapp.model.repositories.user;
 
 import java.util.UUID;
 
-public class UserDto {
+public class User {
 
     private UUID uuid;
 
@@ -16,7 +16,7 @@ public class UserDto {
 
     private boolean active;
 
-    public UserDto(UUID uuid, String login, String firstName, String lastName, String email, boolean active) {
+    public User(UUID uuid, String login, String firstName, String lastName, String email, boolean active) {
         this.uuid = uuid;
         this.login = login;
         this.firstName = firstName;
@@ -73,8 +73,8 @@ public class UserDto {
         this.uuid = uuid;
     }
 
-    public UserDto copy() {
-        return new UserDto(
+    public User copy() {
+        return new User(
                 uuid,
                 login,
                 firstName,
