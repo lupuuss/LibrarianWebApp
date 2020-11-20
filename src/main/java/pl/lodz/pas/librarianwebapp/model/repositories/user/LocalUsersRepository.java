@@ -5,6 +5,7 @@ import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.DtoNotFoundExce
 import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializer;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-
+@ApplicationScoped
 public class LocalUsersRepository implements UsersRepository {
 
     @Inject
@@ -53,6 +54,8 @@ public class LocalUsersRepository implements UsersRepository {
         }
 
         users.add(user.copy());
+
+        System.out.println(users);
     }
 
     @Override

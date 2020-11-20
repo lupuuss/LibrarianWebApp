@@ -6,23 +6,25 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<h:dataTable value="${usersService.allUsers}" var="user">
+<h:button outcome="addNewUser.xhtml" value="${msg['page.users.adduser']}"/>
+
+<h:dataTable value="${usersController.allUsers}" var="user">
     <h:column>
         <!-- column header -->
-        <f:facet name="header">Login</f:facet>
+        <f:facet name="header">${msg['page.common.login']}</f:facet>
         <!-- row record -->
         #{user.login}
     </h:column>
     <h:column>
         <!-- column header -->
-        <f:facet name="header">Email</f:facet>
+        <f:facet name="header">${msg['page.common.email']}</f:facet>
         <!-- row record -->
         #{user.email}
     </h:column>
 
     <h:column>
         <!-- column header -->
-        <f:facet name="header">Name</f:facet>
+        <f:facet name="header">${msg['page.common.name.full']}</f:facet>
         <!-- row record -->
         #{user.firstName} #{user.lastName}
     </h:column>

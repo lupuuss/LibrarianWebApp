@@ -2,15 +2,15 @@ package pl.lodz.pas.librarianwebapp.services.dto;
 
 public class UserDto {
 
-    private final String login;
+    private String login;
 
-    private final String firstName;
+    private String firstName;
 
-    private final String lastName;
+    private String lastName;
 
-    private final String email;
+    private String email;
 
-    private final boolean active;
+    private boolean active;
 
     public UserDto(String login, String firstName, String lastName, String email, boolean active) {
         this.login = login;
@@ -18,6 +18,9 @@ public class UserDto {
         this.lastName = lastName;
         this.email = email;
         this.active = active;
+    }
+
+    public UserDto() {
     }
 
     public String getLogin() {
@@ -38,5 +41,25 @@ public class UserDto {
 
     public boolean isActive() {
         return active;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
