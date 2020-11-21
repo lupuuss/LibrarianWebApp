@@ -13,6 +13,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class LocalBooksRepository implements BooksRepository {
@@ -36,7 +37,9 @@ public class LocalBooksRepository implements BooksRepository {
 
     @Override
     public synchronized List<Book> findAllBooks() {
-        return new ArrayList<>(books);
+        return books.stream()
+                .map(Book::copy)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -44,7 +47,16 @@ public class LocalBooksRepository implements BooksRepository {
 
         return books.stream()
                 .filter(book -> book.getIsbn().equals(isbn))
-                .findFirst();
+                .findFirst()
+                .map(Book::copy);
+    }
+
+    @Override
+    public List<BookCopy> findBookCopiesByIsbn(String isbn) {
+        return bookCopies.stream()
+                .filter(copy -> copy.getBookIsbn().equals(isbn))
+                .map(BookCopy::copy)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -59,7 +71,7 @@ public class LocalBooksRepository implements BooksRepository {
                             copy.getState() != BookCopy.State.NEED_REPLACEMENT)
                     .count();
 
-            map.put(book, count);
+            map.put(book.copy(), count);
         }
 
         return map;
@@ -80,7 +92,7 @@ public class LocalBooksRepository implements BooksRepository {
             throw new ObjectAlreadyExistsException(Book.class.getSimpleName(), book.getIsbn());
         }
 
-        books.add(book);
+        books.add(book.copy());
     }
 
     private void checkBookCopyConsistency(BookCopy copy) throws InconsistencyFoundException {
@@ -110,7 +122,7 @@ public class LocalBooksRepository implements BooksRepository {
 
         checkBookCopyConsistency(bookCopy);
 
-        bookCopies.add(bookCopy);
+        bookCopies.add(bookCopy.copy());
     }
 
     @Override
@@ -121,20 +133,20 @@ public class LocalBooksRepository implements BooksRepository {
         }
 
         books.remove(book);
-        books.add(book);
+        books.add(book.copy());
     }
 
     @Override
-    public synchronized void updateBookCopy(BookCopy copy) throws RepositoryException {
+    public synchronized void updateBookCopy(BookCopy bookCopy) throws RepositoryException {
 
-        if (!bookCopies.contains(copy)) {
-            throw new ObjectNotFoundException(BookCopy.class.getSimpleName(), copy.getUuid().toString());
+        if (!bookCopies.contains(bookCopy)) {
+            throw new ObjectNotFoundException(BookCopy.class.getSimpleName(), bookCopy.getUuid().toString());
         }
 
-        checkBookCopyConsistency(copy);
+        checkBookCopyConsistency(bookCopy);
 
-        bookCopies.remove(copy);
-        bookCopies.add(copy);
+        bookCopies.remove(bookCopy);
+        bookCopies.add(bookCopy.copy());
     }
 
     public synchronized void removeBookByIsbn(String isbn) throws ObjectNotFoundException {
@@ -157,5 +169,15 @@ public class LocalBooksRepository implements BooksRepository {
         }
 
         bookCopies.remove(copy.get());
+    }
+
+    @Override
+    public synchronized Integer getNextCopyNumberByIsbn(String isbn) {
+
+        return findBookCopiesByIsbn(isbn)
+                .stream()
+                .mapToInt(copy -> copy.getNumber() + 1)
+                .max()
+                .orElse(0);
     }
 }

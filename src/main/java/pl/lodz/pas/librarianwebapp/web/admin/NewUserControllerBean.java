@@ -1,4 +1,4 @@
-package pl.lodz.pas.librarianwebapp.web;
+package pl.lodz.pas.librarianwebapp.web.admin;
 
 import pl.lodz.pas.librarianwebapp.services.UsersService;
 import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
@@ -9,7 +9,7 @@ import javax.inject.Named;
 
 @Named("newPersonController")
 @RequestScoped
-public class NewPersonController {
+public class NewUserControllerBean {
 
     @Inject
     UsersService service;

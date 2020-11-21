@@ -16,6 +16,8 @@ public interface BooksRepository {
 
     Optional<Book> findBookByIsbn(String isbn);
 
+    List<BookCopy> findBookCopiesByIsbn(String isbn);
+
     Map<Book, Long> countAllBooksWithNotDamagedCopies();
 
     Long countCopiesByIsbnAndState(String isbn, BookCopy.State state);
@@ -27,4 +29,6 @@ public interface BooksRepository {
     void updateBook(Book book) throws ObjectNotFoundException;
 
     void updateBookCopy(BookCopy copy) throws ObjectNotFoundException, RepositoryException;
+
+    Integer getNextCopyNumberByIsbn(String isbn);
 }

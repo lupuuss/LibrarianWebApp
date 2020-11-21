@@ -1,4 +1,4 @@
-package pl.lodz.pas.librarianwebapp.web;
+package pl.lodz.pas.librarianwebapp.web.admin;
 
 import pl.lodz.pas.librarianwebapp.model.repositories.user.User;
 import pl.lodz.pas.librarianwebapp.services.UsersService;

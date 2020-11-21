@@ -11,11 +11,14 @@ public class BookCopy {
 
     private final UUID uuid;
 
+    private final int number;
+
     private String bookIsbn;
     private State state;
 
-    public BookCopy(UUID uuid, String bookIsbn, State state) {
+    public BookCopy(UUID uuid, int number, String bookIsbn, State state) {
         this.uuid = uuid;
+        this.number = number;
         this.bookIsbn = bookIsbn;
         this.state = state;
     }
@@ -51,5 +54,18 @@ public class BookCopy {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public BookCopy copy() {
+        return new BookCopy(
+                uuid,
+                number,
+                bookIsbn,
+                state
+        );
     }
 }

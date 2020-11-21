@@ -1,10 +1,7 @@
 package pl.lodz.pas.librarianwebapp.producer;
 
-import pl.lodz.pas.librarianwebapp.model.repositories.books.BooksRepository;
 import pl.lodz.pas.librarianwebapp.model.repositories.books.data.Book;
 import pl.lodz.pas.librarianwebapp.model.repositories.books.data.BookCopy;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectAlreadyExistsException;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.RepositoryException;
 import pl.lodz.pas.librarianwebapp.model.repositories.user.User;
 import pl.lodz.pas.librarianwebapp.producer.annotations.BooksRepositoryInitializer;
 import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializer;
@@ -40,13 +37,13 @@ public class Producer {
             books.add(new Book(isbn[1], "Diuna2", "Morawiecki", "Fabryka Slow"));
             books.add(new Book(isbn[2], "Diuna3", "Kaczynski", "Polska Ksiazka"));
 
-            copies.add(new BookCopy(UUID.randomUUID(), isbn[0], BookCopy.State.GOOD));
-            copies.add(new BookCopy(UUID.randomUUID(), isbn[1], BookCopy.State.USED));
-            copies.add(new BookCopy(UUID.randomUUID(), isbn[2], BookCopy.State.NEW));
-            copies.add(new BookCopy(UUID.randomUUID(), isbn[0], BookCopy.State.NEED_REPLACEMENT));
-            copies.add(new BookCopy(UUID.randomUUID(), isbn[1], BookCopy.State.GOOD));
-            copies.add(new BookCopy(UUID.randomUUID(), isbn[1], BookCopy.State.USED));
-            copies.add(new BookCopy(UUID.randomUUID(), isbn[2], BookCopy.State.GOOD));
+            copies.add(new BookCopy(UUID.randomUUID(), 0, isbn[0], BookCopy.State.GOOD));
+            copies.add(new BookCopy(UUID.randomUUID(), 0, isbn[1], BookCopy.State.USED));
+            copies.add(new BookCopy(UUID.randomUUID(), 0, isbn[2], BookCopy.State.NEW));
+            copies.add(new BookCopy(UUID.randomUUID(), 1, isbn[0], BookCopy.State.NEED_REPLACEMENT));
+            copies.add(new BookCopy(UUID.randomUUID(), 1, isbn[1], BookCopy.State.GOOD));
+            copies.add(new BookCopy(UUID.randomUUID(), 2, isbn[1], BookCopy.State.USED));
+            copies.add(new BookCopy(UUID.randomUUID(), 1, isbn[2], BookCopy.State.GOOD));
         };
     }
 }

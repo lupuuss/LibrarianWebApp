@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Book {
 
-    private String isbn;
+    private final String isbn;
 
     private String title;
     private String author;
@@ -56,5 +56,14 @@ public class Book {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public Book copy() {
+        return new Book(
+                isbn,
+                title,
+                author,
+                publisher
+        );
     }
 }

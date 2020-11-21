@@ -5,7 +5,33 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello ${request.userPrincipal.name}"/>
-</f:view>
+<h:form>
+    <h:button outcome="addNewBook.xhtml" value="${msg['page.books.addbook']}"/>
+    <h:button outcome="addNewBookCopy.xhtml" value="${msg['page.books.addbookcopy']}"/>
+    <h:commandButton action="#{usersController.deactivateMarkedUsers}" value="${msg['page.users.deactivate']}" />
+    <h:commandButton action="#{usersController.activateMarkedUsers}" value="${msg['page.users.activate']}" />
+
+    <h:dataTable value="${booksController.allCopies}" var="copy">
+        <h:column>
+            <f:facet name="header">${msg['page.books.isbn']}</f:facet>
+            #{copy.book.isbn}
+        </h:column>
+        <h:column>
+            <f:facet name="header">${msg['page.books.number']}</f:facet>
+            #{copy.number}
+        </h:column>
+        <h:column>
+            <f:facet name="header">${msg['page.books.title']}</f:facet>
+            #{copy.book.title}
+        </h:column>
+        <h:column>
+            <f:facet name="header">${msg['page.books.state']}</f:facet>
+            <h:outputText
+                    value="#{copy.state}"
+                    converter="pl.lodz.pas.librarianwebapp.web.converter.BookCopyDtoStateConverter"/>
+        </h:column>
+
+    </h:dataTable>
+</h:form>
+
 </html>
