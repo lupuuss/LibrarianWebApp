@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.model.repositories.user;
 
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.DtoAlreadyExistsException;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.DtoNotFoundException;
+import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +10,9 @@ public interface UsersRepository {
 
     Optional<User> findUserByLogin(String login);
 
-    void addUser(User user) throws DtoAlreadyExistsException;
+    void addUser(User user) throws ObjectAlreadyExistsException;
 
-    void updateUser(User user) throws DtoNotFoundException;
+    void updateUser(User user) throws ObjectNotFoundException;
 
     List<User> findAllUsers();
 }

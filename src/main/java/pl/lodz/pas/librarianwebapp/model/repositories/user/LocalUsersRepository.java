@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.model.repositories.user;
 
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.DtoAlreadyExistsException;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.DtoNotFoundException;
+import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializer;
 
 import javax.annotation.PostConstruct;
@@ -44,13 +44,13 @@ public class LocalUsersRepository implements UsersRepository {
     }
 
     @Override
-    public void addUser(User user) throws DtoAlreadyExistsException {
+    public void addUser(User user) throws ObjectAlreadyExistsException {
 
         var inBaseUser = findUserByLogin(user.getLogin());
 
         if (inBaseUser.isPresent() &&
                 inBaseUser.get().getLogin().equals(user.getLogin())) {
-            throw new DtoAlreadyExistsException(User.class.getSimpleName(), user.getLogin());
+            throw new ObjectAlreadyExistsException(User.class.getSimpleName(), user.getLogin());
         }
 
         users.add(user.copy());
@@ -59,11 +59,11 @@ public class LocalUsersRepository implements UsersRepository {
     }
 
     @Override
-    public void updateUser(User updatedUser) throws DtoNotFoundException {
+    public void updateUser(User updatedUser) throws ObjectNotFoundException {
         var inBaseUser = findUserByLogin(updatedUser.getLogin());
 
         if (inBaseUser.isEmpty()) {
-            throw new DtoNotFoundException(User.class.getSimpleName(), updatedUser.getLogin());
+            throw new ObjectNotFoundException(User.class.getSimpleName(), updatedUser.getLogin());
         }
 
         inBaseUser.ifPresent(user -> {

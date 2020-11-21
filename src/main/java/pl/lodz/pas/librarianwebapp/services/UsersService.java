@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.services;
 
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.DtoAlreadyExistsException;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.DtoNotFoundException;
+import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.model.repositories.user.User;
 import pl.lodz.pas.librarianwebapp.model.repositories.user.UsersRepository;
 import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
@@ -44,7 +44,7 @@ public class UsersService {
         try {
             repository.addUser(newUser);
             return true;
-        } catch (DtoAlreadyExistsException e) {
+        } catch (ObjectAlreadyExistsException e) {
             e.printStackTrace();
             return false;
         }
@@ -60,7 +60,7 @@ public class UsersService {
 
                 try {
                     repository.updateUser(userToUpdate);
-                } catch (DtoNotFoundException e) {
+                } catch (ObjectNotFoundException e) {
                     e.printStackTrace();
                 }
             });
