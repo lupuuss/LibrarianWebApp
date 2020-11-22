@@ -1,11 +1,11 @@
 package pl.lodz.pas.librarianwebapp.services;
 
-import pl.lodz.pas.librarianwebapp.model.repositories.books.BooksRepository;
-import pl.lodz.pas.librarianwebapp.model.repositories.books.data.Book;
-import pl.lodz.pas.librarianwebapp.model.repositories.books.data.BookCopy;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectAlreadyExistsException;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectNotFoundException;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.RepositoryException;
+import pl.lodz.pas.librarianwebapp.repository.books.BooksRepository;
+import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
+import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
 import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
 

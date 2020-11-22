@@ -1,4 +1,4 @@
-package pl.lodz.pas.librarianwebapp.model.repositories.books.data;
+package pl.lodz.pas.librarianwebapp.repository.books.data;
 
 import java.util.Objects;
 

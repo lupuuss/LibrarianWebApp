@@ -1,10 +1,10 @@
-package pl.lodz.pas.librarianwebapp.model.repositories.books;
+package pl.lodz.pas.librarianwebapp.repository.books;
 
-import pl.lodz.pas.librarianwebapp.model.repositories.books.data.Book;
-import pl.lodz.pas.librarianwebapp.model.repositories.books.data.BookCopy;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectAlreadyExistsException;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectNotFoundException;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.RepositoryException;
+import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
+import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
 
 import java.util.List;
 import java.util.Map;

@@ -1,7 +1,6 @@
-package pl.lodz.pas.librarianwebapp.model.repositories.books.data;
+package pl.lodz.pas.librarianwebapp.repository.books.data;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
 

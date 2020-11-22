@@ -1,6 +1,6 @@
 package pl.lodz.pas.librarianwebapp.services.dto;
 
-import pl.lodz.pas.librarianwebapp.model.repositories.books.data.Book;
+import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
 
 public class BookCopyDto {
 

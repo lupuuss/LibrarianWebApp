@@ -1,4 +1,4 @@
-package pl.lodz.pas.librarianwebapp.model.repositories.exceptions;
+package pl.lodz.pas.librarianwebapp.repository.exceptions;
 
 public class ObjectNotFoundException extends RepositoryException {
     public ObjectNotFoundException(String type, String identifier) {

@@ -1,9 +1,9 @@
 package pl.lodz.pas.librarianwebapp.services;
 
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectAlreadyExistsException;
-import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectNotFoundException;
-import pl.lodz.pas.librarianwebapp.model.repositories.user.User;
-import pl.lodz.pas.librarianwebapp.model.repositories.user.UsersRepository;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
+import pl.lodz.pas.librarianwebapp.repository.user.User;
+import pl.lodz.pas.librarianwebapp.repository.user.UsersRepository;
 import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
 
 import javax.enterprise.context.RequestScoped;

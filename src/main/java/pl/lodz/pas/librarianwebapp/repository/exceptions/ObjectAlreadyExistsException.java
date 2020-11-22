@@ -1,4 +1,4 @@
-package pl.lodz.pas.librarianwebapp.model.repositories.exceptions;
+package pl.lodz.pas.librarianwebapp.repository.exceptions;
 
 public class ObjectAlreadyExistsException extends RepositoryException {
     public ObjectAlreadyExistsException(String type, String identifier) {

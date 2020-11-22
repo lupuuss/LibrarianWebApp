@@ -1,4 +1,4 @@
-package pl.lodz.pas.librarianwebapp.model.repositories.user;
+package pl.lodz.pas.librarianwebapp.repository.user;
 
 import java.util.UUID;
 

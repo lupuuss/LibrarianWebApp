@@ -1,8 +1,8 @@
 package pl.lodz.pas.librarianwebapp.producer;
 
-import pl.lodz.pas.librarianwebapp.model.repositories.books.data.Book;
-import pl.lodz.pas.librarianwebapp.model.repositories.books.data.BookCopy;
-import pl.lodz.pas.librarianwebapp.model.repositories.user.User;
+import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
+import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
+import pl.lodz.pas.librarianwebapp.repository.user.User;
 import pl.lodz.pas.librarianwebapp.producer.annotations.BooksRepositoryInitializer;
 import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializer;
 
