@@ -8,6 +8,10 @@
         librarian
     </default-context-path>
 
+    <welcome-file-list>
+        <welcome-file>lendings/list.xhtml</welcome-file>
+    </welcome-file-list>
+
     <security-role>
         <role-name>ADMINS</role-name>
     </security-role>
@@ -41,6 +45,24 @@
             </role-name>
             <role-name>
                 ADMINS
+            </role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Rent pages</web-resource-name>
+            <url-pattern>/rents/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>
+                EMPLOYEES
+            </role-name>
+            <role-name>
+                ADMINS
+            </role-name>
+            <role-name>
+                USERS
             </role-name>
         </auth-constraint>
     </security-constraint>

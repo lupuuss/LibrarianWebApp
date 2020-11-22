@@ -13,6 +13,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -168,5 +169,23 @@ public class BooksService {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Map<BookDto, Long> getAvailableBooksCopiesCount() {
+        return repository.countAllBooksWithNotDamagedCopies()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        entry -> {
+                            var book = entry.getKey();
+                            return new BookDto(
+                                    book.getIsbn(),
+                                    book.getTitle(),
+                                    book.getAuthor(),
+                                    book.getPublisher()
+                            );
+                        },
+                        Map.Entry::getValue
+                ));
     }
 }
