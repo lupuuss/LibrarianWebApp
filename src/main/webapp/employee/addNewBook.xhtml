@@ -10,11 +10,13 @@
         <h:outputLabel for="isbn">#{msg['page.books.isbn']}:</h:outputLabel>
         <h:inputText
                 id="isbn"
-                maxlength="25"
+                maxlength="8"
                 required="true"
                 label="isbn"
                 value="${newBookController.book.isbn}"
-                requiredMessage="${msg['page.form.field.required']}"/>
+                requiredMessage="${msg['page.form.field.required']}">
+            <f:validateRegex pattern="([a-zA-Z0-9]{8})" />
+        </h:inputText>
         <h:message for="isbn" />
 
         <h:outputLabel for="title">#{msg['page.books.title']}:</h:outputLabel>

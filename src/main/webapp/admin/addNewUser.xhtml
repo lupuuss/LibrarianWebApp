@@ -45,7 +45,7 @@
                 label="email"
                 value="${newPersonController.user.email}"
                 requiredMessage="${msg['page.form.field.required']}"
-                validatorMessage="${msg['page.form.field.required']}">
+                validatorMessage="${msg['page.form.field.incorrectValue']}">
             <f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
         </h:inputText>
         <h:message for="email" />
