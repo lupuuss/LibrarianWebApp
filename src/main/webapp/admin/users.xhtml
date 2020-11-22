@@ -29,8 +29,8 @@
             <h:selectBooleanCheckbox disabled="true" value="${user.active}" />
         </h:column>
         <h:column>
-        <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
-            <h:selectBooleanCheckbox  value="#{usersController.marks[user]}" styleClass="mark" />
+            <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
+                <h:selectBooleanCheckbox  value="#{usersController.marks[user]}" styleClass="mark" />
         </h:column>
     </h:dataTable>
 </h:form>

@@ -4,6 +4,7 @@ import pl.lodz.pas.librarianwebapp.model.repositories.books.BooksRepository;
 import pl.lodz.pas.librarianwebapp.model.repositories.books.data.Book;
 import pl.lodz.pas.librarianwebapp.model.repositories.books.data.BookCopy;
 import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.model.repositories.exceptions.RepositoryException;
 import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
@@ -120,5 +121,52 @@ public class BooksService {
                 .stream()
                 .map(Book::getIsbn)
                 .collect(Collectors.toList());
+    }
+
+    public void degradeCopies(List<BookCopyDto> copies) {
+
+        for (var copy : copies) {
+
+            var toUpdate = repository.findBookCopyByIsbnAndNumber(
+                    copy.getBook().getIsbn(),
+                    copy.getNumber()
+            );
+
+            if (toUpdate.isEmpty()) {
+                continue;
+            }
+
+            var bookCopy = toUpdate.get();
+
+            var currentState = bookCopy.getState();
+            bookCopy.setState(BookCopy.State.degrade(currentState));
+
+            try {
+                repository.updateBookCopy(bookCopy);
+            } catch (RepositoryException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void deleteBookCopies(List<BookCopyDto> copies) {
+
+        for (var bookCopy : copies) {
+
+            var toRemove = repository.findBookCopyByIsbnAndNumber(
+                    bookCopy.getBook().getIsbn(),
+                    bookCopy.getNumber()
+            );
+
+            if (toRemove.isEmpty()) {
+                continue;
+            }
+
+            try {
+                repository.deleteBookCopy(toRemove.get());
+            } catch (ObjectNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

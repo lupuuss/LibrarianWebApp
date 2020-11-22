@@ -8,8 +8,8 @@
 <h:form>
     <h:button outcome="addNewBook.xhtml" value="${msg['page.books.addbook']}"/>
     <h:button outcome="addNewBookCopy.xhtml" value="${msg['page.books.addbookcopy']}"/>
-    <h:commandButton action="#{usersController.deactivateMarkedUsers}" value="${msg['page.users.deactivate']}" />
-    <h:commandButton action="#{usersController.activateMarkedUsers}" value="${msg['page.users.activate']}" />
+    <h:commandButton action="#{booksController.degradeMarkedCopies}" value="${msg['page.books.degradate']}" />
+    <h:commandButton action="#{booksController.removeMarkedCopies}" value="${msg['page.books.remove']}" />
 
     <h:dataTable value="${booksController.allCopies}" var="copy">
         <h:column>
@@ -31,7 +31,24 @@
                     converter="pl.lodz.pas.librarianwebapp.web.converter.BookCopyDtoStateConverter"/>
         </h:column>
 
+        <h:column>
+            <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
+            <h:selectBooleanCheckbox  value="#{booksController.marks[copy]}" styleClass="mark" />
+        </h:column>
+
     </h:dataTable>
 </h:form>
+
+<script type="text/javascript">
+    function selectAll() {
+        const checkbox = document.getElementsByClassName('masterMark')[0];
+
+        const elements = document.getElementsByClassName('mark');
+
+        for (let element of elements) {
+            element.checked = checkbox.checked
+        }
+    }
+</script>
 
 </html>

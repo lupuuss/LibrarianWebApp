@@ -12,11 +12,15 @@ import java.util.Optional;
 
 public interface BooksRepository {
 
+    Integer getNextCopyNumberByIsbn(String isbn);
+
     List<Book> findAllBooks();
 
     Optional<Book> findBookByIsbn(String isbn);
 
     List<BookCopy> findBookCopiesByIsbn(String isbn);
+
+    Optional<BookCopy> findBookCopyByIsbnAndNumber(String isbn, int number);
 
     Map<Book, Long> countAllBooksWithNotDamagedCopies();
 
@@ -28,7 +32,9 @@ public interface BooksRepository {
 
     void updateBook(Book book) throws ObjectNotFoundException;
 
-    void updateBookCopy(BookCopy copy) throws ObjectNotFoundException, RepositoryException;
+    void updateBookCopy(BookCopy copy) throws RepositoryException;
 
-    Integer getNextCopyNumberByIsbn(String isbn);
+    void deleteBook(Book book) throws ObjectNotFoundException;
+
+    void deleteBookCopy(BookCopy bookCopy) throws ObjectNotFoundException;
 }

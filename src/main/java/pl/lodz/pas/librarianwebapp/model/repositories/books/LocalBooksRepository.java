@@ -34,6 +34,15 @@ public class LocalBooksRepository implements BooksRepository {
         }
     }
 
+    @Override
+    public synchronized Integer getNextCopyNumberByIsbn(String isbn) {
+
+        return findBookCopiesByIsbn(isbn)
+                .stream()
+                .mapToInt(copy -> copy.getNumber() + 1)
+                .max()
+                .orElse(0);
+    }
 
     @Override
     public synchronized List<Book> findAllBooks() {
@@ -68,7 +77,7 @@ public class LocalBooksRepository implements BooksRepository {
             var count = bookCopies.stream()
                     .filter(copy -> copy.getBookIsbn().equals(book.getIsbn()))
                     .filter(copy -> copy.getState() != BookCopy.State.DAMAGED &&
-                            copy.getState() != BookCopy.State.NEED_REPLACEMENT)
+                                    copy.getState() != BookCopy.State.NEED_REPLACEMENT)
                     .count();
 
             map.put(book.copy(), count);
@@ -81,7 +90,8 @@ public class LocalBooksRepository implements BooksRepository {
     public synchronized Long countCopiesByIsbnAndState(String isbn, BookCopy.State state) {
         return bookCopies
                 .stream()
-                .filter(copy -> copy.getBookIsbn().equals(isbn) && copy.getState() == state)
+                .filter(copy -> copy.getBookIsbn().equals(isbn) &&
+                                copy.getState() == state)
                 .count();
     }
 
@@ -123,6 +133,13 @@ public class LocalBooksRepository implements BooksRepository {
         checkBookCopyConsistency(bookCopy);
 
         bookCopies.add(bookCopy.copy());
+    }
+
+    @Override
+    public Optional<BookCopy> findBookCopyByIsbnAndNumber(String isbn, int number) {
+        return bookCopies.stream()
+                .filter(copy -> copy.getBookIsbn().equals(isbn) && copy.getNumber() == number)
+                .findFirst();
     }
 
     @Override
@@ -172,12 +189,21 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
-    public synchronized Integer getNextCopyNumberByIsbn(String isbn) {
+    public void deleteBookCopy(BookCopy bookCopy) throws ObjectNotFoundException {
 
-        return findBookCopiesByIsbn(isbn)
-                .stream()
-                .mapToInt(copy -> copy.getNumber() + 1)
-                .max()
-                .orElse(0);
+        if (!bookCopies.contains(bookCopy)) {
+            throw new ObjectNotFoundException(BookCopy.class.getSimpleName(), bookCopy.getUuid().toString());
+        }
+
+        bookCopies.remove(bookCopy);
+    }
+
+    @Override
+    public void deleteBook(Book book) throws ObjectNotFoundException {
+        if (!books.contains(book)) {
+            throw new ObjectNotFoundException(Book.class.getSimpleName(), book.getIsbn());
+        }
+
+        books.remove(book);
     }
 }

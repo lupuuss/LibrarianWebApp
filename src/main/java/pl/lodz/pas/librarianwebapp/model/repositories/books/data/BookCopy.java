@@ -1,12 +1,43 @@
 package pl.lodz.pas.librarianwebapp.model.repositories.books.data;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
 
 public class BookCopy {
 
     public enum State {
-        NEW, GOOD, USED, NEED_REPLACEMENT, DAMAGED
+        NEW(3), GOOD(2), USED(1), NEED_REPLACEMENT(0), DAMAGED(-1);
+
+        private final int level;
+
+        State(int level) {
+            this.level = level;
+        }
+
+        public int getLevel() {
+            return level;
+        }
+
+        public static State degrade(State state) {
+
+            if (state.getLevel() == -1) {
+                return DAMAGED;
+            }
+
+            if (state.getLevel() == 0) {
+                return NEED_REPLACEMENT;
+            }
+
+            var level = state.getLevel() - 1;
+
+            return Arrays.stream(values())
+                    .filter(s -> s.getLevel() == level)
+                    .findFirst()
+                    .orElseThrow();
+
+        }
     }
 
     private final UUID uuid;
