@@ -1,0 +1,19 @@
+#footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#header {
+    text-align: center;
+}
+
+#menu {
+    float: left;
+}
+
+#content {
+    float: left;
+}

@@ -5,30 +5,36 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:form>
-    <h:panelGrid columns="3">
+
+<ui:composition template = "/common/template.xhtml">
+    <ui:define name = "content">
+        <h:form>
+            <h:panelGrid columns="3">
 
 
-        <h:outputLabel for="bookIsbn">#{msg['page.books.isbn']}:</h:outputLabel>
-        <h:selectOneMenu id="bookIsbn" value="#{newBookCopyController.isbn}" >
-            <f:selectItems value="#{newBookCopyController.isbns}" />
-        </h:selectOneMenu>
-        <h:message for="bookIsbn" />
+                <h:outputLabel for="bookIsbn">#{msg['page.books.isbn']}:</h:outputLabel>
+                <h:selectOneMenu id="bookIsbn" value="#{newBookCopyController.isbn}" >
+                    <f:selectItems value="#{newBookCopyController.isbns}" />
+                </h:selectOneMenu>
+                <h:message for="bookIsbn" />
 
-        <h:outputLabel for="state">#{msg['page.books.state']}:</h:outputLabel>
-        <h:selectOneMenu
-                id="state"
-                value="#{newBookCopyController.state}">
-            <f:selectItems value="#{newBookCopyController.states}" />
-        </h:selectOneMenu>
-        <h:message for="state" />
+                <h:outputLabel for="state">#{msg['page.books.state']}:</h:outputLabel>
+                <h:selectOneMenu
+                        id="state"
+                        value="#{newBookCopyController.state}">
+                    <f:selectItems value="#{newBookCopyController.states}" />
+                </h:selectOneMenu>
+                <h:message for="state" />
 
-        <h:commandButton
-                value="${msg['page.common.add']}"
-                action="#{newBookCopyController.createBookCopy}"/>
+                <h:commandButton
+                        value="${msg['page.common.add']}"
+                        action="#{newBookCopyController.createBookCopy}"/>
 
-        <h:button outcome="books.xhtml" value="${msg['page.common.cancel']}"/>
+                <h:button outcome="books.xhtml" value="${msg['page.common.cancel']}"/>
 
-    </h:panelGrid>
-</h:form>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
 </html>

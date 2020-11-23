@@ -6,62 +6,67 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<h:form>
-    <h:panelGrid columns="3">
-        <h:outputLabel for="login">#{msg['page.common.login']}:</h:outputLabel>
-        <h:inputText
-                id="login"
-                maxlength="25"
-                required="true"
-                label="login"
-                value="${newPersonController.user.login}"
-                requiredMessage="${msg['page.form.field.required']}"/>
-        <h:message for="login" />
+<ui:composition template = "/common/template.xhtml">
 
-        <h:outputLabel for="firstName">#{msg['page.common.name.first']}:</h:outputLabel>
-        <h:inputText
-                id="firstName"
-                maxlength="25"
-                required="true"
-                label="firstName"
-                value="${newPersonController.user.firstName}"
-                requiredMessage="${msg['page.form.field.required']}"/>
-        <h:message for="firstName" />
+    <ui:define name = "content">
+        <h:form>
+            <h:panelGrid columns="3">
+                <h:outputLabel for="login">#{msg['page.common.login']}:</h:outputLabel>
+                <h:inputText
+                        id="login"
+                        maxlength="25"
+                        required="true"
+                        label="login"
+                        value="${newPersonController.user.login}"
+                        requiredMessage="${msg['page.form.field.required']}"/>
+                <h:message for="login" />
 
-        <h:outputLabel value="#{msg['page.common.name.last']}:" for="lastName"/>
-        <h:inputText
-                id="lastName"
-                maxlength="25"
-                required="true"
-                label="lastName"
-                value="${newPersonController.user.lastName}"
-                requiredMessage="${msg['page.form.field.required']}"/>
-        <h:message for="lastName" />
+                <h:outputLabel for="firstName">#{msg['page.common.name.first']}:</h:outputLabel>
+                <h:inputText
+                        id="firstName"
+                        maxlength="25"
+                        required="true"
+                        label="firstName"
+                        value="${newPersonController.user.firstName}"
+                        requiredMessage="${msg['page.form.field.required']}"/>
+                <h:message for="firstName" />
 
-        <h:outputLabel for="email">#{msg['page.common.email']}:</h:outputLabel>
-        <h:inputText
-                id="email"
-                required="true"
-                label="email"
-                value="${newPersonController.user.email}"
-                requiredMessage="${msg['page.form.field.required']}"
-                validatorMessage="${msg['page.form.field.incorrectValue']}">
-            <f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
-        </h:inputText>
-        <h:message for="email" />
+                <h:outputLabel value="#{msg['page.common.name.last']}:" for="lastName"/>
+                <h:inputText
+                        id="lastName"
+                        maxlength="25"
+                        required="true"
+                        label="lastName"
+                        value="${newPersonController.user.lastName}"
+                        requiredMessage="${msg['page.form.field.required']}"/>
+                <h:message for="lastName" />
 
-        <h:outputLabel for="active">#{msg['page.common.active']}:</h:outputLabel>
-        <h:selectBooleanCheckbox
-                id="active"
-                required="true"
-                value="${newPersonController.user.active}"/>
-        <h:message for="active"/>
+                <h:outputLabel for="email">#{msg['page.common.email']}:</h:outputLabel>
+                <h:inputText
+                        id="email"
+                        required="true"
+                        label="email"
+                        value="${newPersonController.user.email}"
+                        requiredMessage="${msg['page.form.field.required']}"
+                        validatorMessage="${msg['page.form.field.incorrectValue']}">
+                    <f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
+                </h:inputText>
+                <h:message for="email" />
 
-        <h:commandButton
-                value="${msg['page.common.add']}"
-                action="#{newPersonController.createUser()}"/>
+                <h:outputLabel for="active">#{msg['page.common.active']}:</h:outputLabel>
+                <h:selectBooleanCheckbox
+                        id="active"
+                        required="true"
+                        value="${newPersonController.user.active}"/>
+                <h:message for="active"/>
 
-        <h:button outcome="users.xhtml" value="${msg['page.common.cancel']}"/>
-    </h:panelGrid>
-</h:form>
+                <h:commandButton
+                        value="${msg['page.common.add']}"
+                        action="#{newPersonController.createUser()}"/>
+
+                <h:button outcome="users.xhtml" value="${msg['page.common.cancel']}"/>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
 </html>

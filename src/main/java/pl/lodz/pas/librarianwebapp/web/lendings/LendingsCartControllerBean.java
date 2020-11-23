@@ -36,7 +36,7 @@ public class LendingsCartControllerBean implements Serializable {
 
         System.out.println(books);
 
-        return "list.xhtml?faces-redirect=true";
+        return "books.xhtml?faces-redirect=true";
     }
 
     private String getLogin() {
@@ -54,7 +54,7 @@ public class LendingsCartControllerBean implements Serializable {
         return "cart.xhtml?faces-redirect=true";
     }
 
-    List<BookCopyDto> getCartPositions() {
+    public List<BookCopyDto> getCartPositions() {
         return new ArrayList<>(books);
     }
 }
