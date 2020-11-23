@@ -12,6 +12,7 @@ import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
 import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
+import pl.lodz.pas.librarianwebapp.services.dto.BookLockDto;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 public class BooksService {
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final long reservationTimeInMinutes = 30;
+    private final long reservationTimeInMinutes = 1;
 
     @Inject
     private BooksRepository booksRepository;
@@ -102,6 +103,7 @@ public class BooksService {
         try {
 
             booksRepository.addBook(new Book(
+                    UUID.randomUUID(),
                     book.getIsbn(),
                     book.getTitle(),
                     book.getAuthor(),
@@ -119,10 +121,16 @@ public class BooksService {
 
             var number = booksRepository.getNextCopyNumberByIsbn(isbn);
 
+            var book = booksRepository.findBookByIsbn(isbn);
+
+            if (book.isEmpty()) {
+                return false;
+            }
+
             booksRepository.addBookCopy(new BookCopy(
                     UUID.randomUUID(),
+                    book.get().getUuid(),
                     number,
-                    isbn,
                     mapState(state)
             ));
 
@@ -210,7 +218,7 @@ public class BooksService {
 
     }
 
-    public Optional<BookCopyDto> lockBook(String isbn, String userLogin, BookCopyDto.State state) {
+    public Optional<BookLockDto> lockBook(String isbn, String userLogin, BookCopyDto.State state) {
 
         var copies = booksRepository.findBookCopiesByIsbnAndState(isbn, mapState(state));
 
@@ -222,19 +230,25 @@ public class BooksService {
             return Optional.empty();
         }
 
+        BookLock lock;
+
         try {
-            eventsRepository.saveBookLock(new BookLock(
+            lock = new BookLock(
                     optReservedCopy.get().getUuid(),
                     userLogin,
                     dateProvider.now().plusMinutes(reservationTimeInMinutes)
-            ));
+            );
+
+            eventsRepository.saveBookLock(lock);
+
         } catch (InconsistencyFoundException e) {
             e.printStackTrace();
             return Optional.empty();
         }
 
         var reservedCopy = optReservedCopy.get();
-        var book = booksRepository.findBookByIsbn(reservedCopy.getBookIsbn()).orElseThrow();
+
+        var book = booksRepository.findBookByUuid(reservedCopy.getElementUuid()).orElseThrow();
         var bookDto = new BookDto(
                 book.getIsbn(),
                 book.getTitle(),
@@ -248,7 +262,7 @@ public class BooksService {
                 mapState(reservedCopy.getState())
         );
 
-        return Optional.of(result);
+        return Optional.of(new BookLockDto(result, lock.getUserLogin(), lock.getUntil()));
     }
 
     public void unlockBook(String user, BookCopyDto bookCopyDto) {

@@ -7,8 +7,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <ui:composition template = "/common/template.xhtml">
-
     <ui:define name = "content">
+        <h:outputScript name="js/selectAll.js" />
         <h:form>
             <h:button outcome="addNewUser.xhtml" value="${msg['page.users.adduser']}"/>
             <h:commandButton action="#{usersController.deactivateMarkedUsers}" value="${msg['page.users.deactivate']}" />
@@ -37,20 +37,6 @@
                 </h:column>
             </h:dataTable>
         </h:form>
-
-        <script type="text/javascript">
-            function selectAll() {
-                const checkbox = document.getElementsByClassName('masterMark')[0];
-
-                const elements = document.getElementsByClassName('mark');
-
-                for (let element of elements) {
-                    element.checked = checkbox.checked
-                }
-            }
-        </script>
-
-
     </ui:define>
 </ui:composition>
 </html>

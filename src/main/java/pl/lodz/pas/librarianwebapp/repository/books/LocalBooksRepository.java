@@ -1,7 +1,6 @@
 package pl.lodz.pas.librarianwebapp.repository.books;
 
-import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
-import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
+import pl.lodz.pas.librarianwebapp.repository.books.data.*;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
@@ -25,7 +24,6 @@ public class LocalBooksRepository implements BooksRepository {
 
     private final Set<Book> books = new HashSet<>();
     private final Set<BookCopy> bookCopies = new HashSet<>();
-
 
     @PostConstruct
     private void initializeBooks() {
@@ -61,9 +59,24 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
+    public Optional<Book> findBookByUuid(UUID uuid) {
+        return books.stream()
+                .filter(book -> book.getUuid().equals(uuid))
+                .findFirst()
+                .map(Book::copy);
+    }
+
+    @Override
     public synchronized List<BookCopy> findBookCopiesByIsbn(String isbn) {
+
+        var book = findBookByIsbn(isbn);
+
+        if (book.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return bookCopies.stream()
-                .filter(copy -> copy.getBookIsbn().equals(isbn))
+                .filter(copy -> copy.getElementUuid().equals(book.get().getUuid()))
                 .map(BookCopy::copy)
                 .collect(Collectors.toList());
     }
@@ -76,7 +89,6 @@ public class LocalBooksRepository implements BooksRepository {
                                 copy.getState() != BookCopy.State.NEED_REPLACEMENT)
                 .collect(Collectors.toList());
     }
-
     @Override
     public synchronized void addBook(Book book) throws ObjectAlreadyExistsException {
 
@@ -88,11 +100,13 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     private void checkBookCopyConsistency(BookCopy copy) throws InconsistencyFoundException {
-        var book = findBookByIsbn(copy.getBookIsbn());
+        var book = books.stream()
+                .filter(b -> b.getUuid().equals(copy.getUuid()))
+                .findFirst();
 
         if (book.isEmpty()) {
             throw new InconsistencyFoundException(
-                    "Passed BookCopy doesn't match any Book! Isbn '" + copy.getBookIsbn() + "' not found!"
+                    "Passed BookCopy doesn't match any Book! UUID '" + copy.getUuid() + "' not found!"
             );
         }
     }
@@ -119,15 +133,29 @@ public class LocalBooksRepository implements BooksRepository {
 
     @Override
     public Optional<BookCopy> findBookCopyByIsbnAndNumber(String isbn, int number) {
+
+        var book = findBookByIsbn(isbn);
+
+        if (book.isEmpty()) {
+            return Optional.empty();
+        }
+
         return bookCopies.stream()
-                .filter(copy -> copy.getBookIsbn().equals(isbn) && copy.getNumber() == number)
+                .filter(copy -> copy.getElementUuid().equals(book.get().getUuid()) && copy.getNumber() == number)
                 .findFirst();
     }
 
     @Override
     public List<BookCopy> findBookCopiesByIsbnAndState(String isbn, BookCopy.State state) {
+
+        var book = findBookByIsbn(isbn);
+
+        if (book.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return bookCopies.stream()
-                .filter(copy -> copy.getState() == state && copy.getBookIsbn().equals(isbn))
+                .filter(copy -> copy.getState() == state && copy.getElementUuid().equals(book.get().getUuid()))
                 .collect(Collectors.toList());
     }
 

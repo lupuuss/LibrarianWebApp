@@ -8,7 +8,30 @@
 <ui:composition template = "/common/template.xhtml">
 
     <ui:define name = "content">
+        <h:outputScript name="js/selectAll.js" />
         <h2>${msg['page.lending.cart']}</h2>
+        <h:form>
+            <h:commandButton action="${lendingsCartController.removeMarkedPositions()}" />
+            <h:dataTable var="lock" value="${lendingsCartController.cartPositions}">
+                <h:column>
+                    <f:facet name="header">${msg['page.books.title']}</f:facet>
+                    #{lock.copy.book.title}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">${msg['page.books.author']}</f:facet>
+                    #{lock.copy.book.author}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">${msg['page.books.state']}</f:facet>
+                    <h:outputText value="#{lock.copy.state}"
+                                  converter="pl.lodz.pas.librarianwebapp.web.converter.BookCopyDtoStateConverter" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
+                    <h:selectBooleanCheckbox  value="#{lendingsCartController.markedPositions[lock]}" styleClass="mark" />
+                </h:column>
+            </h:dataTable>
+        </h:form>
     </ui:define>
 
 </ui:composition>

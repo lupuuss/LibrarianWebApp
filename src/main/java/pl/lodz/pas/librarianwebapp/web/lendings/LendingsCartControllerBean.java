@@ -1,23 +1,28 @@
 package pl.lodz.pas.librarianwebapp.web.lendings;
 
+import pl.lodz.pas.librarianwebapp.DateProvider;
 import pl.lodz.pas.librarianwebapp.services.BooksService;
 import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
+import pl.lodz.pas.librarianwebapp.services.dto.BookLockDto;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Named("lendingsCartController")
 @SessionScoped
 public class LendingsCartControllerBean implements Serializable {
 
-    private final Set<BookCopyDto> books = new HashSet<>();
+    @Inject
+    private DateProvider dateProvider;
+
+    private final Set<BookLockDto> bookLocks = new HashSet<>();
+
+    private Map<BookLockDto, Boolean> markedPositions = new HashMap<>();
 
     @Inject
     private BooksService service;
@@ -32,9 +37,9 @@ public class LendingsCartControllerBean implements Serializable {
             return "error.xhtml?faces-redirect=true";
         }
 
-        books.add(bookCopy.get());
+        bookLocks.add(bookCopy.get());
 
-        System.out.println(books);
+        System.out.println(bookLocks);
 
         return "books.xhtml?faces-redirect=true";
     }
@@ -43,18 +48,44 @@ public class LendingsCartControllerBean implements Serializable {
         return FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
     }
 
-    public String removeFromCart(BookCopyDto bookCopy) {
+    public String removeMarkedPositions() {
 
-        var userLogin = getLogin();
+        var marked = markedPositions.entrySet()
+                .stream()
+                .filter(Map.Entry::getValue)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
-        books.remove(bookCopy);
+        for (var bookLock : marked) {
+            var userLogin = getLogin();
 
-        service.unlockBook(userLogin, bookCopy);
+            bookLocks.remove(bookLock);
+
+            service.unlockBook(userLogin, bookLock.getCopy());
+        }
 
         return "cart.xhtml?faces-redirect=true";
     }
 
-    public List<BookCopyDto> getCartPositions() {
-        return new ArrayList<>(books);
+    public List<BookLockDto> getCartPositions() {
+
+        cleanOutdatedCartPositions();
+        return new ArrayList<>(bookLocks);
+    }
+
+    private void cleanOutdatedCartPositions() {
+        bookLocks.removeIf(lock -> lock.getUntil().isBefore(dateProvider.now()));
+        markedPositions.entrySet().removeIf(entry -> !bookLocks.contains(entry.getKey()));
+    }
+
+
+    public Map<BookLockDto, Boolean> getMarkedPositions() {
+
+        cleanOutdatedCartPositions();
+        return markedPositions;
+    }
+
+    public void setMarkedPositions(Map<BookLockDto, Boolean> markedPositions) {
+        this.markedPositions = markedPositions;
     }
 }

@@ -99,7 +99,10 @@ public class LocalEventsRepository implements EventsRepository {
             throw new InconsistencyFoundException("Book already locked!");
         }
 
-        locks.add(lock);
+        if (!locks.add(lock)) {
+            locks.remove(lock);
+            locks.add(lock);
+        }
     }
 
     @Override

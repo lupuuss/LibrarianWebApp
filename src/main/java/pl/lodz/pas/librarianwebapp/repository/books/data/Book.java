@@ -1,20 +1,18 @@
 package pl.lodz.pas.librarianwebapp.repository.books.data;
 
 import java.util.Objects;
+import java.util.UUID;
 
-public class Book {
+public class Book extends Element<Book> {
 
     private final String isbn;
 
-    private String title;
     private String author;
-    private String publisher;
 
-    public Book(String isbn, String title, String author, String publisher) {
+    public Book(UUID uuid, String isbn, String title, String author, String publisher) {
+        super(uuid, publisher, title);
         this.isbn = isbn;
-        this.title = title;
         this.author = author;
-        this.publisher = publisher;
     }
 
     @Override
@@ -34,13 +32,7 @@ public class Book {
         return isbn;
     }
 
-    public String getTitle() {
-        return title;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getAuthor() {
         return author;
@@ -50,20 +42,14 @@ public class Book {
         this.author = author;
     }
 
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
+    @Override
     public Book copy() {
         return new Book(
+                getUuid(),
                 isbn,
-                title,
+                getTitle(),
                 author,
-                publisher
+                getPublisher()
         );
     }
 }

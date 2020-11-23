@@ -1,14 +1,11 @@
 package pl.lodz.pas.librarianwebapp.repository.books;
 
-import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
-import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
+import pl.lodz.pas.librarianwebapp.repository.books.data.*;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
-import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +16,8 @@ public interface BooksRepository {
     List<Book> findAllBooks();
 
     Optional<Book> findBookByIsbn(String isbn);
+
+    Optional<Book> findBookByUuid(UUID uuid);
 
     List<BookCopy> findBookCopiesByIsbn(String isbn);
 

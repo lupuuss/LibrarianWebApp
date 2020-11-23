@@ -8,6 +8,7 @@
 
 <ui:composition template = "/common/template.xhtml">
     <ui:define name = "content">
+        <h:outputScript name="js/selectAll.js" />
         <h:form>
             <h:button outcome="addNewBook.xhtml" value="${msg['page.books.addbook']}"/>
             <h:button outcome="addNewBookCopy.xhtml" value="${msg['page.books.addbookcopy']}"/>
@@ -41,18 +42,6 @@
 
             </h:dataTable>
         </h:form>
-
-        <script type="text/javascript">
-            function selectAll() {
-                const checkbox = document.getElementsByClassName('masterMark')[0];
-
-                const elements = document.getElementsByClassName('mark');
-
-                for (let element of elements) {
-                    element.checked = checkbox.checked
-                }
-            }
-        </script>
     </ui:define>
 </ui:composition>
 </html>
