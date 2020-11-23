@@ -1,6 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.lendings;
 
 import pl.lodz.pas.librarianwebapp.services.BooksService;
+import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
 
 import javax.enterprise.context.RequestScoped;
@@ -19,7 +20,7 @@ public class LendingsControllerBean {
     private BooksService service;
 
     public Set<Map.Entry<BookDto, Long>> getAvailableBooksCopiesCount() {
-        return service.getAvailableBooksCopiesCount()
+        return service.getAvailableCopiesCount()
                 .entrySet();
     }
 }

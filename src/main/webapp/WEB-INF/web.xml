@@ -52,7 +52,7 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Rent pages</web-resource-name>
-            <url-pattern>/rents/*</url-pattern>
+            <url-pattern>/lendings/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>

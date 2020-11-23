@@ -4,7 +4,7 @@ import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
 
 public class BookCopyDto {
 
-    private final Book book;
+    private final BookDto book;
 
     private final int number;
 
@@ -14,7 +14,7 @@ public class BookCopyDto {
 
     private State state;
 
-    public BookCopyDto(int number, Book book, State state) {
+    public BookCopyDto(int number, BookDto book, State state) {
         this.number = number;
         this.book = book;
         this.state = state;
@@ -24,7 +24,7 @@ public class BookCopyDto {
         return number;
     }
 
-    public Book getBook() {
+    public BookDto getBook() {
         return book;
     }
 

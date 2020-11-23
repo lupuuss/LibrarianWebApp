@@ -61,7 +61,7 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
-    public List<BookCopy> findBookCopiesByIsbn(String isbn) {
+    public synchronized List<BookCopy> findBookCopiesByIsbn(String isbn) {
         return bookCopies.stream()
                 .filter(copy -> copy.getBookIsbn().equals(isbn))
                 .map(BookCopy::copy)
@@ -69,30 +69,12 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
-    public synchronized Map<Book, Long> countAllBooksWithNotDamagedCopies() {
-        var map = new HashMap<Book, Long>();
-
-        for (var book : books) {
-
-            var count = bookCopies.stream()
-                    .filter(copy -> copy.getBookIsbn().equals(book.getIsbn()))
-                    .filter(copy -> copy.getState() != BookCopy.State.DAMAGED &&
-                                    copy.getState() != BookCopy.State.NEED_REPLACEMENT)
-                    .count();
-
-            map.put(book.copy(), count);
-        }
-
-        return map;
-    }
-
-    @Override
-    public synchronized Long countCopiesByIsbnAndState(String isbn, BookCopy.State state) {
-        return bookCopies
+    public synchronized List<BookCopy> findBookCopiesByIsbnAndNotDamaged(String isbn) {
+        return findBookCopiesByIsbn(isbn)
                 .stream()
-                .filter(copy -> copy.getBookIsbn().equals(isbn) &&
-                                copy.getState() == state)
-                .count();
+                .filter(copy -> copy.getState() != BookCopy.State.DAMAGED &&
+                                copy.getState() != BookCopy.State.NEED_REPLACEMENT)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -140,6 +122,13 @@ public class LocalBooksRepository implements BooksRepository {
         return bookCopies.stream()
                 .filter(copy -> copy.getBookIsbn().equals(isbn) && copy.getNumber() == number)
                 .findFirst();
+    }
+
+    @Override
+    public List<BookCopy> findBookCopiesByIsbnAndState(String isbn, BookCopy.State state) {
+        return bookCopies.stream()
+                .filter(copy -> copy.getState() == state && copy.getBookIsbn().equals(isbn))
+                .collect(Collectors.toList());
     }
 
     @Override

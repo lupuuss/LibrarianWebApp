@@ -1,18 +1,13 @@
 package pl.lodz.pas.librarianwebapp.web.employees;
 
 import pl.lodz.pas.librarianwebapp.services.BooksService;
-import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
 import pl.lodz.pas.librarianwebapp.web.BookCopyStateI18n;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Named("newBookCopyController")
 @RequestScoped
@@ -48,7 +43,7 @@ public class NewBookCopyControllerBean {
 
     public String createBookCopy() {
 
-        var result = booksService.addBookCopy(isbn, state.toBookCopyState());
+        var result = booksService.addCopy(isbn, state.toBookCopyState());
 
         if (result) {
             return "books.xhtml?faces-redirect=true";

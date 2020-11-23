@@ -40,7 +40,7 @@ public class BooksControllerBean {
 
     public String removeMarkedCopies() {
 
-        booksService.deleteBookCopies(getMarkedCopies());
+        booksService.deleteCopies(getMarkedCopies());
 
         return "books.xhtml?faces-redirect=true";
     }

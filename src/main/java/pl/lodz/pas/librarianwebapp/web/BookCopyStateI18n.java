@@ -47,6 +47,8 @@ public enum BookCopyStateI18n {
 
         var map = Arrays.stream(BookCopyStateI18n.values())
                 .collect(Collectors.toMap(BookCopyStateI18n::getTranslated, state -> state));
+
+        System.out.println("-------sadasds----" + map);
         return map.get(translated);
     }
 }

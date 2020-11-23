@@ -5,10 +5,12 @@ import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
+import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface BooksRepository {
 
@@ -22,9 +24,9 @@ public interface BooksRepository {
 
     Optional<BookCopy> findBookCopyByIsbnAndNumber(String isbn, int number);
 
-    Map<Book, Long> countAllBooksWithNotDamagedCopies();
+    List<BookCopy> findBookCopiesByIsbnAndNotDamaged(String isbn);
 
-    Long countCopiesByIsbnAndState(String isbn, BookCopy.State state);
+    List<BookCopy> findBookCopiesByIsbnAndState(String isbn, BookCopy.State state);
 
     void addBook(Book book) throws ObjectAlreadyExistsException;
 
