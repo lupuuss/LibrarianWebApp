@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.producer;
 
-import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
-import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
+import pl.lodz.pas.librarianwebapp.producer.annotations.MagazinesRepositoryInitializer;
+import pl.lodz.pas.librarianwebapp.repository.books.data.*;
 import pl.lodz.pas.librarianwebapp.repository.user.User;
 import pl.lodz.pas.librarianwebapp.producer.annotations.BooksRepositoryInitializer;
 import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializer;
@@ -46,5 +46,31 @@ public class Producer {
             copies.add(new BookCopy(UUID.randomUUID(), uuids[1],2, BookCopy.State.USED));
             copies.add(new BookCopy(UUID.randomUUID(), uuids[2],1, BookCopy.State.GOOD));
         };
+    }
+
+
+    @Produces
+    @MagazinesRepositoryInitializer
+    public BiConsumer<Set<Magazine>, Set<MagazineCopy>> produceMagazinesInitializer(){
+        return ((magazines, magazineCopies) -> {
+            UUID[] elementUuids = new UUID[] { UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID() , UUID.randomUUID() };
+            UUID[] uuids = new UUID[] { UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID() , UUID.randomUUID() , UUID.randomUUID(), UUID.randomUUID()};
+            String[] issn = new String[] { "mju76yhn", "nhy67ujm", "asdfghjk","kjhgfdsa" };
+            Integer[] issue = new Integer[] {1,2,3,4,5,6};
+
+            magazines.add(new Magazine(elementUuids[0],"Fnatic","Fraszki",issn[0],3));
+            magazines.add(new Magazine(elementUuids[1],"Gamers2","Sport",issn[1],2));
+            magazines.add(new Magazine(elementUuids[2],"Fnatic","Fraszki",issn[0],2));
+            magazines.add(new Magazine(elementUuids[3],"Republika Konga","Polska Niepodległa",issn[2],1));
+            magazines.add(new Magazine(elementUuids[4],"Nickelodeon","Fakt",issn[3],2));
+
+            magazineCopies.add(new MagazineCopy(uuids[0],elementUuids[0], 0, ElementCopy.State.NEW));
+            magazineCopies.add(new MagazineCopy(uuids[1],elementUuids[1], 2, ElementCopy.State.GOOD));
+            magazineCopies.add(new MagazineCopy(uuids[2],elementUuids[4], 3, ElementCopy.State.GOOD));
+            magazineCopies.add(new MagazineCopy(uuids[3],elementUuids[3], 1, ElementCopy.State.GOOD));
+            magazineCopies.add(new MagazineCopy(uuids[4],elementUuids[2], 1, ElementCopy.State.NEED_REPLACEMENT));
+            magazineCopies.add(new MagazineCopy(uuids[5],elementUuids[1], 1, ElementCopy.State.NEW));
+        });
+
     }
 }
