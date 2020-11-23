@@ -101,12 +101,12 @@ public class LocalBooksRepository implements BooksRepository {
 
     private void checkBookCopyConsistency(BookCopy copy) throws InconsistencyFoundException {
         var book = books.stream()
-                .filter(b -> b.getUuid().equals(copy.getUuid()))
+                .filter(b -> b.getUuid().equals(copy.getElementUuid()))
                 .findFirst();
 
         if (book.isEmpty()) {
             throw new InconsistencyFoundException(
-                    "Passed BookCopy doesn't match any Book! UUID '" + copy.getUuid() + "' not found!"
+                    "Passed BookCopy doesn't match any Book! UUID '" + copy.getElementUuid() + "' not found!"
             );
         }
     }
