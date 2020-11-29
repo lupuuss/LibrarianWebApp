@@ -1,12 +1,9 @@
 package pl.lodz.pas.librarianwebapp.services.dto;
 
-import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
+public class ElementCopyDto {
 
-public class BookCopyDto {
-
-    private final BookDto book;
-
-    private final int number;
+    private final  int number;
+    private final  ElementDto element;
 
     public enum State {
         NEW, GOOD, USED, NEED_REPLACEMENT, DAMAGED
@@ -14,18 +11,18 @@ public class BookCopyDto {
 
     private State state;
 
-    public BookCopyDto(int number, BookDto book, State state) {
+    public ElementCopyDto(int number,ElementDto element,  State state) {
+        this.element = element;
         this.number = number;
-        this.book = book;
         this.state = state;
+    }
+
+    public ElementDto getElement() {
+        return element;
     }
 
     public int getNumber() {
         return number;
-    }
-
-    public BookDto getBook() {
-        return book;
     }
 
     public State getState() {

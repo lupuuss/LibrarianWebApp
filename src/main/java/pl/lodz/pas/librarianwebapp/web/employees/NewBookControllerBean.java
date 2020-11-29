@@ -1,9 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.employees;
 
 import pl.lodz.pas.librarianwebapp.services.BooksService;
-import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
-import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -32,7 +30,7 @@ public class NewBookControllerBean {
         var result = booksService.addBook(book);
 
         if (result) {
-            return "books.xhtml?faces-redirect=true";
+            return "elements.xhtml?faces-redirect=true";
         } else {
             return "creationFailed.xhtml?faces-redirect=true";
         }

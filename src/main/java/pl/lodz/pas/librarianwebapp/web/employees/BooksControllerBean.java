@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.employees;
 
 import pl.lodz.pas.librarianwebapp.services.BooksService;
-import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
+import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -17,17 +17,17 @@ public class BooksControllerBean {
 
     @Inject
     private BooksService booksService;
-    private Map<BookCopyDto, Boolean> marks = new HashMap<>();
+    private Map<ElementCopyDto, Boolean> marks = new HashMap<>();
 
-    public List<BookCopyDto> getAllCopies() {
+    public List<ElementCopyDto> getAllCopies() {
         return booksService.getAllCopies();
     }
 
-    public Map<BookCopyDto, Boolean> getMarks() {
+    public Map<ElementCopyDto, Boolean> getMarks() {
         return marks;
     }
 
-    public void setMarks(Map<BookCopyDto, Boolean> marks) {
+    public void setMarks(Map<ElementCopyDto, Boolean> marks) {
         this.marks = marks;
     }
 
@@ -35,17 +35,17 @@ public class BooksControllerBean {
 
         booksService.degradeCopies(getMarkedCopies());
 
-        return "books.xhtml?faces-redirect=true";
+        return "elements.xhtml?faces-redirect=true";
     }
 
     public String removeMarkedCopies() {
 
         booksService.deleteCopies(getMarkedCopies());
 
-        return "books.xhtml?faces-redirect=true";
+        return "elements.xhtml?faces-redirect=true";
     }
 
-    private List<BookCopyDto> getMarkedCopies() {
+    private List<ElementCopyDto> getMarkedCopies() {
         return marks.entrySet()
                 .stream()
                 .filter(Map.Entry::getValue)

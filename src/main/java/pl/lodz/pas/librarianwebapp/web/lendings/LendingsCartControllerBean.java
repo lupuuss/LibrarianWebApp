@@ -2,8 +2,8 @@ package pl.lodz.pas.librarianwebapp.web.lendings;
 
 import pl.lodz.pas.librarianwebapp.DateProvider;
 import pl.lodz.pas.librarianwebapp.services.BooksService;
-import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
-import pl.lodz.pas.librarianwebapp.services.dto.BookLockDto;
+import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
+import pl.lodz.pas.librarianwebapp.services.dto.ElementLockDto;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -20,14 +20,14 @@ public class LendingsCartControllerBean implements Serializable {
     @Inject
     private DateProvider dateProvider;
 
-    private final Set<BookLockDto> bookLocks = new HashSet<>();
+    private final Set<ElementLockDto> elementLocks = new HashSet<>();
 
-    private Map<BookLockDto, Boolean> markedPositions = new HashMap<>();
+    private Map<ElementLockDto, Boolean> markedPositions = new HashMap<>();
 
     @Inject
     private BooksService service;
 
-    public String addToCart(String isbn, BookCopyDto.State state) {
+    public String addToCart(String isbn,ElementCopyDto.State state) {
 
         var userLogin = getLogin();
 
@@ -37,11 +37,23 @@ public class LendingsCartControllerBean implements Serializable {
             return "error.xhtml?faces-redirect=true";
         }
 
-        bookLocks.add(bookCopy.get());
+        elementLocks.add(bookCopy.get());
 
-        System.out.println(bookLocks);
+        return "elements.xhtml?faces-redirect=true";
+    }
 
-        return "books.xhtml?faces-redirect=true";
+    public String addToCart(String issn, Integer issue, ElementCopyDto.State state){
+        var userLogin = getLogin();
+
+        var magazineCopy = service.lockMagazine(issn,issue, userLogin, state);
+
+        if (magazineCopy.isEmpty()) {
+            return "error.xhtml?faces-redirect=true";
+        }
+
+        elementLocks.add(magazineCopy.get());
+
+        return "elements.xhtml?faces-redirect=true";
     }
 
     private String getLogin() {
@@ -59,33 +71,33 @@ public class LendingsCartControllerBean implements Serializable {
         for (var bookLock : marked) {
             var userLogin = getLogin();
 
-            bookLocks.remove(bookLock);
+            elementLocks.remove(bookLock);
 
-            service.unlockBook(userLogin, bookLock.getCopy());
+            service.unlockElement(userLogin, bookLock.getCopy());
         }
 
         return "cart.xhtml?faces-redirect=true";
     }
 
-    public List<BookLockDto> getCartPositions() {
+    public List<ElementLockDto> getCartPositions() {
 
         cleanOutdatedCartPositions();
-        return new ArrayList<>(bookLocks);
+        return new ArrayList<>(elementLocks);
     }
 
     private void cleanOutdatedCartPositions() {
-        bookLocks.removeIf(lock -> lock.getUntil().isBefore(dateProvider.now()));
-        markedPositions.entrySet().removeIf(entry -> !bookLocks.contains(entry.getKey()));
+        elementLocks.removeIf(lock -> lock.getUntil().isBefore(dateProvider.now()));
+        markedPositions.entrySet().removeIf(entry -> !elementLocks.contains(entry.getKey()));
     }
 
 
-    public Map<BookLockDto, Boolean> getMarkedPositions() {
+    public Map<ElementLockDto, Boolean> getMarkedPositions() {
 
         cleanOutdatedCartPositions();
         return markedPositions;
     }
 
-    public void setMarkedPositions(Map<BookLockDto, Boolean> markedPositions) {
+    public void setMarkedPositions(Map<ElementLockDto, Boolean> markedPositions) {
         this.markedPositions = markedPositions;
     }
 }

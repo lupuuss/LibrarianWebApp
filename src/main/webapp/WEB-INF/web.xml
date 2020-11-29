@@ -9,7 +9,7 @@
     </default-context-path>
 
     <welcome-file-list>
-        <welcome-file>lendings/books.xhtml</welcome-file>
+        <welcome-file>lendings/elements.xhtml</welcome-file>
     </welcome-file-list>
 
     <security-role>

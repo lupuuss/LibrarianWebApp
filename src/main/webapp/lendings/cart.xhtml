@@ -11,20 +11,20 @@
         <h:outputScript name="js/selectAll.js" />
         <h2>${msg['page.lending.cart']}</h2>
         <h:form>
-            <h:commandButton action="${lendingsCartController.removeMarkedPositions()}" />
+            <h:commandButton action="${lendingsCartController.removeMarkedPositions()}"  value="${msg['page.common.cancel']}"/>
             <h:dataTable var="lock" value="${lendingsCartController.cartPositions}">
                 <h:column>
                     <f:facet name="header">${msg['page.books.title']}</f:facet>
-                    #{lock.copy.book.title}
+                    #{lock.copy.element.title}
                 </h:column>
                 <h:column>
-                    <f:facet name="header">${msg['page.books.author']}</f:facet>
-                    #{lock.copy.book.author}
+                    <f:facet name="header">${msg['page.books.publisher']}</f:facet>
+                    #{lock.copy.element.publisher}
                 </h:column>
                 <h:column>
                     <f:facet name="header">${msg['page.books.state']}</f:facet>
                     <h:outputText value="#{lock.copy.state}"
-                                  converter="pl.lodz.pas.librarianwebapp.web.converter.BookCopyDtoStateConverter" />
+                                  converter="pl.lodz.pas.librarianwebapp.web.converter.ElementCopyDtoStateConverter" />
                 </h:column>
                 <h:column>
                     <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>

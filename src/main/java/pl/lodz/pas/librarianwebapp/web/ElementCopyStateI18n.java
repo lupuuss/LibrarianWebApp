@@ -1,12 +1,12 @@
 package pl.lodz.pas.librarianwebapp.web;
 
-import pl.lodz.pas.librarianwebapp.services.dto.BookCopyDto;
+import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 
 import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public enum BookCopyStateI18n {
+public enum ElementCopyStateI18n {
     NEW, GOOD, USED, NEED_REPLACEMENT, DAMAGED;
 
     public String getTranslated() {
@@ -34,19 +34,19 @@ public enum BookCopyStateI18n {
         return getTranslated();
     }
 
-    public BookCopyDto.State toBookCopyState() {
-        return BookCopyDto.State.valueOf(this.name());
+    public ElementCopyDto.State toBookCopyState() {
+        return ElementCopyDto.State.valueOf(this.name());
     }
 
-    public static BookCopyStateI18n from(BookCopyDto.State state) {
+    public static ElementCopyStateI18n from(ElementCopyDto.State state) {
 
-        return BookCopyStateI18n.valueOf(state.name());
+        return ElementCopyStateI18n.valueOf(state.name());
     }
 
-    public static BookCopyStateI18n fromTranslatedString(String translated) {
+    public static ElementCopyStateI18n fromTranslatedString(String translated) {
 
-        var map = Arrays.stream(BookCopyStateI18n.values())
-                .collect(Collectors.toMap(BookCopyStateI18n::getTranslated, state -> state));
+        var map = Arrays.stream(ElementCopyStateI18n.values())
+                .collect(Collectors.toMap(ElementCopyStateI18n::getTranslated, state -> state));
 
         System.out.println("-------sadasds----" + map);
         return map.get(translated);

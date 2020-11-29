@@ -3,20 +3,20 @@ package pl.lodz.pas.librarianwebapp.services.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class BookLockDto {
+public class ElementLockDto {
 
 
-    private BookCopyDto copy;
+    private ElementCopyDto copy;
     private String userLogin;
     private LocalDateTime until;
 
-    public BookLockDto(BookCopyDto copy, String userLogin, LocalDateTime until) {
+    public ElementLockDto(ElementCopyDto copy, String userLogin, LocalDateTime until) {
         this.copy = copy;
         this.userLogin = userLogin;
         this.until = until;
     }
 
-    public BookCopyDto getCopy() {
+    public ElementCopyDto getCopy() {
         return copy;
     }
 
@@ -28,7 +28,7 @@ public class BookLockDto {
         return until;
     }
 
-    public void setCopy(BookCopyDto copy) {
+    public void setCopy(ElementCopyDto copy) {
         this.copy = copy;
     }
 

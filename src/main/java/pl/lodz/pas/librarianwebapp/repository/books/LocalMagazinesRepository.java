@@ -65,7 +65,7 @@ public class LocalMagazinesRepository implements MagazinesRepository{
     @Override
     public synchronized Optional<Magazine> findMagazineByIssnAndIssue(String issn, int issue) {
         return magazines.stream()
-                .filter(magazine -> magazine.getIssn().equals(issn))
+                .filter(magazine -> magazine.getIssn().equals(issn) && magazine.getIssue() == issue)
                 .findFirst()
                 .map(Magazine::copy);
     }

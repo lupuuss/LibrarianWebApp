@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.employees;
 
 import pl.lodz.pas.librarianwebapp.services.BooksService;
-import pl.lodz.pas.librarianwebapp.web.BookCopyStateI18n;
+import pl.lodz.pas.librarianwebapp.web.ElementCopyStateI18n;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -17,7 +17,7 @@ public class NewBookCopyControllerBean {
     private BooksService booksService;
 
     private String isbn;
-    private BookCopyStateI18n state;
+    private ElementCopyStateI18n state;
 
 
     public List<String> getIsbns() {
@@ -25,11 +25,11 @@ public class NewBookCopyControllerBean {
         return booksService.getAllIsbns();
     }
 
-    public BookCopyStateI18n getState() {
+    public ElementCopyStateI18n getState() {
         return state;
     }
 
-    public void setState(BookCopyStateI18n state) {
+    public void setState(ElementCopyStateI18n state) {
         this.state = state;
     }
 
@@ -46,13 +46,13 @@ public class NewBookCopyControllerBean {
         var result = booksService.addCopy(isbn, state.toBookCopyState());
 
         if (result) {
-            return "books.xhtml?faces-redirect=true";
+            return "elements.xhtml?faces-redirect=true";
         } else {
             return "creationFailed.xhtml?faces-redirect=true";
         }
     }
 
-    public List<BookCopyStateI18n> getStates() {
-        return Arrays.asList(BookCopyStateI18n.values());
+    public List<ElementCopyStateI18n> getStates() {
+        return Arrays.asList(ElementCopyStateI18n.values());
     }
 }

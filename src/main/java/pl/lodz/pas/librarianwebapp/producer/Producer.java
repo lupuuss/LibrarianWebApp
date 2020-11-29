@@ -53,8 +53,12 @@ public class Producer {
     @MagazinesRepositoryInitializer
     public BiConsumer<Set<Magazine>, Set<MagazineCopy>> produceMagazinesInitializer(){
         return ((magazines, magazineCopies) -> {
-            UUID[] elementUuids = new UUID[] { UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID() , UUID.randomUUID() };
-            UUID[] uuids = new UUID[] { UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID() , UUID.randomUUID() , UUID.randomUUID(), UUID.randomUUID()};
+            UUID[] elementUuids = new UUID[] { UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID() , UUID.randomUUID(), UUID.randomUUID() };
+            UUID[] uuids = new UUID[] {
+                    UUID.randomUUID(), UUID.randomUUID(),
+                    UUID.randomUUID() , UUID.randomUUID(),
+                    UUID.randomUUID(), UUID.randomUUID()
+            };
             String[] issn = new String[] { "mju76yhn", "nhy67ujm", "asdfghjk","kjhgfdsa" };
             Integer[] issue = new Integer[] {1,2,3,4,5,6};
 

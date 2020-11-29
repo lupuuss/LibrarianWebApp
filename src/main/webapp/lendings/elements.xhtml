@@ -14,10 +14,6 @@
                 #{entry.key.title}
             </h:column>
             <h:column>
-                <f:facet name="header">#{msg['page.books.author']}</f:facet>
-                #{entry.key.author}
-            </h:column>
-            <h:column>
                 <f:facet name="header">#{msg['page.books.publisher']}</f:facet>
                 #{entry.key.publisher}
             </h:column>
@@ -25,11 +21,29 @@
                 <f:facet name="header">#{msg['page.books.count']}</f:facet>
                 #{entry.value}
             </h:column>
+            <h:column>
+                <f:facet name="header">#{msg['page.books.author']}</f:facet>
+                <h:outputLabel rendered="#{entry.key['class'].simpleName eq 'BookDto'}">
+                    #{entry.key.author}
+                </h:outputLabel>
+            </h:column>
+            <h:column>
+                <f:facet name="header">#{msg['page.books.issue']}</f:facet>
+                <h:outputLabel rendered="#{entry.key['class'].simpleName eq 'MagazineDto'}">
+                    #{entry.key.issue}
+                </h:outputLabel>
+            </h:column>
 
             <h:column>
                 <h:button
+                        rendered="#{entry.key['class'].simpleName eq 'BookDto'}"
                         disabled="${entry.value eq 0}"
-                        outcome="addBookToCart.xhtml?isbn=${entry.key.isbn}"
+                        outcome="addElementToCart.xhtml?ref=${entry.key.isbn}"
+                        value="${msg['page.lending.addcart']}"/>
+                <h:button
+                        rendered="#{entry.key['class'].simpleName eq 'MagazineDto'}"
+                        disabled="${entry.value eq 0}"
+                        outcome="addElementToCart.xhtml?ref=${entry.key.issn}&amp;issue=${entry.key.issue}"
                         value="${msg['page.lending.addcart']}"/>
             </h:column>
         </h:dataTable>
