@@ -11,15 +11,27 @@
     <ui:define name = "content">
         <h:outputScript name="js/selectAll.js" />
         <h:form>
-            <h:button outcome="addNewBook.xhtml" value="${msg['page.books.addbook']}"/>
-            <h:button outcome="addNewBookCopy.xhtml" value="${msg['page.books.addbookcopy']}"/>
-            <h:commandButton action="#{booksController.degradeMarkedCopies}" value="${msg['page.books.degrade']}" />
-            <h:commandButton action="#{booksController.removeMarkedCopies}" value="${msg['page.books.remove']}" />
 
-            <h:dataTable value="${booksController.allCopies}" var="copy">
-                <h:column rendered="#{copy.element['class'].simpleName eq 'BookDto'}">
-                    <f:facet name="header">${msg['page.books.isbn']}</f:facet>
-                    #{copy.element.isbn}
+            <h:button outcome="addNewElement.xhtml?type=book" value="${msg['page.books.addbook']}"/>
+            <h:button outcome="addNewElement.xhtml?type=magazine" value="${msg['page.books.addmagazine']}"/>
+
+            <h:button outcome="addNewElementCopy.xhtml" value="${msg['page.books.addelementcopy']}"/>
+            <h:commandButton action="#{elementsController.degradeMarkedCopies}" value="${msg['page.books.degrade']}" />
+            <h:commandButton action="#{elementsController.removeMarkedCopies}" value="${msg['page.books.remove']}" />
+
+            <h:dataTable value="${elementsController.allCopies}" var="copy">
+                <h:column>
+                    <f:facet name="header">${msg['page.books.ref']}</f:facet>
+                    <h:outputLabel rendered="#{copy.element['class'].simpleName eq 'BookDto'}"
+                                    value="#{copy.element.isbn}"/>
+                    <h:outputLabel rendered="#{copy.element['class'].simpleName eq 'MagazineDto'}"
+                                   value="#{copy.element.issn}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">${msg['page.books.issue']}</f:facet>
+                    <h:outputLabel rendered="#{copy.element['class'].simpleName eq 'MagazineDto'}"
+                                   value="#{copy.element.issue}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">${msg['page.books.number']}</f:facet>
@@ -38,7 +50,7 @@
 
                 <h:column>
                     <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
-                    <h:selectBooleanCheckbox  value="#{booksController.marks[copy]}" styleClass="mark" />
+                    <h:selectBooleanCheckbox  value="#{elementsController.marks[copy]}" styleClass="mark" />
                 </h:column>
 
             </h:dataTable>

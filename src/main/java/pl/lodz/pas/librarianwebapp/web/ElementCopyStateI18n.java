@@ -34,7 +34,7 @@ public enum ElementCopyStateI18n {
         return getTranslated();
     }
 
-    public ElementCopyDto.State toBookCopyState() {
+    public ElementCopyDto.State toElementState() {
         return ElementCopyDto.State.valueOf(this.name());
     }
 

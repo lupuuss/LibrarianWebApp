@@ -1,10 +1,6 @@
 package pl.lodz.pas.librarianwebapp.web.lendings;
 
-import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
-import pl.lodz.pas.librarianwebapp.repository.books.data.Element;
-import pl.lodz.pas.librarianwebapp.repository.books.data.ElementCopy;
-import pl.lodz.pas.librarianwebapp.services.BooksService;
-import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
+import pl.lodz.pas.librarianwebapp.services.ElementsService;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementDto;
 import pl.lodz.pas.librarianwebapp.web.ElementCopyStateI18n;
@@ -24,7 +20,7 @@ import java.util.stream.Collectors;
 public class LendElementControllerBean implements Serializable {
 
     @Inject
-    private BooksService service;
+    private ElementsService service;
 
     @Inject
     private LendingsCartControllerBean lendingsCartControllerBean;
@@ -113,8 +109,8 @@ public class LendElementControllerBean implements Serializable {
     public String addCurrentElementToCart() {
 
         if(issue == null){
-            return lendingsCartControllerBean.addToCart(ref, state.toBookCopyState());
+            return lendingsCartControllerBean.addToCart(ref, state.toElementState());
         }
-        return lendingsCartControllerBean.addToCart(ref,issue, state.toBookCopyState());
+        return lendingsCartControllerBean.addToCart(ref,issue, state.toElementState());
     }
 }

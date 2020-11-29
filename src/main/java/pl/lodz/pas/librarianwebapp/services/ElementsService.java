@@ -13,12 +13,11 @@ import pl.lodz.pas.librarianwebapp.services.dto.*;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RequestScoped
-public class BooksService {
+public class ElementsService {
 
     @SuppressWarnings("FieldCanBeLocal")
     private final long reservationTimeInMinutes = 1;
@@ -83,10 +82,10 @@ public class BooksService {
         for (var book : books) {
 
             var bookDto = new BookDto(
-                    book.getIsbn(),
                     book.getTitle(),
-                    book.getAuthor(),
-                    book.getPublisher()
+                    book.getPublisher(),
+                    book.getIsbn(),
+                    book.getAuthor()
             );
 
             var copiesForBook = booksRepository.findBookCopiesByIsbn(book.getIsbn())
@@ -117,25 +116,7 @@ public class BooksService {
         return copies;
     }
 
-    public boolean addBook(BookDto book) {
-
-        try {
-
-            booksRepository.addBook(new Book(
-                    UUID.randomUUID(),
-                    book.getIsbn(),
-                    book.getTitle(),
-                    book.getAuthor(),
-                    book.getPublisher()
-            ));
-            return true;
-        } catch (ObjectAlreadyExistsException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean addCopy(String isbn, ElementCopyDto.State state) {
+    public boolean addBookCopy(String isbn, ElementCopyDto.State state) {
         try {
 
             var number = booksRepository.getNextCopyNumberByIsbn(isbn);
@@ -161,10 +142,49 @@ public class BooksService {
         }
     }
 
+    public boolean addMagazineCopy(String issn, int issue, ElementCopyDto.State state) {
+        try {
+
+            var number = magazinesRepository.getNextCopyNumberByIssnAndIssue(issn,issue);
+
+            var magazine = magazinesRepository.findMagazineByIssnAndIssue(issn,issue);
+
+            if (magazine.isEmpty()) {
+                return false;
+            }
+
+            magazinesRepository.addMagazineCopy(new MagazineCopy(
+                    UUID.randomUUID(),
+                    magazine.get().getUuid(),
+                    number,
+                    mapState(state)
+            ));
+
+            return true;
+        } catch (RepositoryException e) {
+
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     public List<String> getAllIsbns() {
         return booksRepository.findAllBooks()
                 .stream()
                 .map(Book::getIsbn)
+                .collect(Collectors.toList());
+    }
+
+    public List<MagazineDto> getAllMagazines() {
+        return magazinesRepository.findAllMagazines()
+                .stream()
+                .map(magazine -> new MagazineDto(
+                        magazine.getTitle(),
+                        magazine.getPublisher(),
+                        magazine.getIssn(),
+                        magazine.getIssue()
+                        ))
                 .collect(Collectors.toList());
     }
 
@@ -211,7 +231,7 @@ public class BooksService {
                 var magazineCopy = toUpdate.get();
 
                 var currentState = magazineCopy.getState();
-                magazineCopy.setState(BookCopy.State.degrade(currentState));
+                magazineCopy.setState(MagazineCopy.State.degrade(currentState));
 
                 try {
                     magazinesRepository.updateMagazineCopy(magazineCopy);
@@ -295,7 +315,7 @@ public class BooksService {
 
         for (var magazine : magazines) {
             var copies =
-                    magazinesRepository.findMagazineCopiesByIssnAndIssue(magazine.getIssn(), magazine.getIssue());
+                    magazinesRepository.findMagazineCopiesByIssnAndIssueAndNotDamaged(magazine.getIssn(), magazine.getIssue());
 
             var amount = copies.stream()
                     .filter(copy -> eventsRepository.isElementAvailable(copy.getUuid()))
@@ -490,5 +510,53 @@ public class BooksService {
                 magazine.getIssn(),
                 magazine.getIssue()
         ));
+    }
+
+    public boolean addBook(BookDto book) {
+
+        try{
+            booksRepository.addBook(new Book(
+                    UUID.randomUUID(),
+                    book.getIsbn(),
+                    book.getTitle(),
+                    book.getAuthor(),
+                    book.getPublisher()
+            ));
+            return true;
+        } catch (ObjectAlreadyExistsException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addMagazine(MagazineDto magazine){
+        try {
+            magazinesRepository.addMagazine(new Magazine(
+                    UUID.randomUUID(),
+                    magazine.getPublisher(),
+                    magazine.getTitle(),
+                    magazine.getIssn(),
+                    magazine.getIssue()
+            ));
+            return true;
+        } catch (ObjectAlreadyExistsException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addElement(ElementDto elementDto) {
+
+        if (elementDto instanceof BookDto) {
+            var book = (BookDto) elementDto;
+            return addBook(book);
+
+
+        } else if (elementDto instanceof MagazineDto) {
+            var magazine = (MagazineDto) elementDto;
+            return addMagazine(magazine);
+        }
+        return false;
+
     }
 }

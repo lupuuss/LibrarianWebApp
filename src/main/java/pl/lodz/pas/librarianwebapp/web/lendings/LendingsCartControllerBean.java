@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.lendings;
 
 import pl.lodz.pas.librarianwebapp.DateProvider;
-import pl.lodz.pas.librarianwebapp.services.BooksService;
+import pl.lodz.pas.librarianwebapp.services.ElementsService;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementLockDto;
 
@@ -25,7 +25,7 @@ public class LendingsCartControllerBean implements Serializable {
     private Map<ElementLockDto, Boolean> markedPositions = new HashMap<>();
 
     @Inject
-    private BooksService service;
+    private ElementsService service;
 
     public String addToCart(String isbn,ElementCopyDto.State state) {
 

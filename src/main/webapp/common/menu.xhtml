@@ -8,7 +8,7 @@
     <h:panelGrid columns="1">
         <h:button value="${msg['page.menu.manage.users']}" outcome="/admin/users.xhtml" rendered="${request.isUserInRole('ADMINS')}"/>
 
-        <h:button value="${msg['page.menu.manage.books']}" outcome="/employee/books.xhmtl" rendered="${request.isUserInRole('EMPLOYEES') or request.isUserInRole('ADMINS')}"/>
+        <h:button value="${msg['page.menu.manage.books']}" outcome="/employee/elements.xhmtl" rendered="${request.isUserInRole('EMPLOYEES') or request.isUserInRole('ADMINS')}"/>
 
         <h:button value="${msg['page.menu.lendings']}" outcome="/lendings/elements.xhtml" />
     </h:panelGrid>

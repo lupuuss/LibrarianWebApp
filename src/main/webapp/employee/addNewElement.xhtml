@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--suppress ELValidationInJSP -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<f:metadata>
+    <f:viewParam id="type" name="type" value="#{newElementController.elementType}" required="true" />
+    <f:viewAction action="#{newElementController.initializeElement}"/>
+</f:metadata>
+
+<ui:composition template = "/common/template.xhtml">
+
+    <ui:define name = "content">
+        <h:form>
+            <h:panelGrid columns="1">
+
+                <h:panelGroup rendered="#{newElementController.element['class'].simpleName eq 'BookDto'}">
+                    <h:outputLabel for="isbn">#{msg['page.books.isbn']}:</h:outputLabel>
+                    <h:inputText
+                            id="isbn"
+                            maxlength="25"
+                            required="true"
+                            label="isbn"
+                            value="${newElementController.element.isbn}"
+                            requiredMessage="${msg['page.form.field.required']}">
+                    <f:validateRegex pattern="([a-zA-Z0-9]{8})" />
+                    </h:inputText>
+                    <h:message for="isbn" />
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{newElementController.element['class'].simpleName eq 'MagazineDto'}">
+                    <h:outputLabel for="issn">#{msg['page.books.issn']}:</h:outputLabel>
+                    <h:inputText
+                            id="issn"
+                            maxlength="25"
+                            required="true"
+                            label="issn"
+                            value="${newElementController.element.issn}"
+                            requiredMessage="${msg['page.form.field.required']}">
+                    <f:validateRegex pattern="([a-zA-Z0-9]{8})" />
+                    </h:inputText>
+                    <h:message for="issn" />
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{newElementController.element['class'].simpleName eq 'MagazineDto'}">
+                    <h:outputLabel for="issue">#{msg['page.books.issue']}:</h:outputLabel>
+                    <h:inputText
+                            id="issue"
+                            maxlength="25"
+                            required="true"
+                            label="issue"
+                            value="${newElementController.element.issue}"
+                            requiredMessage="${msg['page.form.field.required']}"/>
+                    <h:message for="issue" />
+                </h:panelGroup>
+
+                <h:panelGroup>
+                    <h:outputLabel for="title">#{msg['page.books.title']}:</h:outputLabel>
+                    <h:inputText
+                            id="title"
+                            maxlength="25"
+                            required="true"
+                            label="title"
+                            value="${newElementController.element.title}"
+                            requiredMessage="${msg['page.form.field.required']}"/>
+                    <h:message for="title" />
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:outputLabel for="publisher">#{msg['page.books.publisher']}:</h:outputLabel>
+                    <h:inputText
+                            id="publisher"
+                            maxlength="25"
+                            required="true"
+                            label="publisher"
+                            value="${newElementController.element.publisher}"
+                            requiredMessage="${msg['page.form.field.required']}"/>
+                    <h:message for="publisher" />
+                </h:panelGroup>
+                <h:panelGroup rendered="#{newElementController.element['class'].simpleName eq 'BookDto'}">
+                    <h:outputLabel for="author">#{msg['page.books.author']}:</h:outputLabel>
+                    <h:inputText
+                            id="author"
+                            maxlength="25"
+                            required="true"
+                            label="author"
+                            value="${newElementController.element.author}"
+                            requiredMessage="${msg['page.form.field.required']}"/>
+                    <h:message for="author" />
+                </h:panelGroup>
+
+                <h:commandButton
+                        value="${msg['page.common.add']}"
+                        action="#{newElementController.createElement}"/>
+
+                <h:button outcome="elements.xhtml" value="${msg['page.common.cancel']}"/>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

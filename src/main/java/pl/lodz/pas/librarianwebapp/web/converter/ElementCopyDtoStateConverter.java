@@ -12,7 +12,7 @@ import javax.faces.convert.FacesConverter;
 public class ElementCopyDtoStateConverter implements Converter<ElementCopyDto.State> {
     @Override
     public ElementCopyDto.State getAsObject(FacesContext context, UIComponent component, String value) {
-        return ElementCopyStateI18n.fromTranslatedString(value).toBookCopyState();
+        return ElementCopyStateI18n.fromTranslatedString(value).toElementState();
     }
 
     @Override

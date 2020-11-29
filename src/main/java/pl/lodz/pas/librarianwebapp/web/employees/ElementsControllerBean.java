@@ -1,6 +1,6 @@
 package pl.lodz.pas.librarianwebapp.web.employees;
 
-import pl.lodz.pas.librarianwebapp.services.BooksService;
+import pl.lodz.pas.librarianwebapp.services.ElementsService;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 
 import javax.enterprise.context.RequestScoped;
@@ -11,16 +11,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Named("booksController")
+@Named("elementsController")
 @RequestScoped
-public class BooksControllerBean {
+public class ElementsControllerBean {
 
     @Inject
-    private BooksService booksService;
+    private ElementsService elementsService;
     private Map<ElementCopyDto, Boolean> marks = new HashMap<>();
 
     public List<ElementCopyDto> getAllCopies() {
-        return booksService.getAllCopies();
+        return elementsService.getAllCopies();
     }
 
     public Map<ElementCopyDto, Boolean> getMarks() {
@@ -33,14 +33,14 @@ public class BooksControllerBean {
 
     public String degradeMarkedCopies() {
 
-        booksService.degradeCopies(getMarkedCopies());
+        elementsService.degradeCopies(getMarkedCopies());
 
         return "elements.xhtml?faces-redirect=true";
     }
 
     public String removeMarkedCopies() {
 
-        booksService.deleteCopies(getMarkedCopies());
+        elementsService.deleteCopies(getMarkedCopies());
 
         return "elements.xhtml?faces-redirect=true";
     }

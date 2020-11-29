@@ -1,8 +1,6 @@
 package pl.lodz.pas.librarianwebapp.web.lendings;
 
-import pl.lodz.pas.librarianwebapp.services.BooksService;
-import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
-import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
+import pl.lodz.pas.librarianwebapp.services.ElementsService;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementDto;
 
 import javax.enterprise.context.RequestScoped;
@@ -16,7 +14,7 @@ import java.util.Set;
 public class LendingsControllerBean {
 
     @Inject
-    private BooksService service;
+    private ElementsService service;
 
     public Set<Map.Entry<ElementDto, Long>> getAvailableBooksCopiesCount() {
         return service.getAvailableCopiesCount()

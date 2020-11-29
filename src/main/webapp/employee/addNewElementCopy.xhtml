@@ -12,25 +12,25 @@
             <h:panelGrid columns="3">
 
 
-                <h:outputLabel for="bookIsbn">#{msg['page.books.isbn']}:</h:outputLabel>
-                <h:selectOneMenu id="bookIsbn" value="#{newBookCopyController.isbn}" >
-                    <f:selectItems value="#{newBookCopyController.isbns}" />
+                <h:outputLabel for="elementRef">#{msg['page.books.ref']}:</h:outputLabel>
+                <h:selectOneMenu id="elementRef" value="#{newElementCopyController.reference}" >
+                    <f:selectItems value="#{newElementCopyController.references}" />
                 </h:selectOneMenu>
-                <h:message for="bookIsbn" />
+                <h:message for="elementRef" />
 
                 <h:outputLabel for="state">#{msg['page.books.state']}:</h:outputLabel>
                 <h:selectOneMenu
                         id="state"
-                        value="#{newBookCopyController.state}">
-                    <f:selectItems value="#{newBookCopyController.states}" />
+                        value="#{newElementCopyController.state}">
+                    <f:selectItems value="#{newElementCopyController.states}" />
                 </h:selectOneMenu>
                 <h:message for="state" />
 
                 <h:commandButton
                         value="${msg['page.common.add']}"
-                        action="#{newBookCopyController.createBookCopy}"/>
+                        action="#{newElementCopyController.createElementCopy}"/>
 
-                <h:button outcome="books.xhtml" value="${msg['page.common.cancel']}"/>
+                <h:button outcome="elements.xhtml" value="${msg['page.common.cancel']}"/>
 
             </h:panelGrid>
         </h:form>
