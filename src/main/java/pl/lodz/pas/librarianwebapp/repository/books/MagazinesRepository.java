@@ -39,4 +39,6 @@ public interface MagazinesRepository {
     void deleteMagazine(Magazine magazine) throws ObjectNotFoundException;
 
     void deleteMagazineCopy(MagazineCopy magazineCopy) throws ObjectNotFoundException;
+
+    Optional<MagazineCopy> findMagazineCopyByUuid(UUID uuid);
 }

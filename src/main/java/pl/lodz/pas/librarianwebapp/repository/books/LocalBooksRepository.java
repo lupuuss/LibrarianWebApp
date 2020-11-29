@@ -67,6 +67,14 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
+    public Optional<BookCopy> findBookCopyByUuid(UUID uuid) {
+        return bookCopies.stream()
+                .filter(bookCopy -> bookCopy.getUuid().equals(uuid))
+                .findAny()
+                .map(BookCopy::copy);
+    }
+
+    @Override
     public synchronized List<BookCopy> findBookCopiesByIsbn(String isbn) {
 
         var book = findBookByIsbn(isbn);

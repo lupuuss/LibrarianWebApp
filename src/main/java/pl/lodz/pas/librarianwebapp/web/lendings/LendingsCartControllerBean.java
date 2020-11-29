@@ -90,7 +90,6 @@ public class LendingsCartControllerBean implements Serializable {
         markedPositions.entrySet().removeIf(entry -> !elementLocks.contains(entry.getKey()));
     }
 
-
     public Map<ElementLockDto, Boolean> getMarkedPositions() {
 
         cleanOutdatedCartPositions();
@@ -99,5 +98,19 @@ public class LendingsCartControllerBean implements Serializable {
 
     public void setMarkedPositions(Map<ElementLockDto, Boolean> markedPositions) {
         this.markedPositions = markedPositions;
+    }
+
+    public String rentElements() {
+
+        if (elementLocks.isEmpty()) return "";
+
+        var result = service.rentLockedItems(elementLocks, getLogin());
+
+        if (result) {
+            elementLocks.clear();
+            return "elements.xhtml?faces-redirect=true";
+        } else {
+            return "error.xhtml?faces-redirect=true";
+        }
     }
 }

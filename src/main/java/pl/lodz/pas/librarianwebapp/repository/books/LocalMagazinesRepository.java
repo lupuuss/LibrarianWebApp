@@ -1,10 +1,7 @@
 package pl.lodz.pas.librarianwebapp.repository.books;
 
 import pl.lodz.pas.librarianwebapp.producer.annotations.MagazinesRepositoryInitializer;
-import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
-import pl.lodz.pas.librarianwebapp.repository.books.data.ElementCopy;
-import pl.lodz.pas.librarianwebapp.repository.books.data.Magazine;
-import pl.lodz.pas.librarianwebapp.repository.books.data.MagazineCopy;
+import pl.lodz.pas.librarianwebapp.repository.books.data.*;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
@@ -176,7 +173,13 @@ public class LocalMagazinesRepository implements MagazinesRepository{
         magazineCopies.remove(magazineCopy);
     }
 
-
+    @Override
+    public Optional<MagazineCopy> findMagazineCopyByUuid(UUID uuid) {
+        return magazineCopies.stream()
+                .filter(magazineCopy -> magazineCopy.getUuid().equals(uuid))
+                .findAny()
+                .map(MagazineCopy::copy);
+    }
 
 
     @Override

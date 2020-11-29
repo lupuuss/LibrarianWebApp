@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template = "/common/template.xhtml">
+    <ui:define name = "content">
+        <f:view>
+            <h:dataTable var="event" value="${lendingsHistoryController.lendingsHistory}">
+                <h:column>
+                    <f:facet name="header">${msg['page.books.title']}</f:facet>
+                    #{event.copy.element.title}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">${msg['page.books.state']}</f:facet>
+                    <h:outputText value="#{event.copy.state}"
+                                  converter="pl.lodz.pas.librarianwebapp.web.converter.ElementCopyDtoStateConverter" />
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">${msg['page.books.date.lend']}</f:facet>
+                    <h:outputText value="#{event.lendDate}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">${msg['page.books.date.return']}</f:facet>
+                    <h:outputText value="#{event.returnDate}"/>
+                </h:column>
+            </h:dataTable>
+        </f:view>
+    </ui:define>
+</ui:composition>
+
+</html>

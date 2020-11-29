@@ -11,5 +11,13 @@
         value="${msg['page.lending.cart']}"
         style="float: right"
         outcome="/lendings/cart.xhtml" />
+
+    <h:button
+            rendered="${request.servletPath.contains('/lendings/')}"
+            value="${msg['page.lending.yourRents']}"
+            style="float: right"
+            outcome="/lendings/yourRents.xhtml" />
+
+
 </ui:composition>
 </html>

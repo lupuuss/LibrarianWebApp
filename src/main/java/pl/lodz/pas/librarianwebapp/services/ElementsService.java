@@ -6,6 +6,7 @@ import pl.lodz.pas.librarianwebapp.repository.books.MagazinesRepository;
 import pl.lodz.pas.librarianwebapp.repository.books.data.*;
 import pl.lodz.pas.librarianwebapp.repository.events.EventsRepository;
 import pl.lodz.pas.librarianwebapp.repository.events.data.ElementLock;
+import pl.lodz.pas.librarianwebapp.repository.events.data.LendingEvent;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
@@ -13,6 +14,7 @@ import pl.lodz.pas.librarianwebapp.services.dto.*;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -281,7 +283,7 @@ public class ElementsService {
                 }
 
                 try {
-                    magazinesRepository.updateMagazineCopy(toRemove.get());
+                    magazinesRepository.deleteMagazineCopy(toRemove.get());
                 } catch (RepositoryException e) {
                     e.printStackTrace();
                 }
@@ -558,5 +560,104 @@ public class ElementsService {
         }
         return false;
 
+    }
+
+    public boolean rentLockedItems(Set<ElementLockDto> elementLocks, String userLogin) {
+
+        if (!elementLocks.stream().allMatch(lock -> lock.getUntil().isAfter(dateProvider.now()))) {
+            return false;
+        }
+
+        for (var lock : elementLocks) {
+
+            var elementCopy = lock.getCopy();
+
+            UUID uuid;
+
+            if (elementCopy.getElement() instanceof BookDto) {
+                BookDto book = (BookDto) elementCopy.getElement();
+
+                uuid = booksRepository.findBookCopyByIsbnAndNumber(book.getIsbn(), elementCopy.getNumber())
+                        .orElseThrow()
+                        .getUuid();
+            } else if (elementCopy.getElement() instanceof MagazineDto) {
+                MagazineDto magazine = (MagazineDto) elementCopy.getElement();
+
+                uuid = magazinesRepository.findMagazineCopyByIssnAndIssueAndNumber(magazine.getIssn(), magazine.getIssue(), elementCopy.getNumber())
+                        .orElseThrow()
+                        .getUuid();
+            } else {
+                throw new IllegalStateException("Unsupported element type!");
+            }
+
+            try {
+                eventsRepository.addEvent(new LendingEvent(UUID.randomUUID(), dateProvider.now(), userLogin, uuid));
+            } catch (RepositoryException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return true;
+    }
+
+    public List<LendEventDto> getLendingForUser(String user) {
+
+        var events = eventsRepository.findLendingEventsByUserLogin(user);
+
+        List<LendEventDto> eventDtos = new ArrayList<>();
+
+        for (var event : events) {
+
+            var copy = getElementCopyDtoByUuid(event.getElementUuid());
+
+            var lendDate = event.getDate();
+
+            LocalDateTime returnDate = null;
+
+            if (event.getReturnUuid().isPresent()) {
+                var returnEvent =
+                        eventsRepository.findReturnEventByUuid(event.getReturnUuid().get());
+
+                returnDate = returnEvent.orElseThrow().getDate();
+            }
+
+            eventDtos.add(new LendEventDto(copy, lendDate, returnDate, user));
+        }
+
+        return eventDtos;
+    }
+
+    private ElementCopyDto getElementCopyDtoByUuid(UUID uuid) {
+
+        var bookCopy = booksRepository.findBookCopyByUuid(uuid);
+
+        if (bookCopy.isPresent()) {
+
+            var book =
+                    booksRepository.findBookByUuid(bookCopy.get().getElementUuid())
+                            .orElseThrow();
+
+            return new ElementCopyDto(
+                    bookCopy.get().getNumber(),
+                    new BookDto(book.getTitle(), book.getPublisher(), book.getIsbn(), book.getAuthor()),
+                    mapState(bookCopy.get().getState())
+            );
+        }
+
+        var magazineCopy = magazinesRepository.findMagazineCopyByUuid(uuid);
+
+        if (magazineCopy.isPresent()) {
+            var magazine = magazinesRepository.findMagazineByUuid(magazineCopy.get().getElementUuid())
+                    .orElseThrow();
+
+            return new ElementCopyDto(
+                    magazineCopy.get().getNumber(),
+                    new MagazineDto(magazine.getTitle(),magazine.getPublisher(),magazine.getIssn(),magazine.getIssue()),
+                    mapState(magazineCopy.get().getState())
+            );
+
+        }
+
+        return null;
     }
 }

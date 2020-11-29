@@ -11,7 +11,9 @@
         <h:outputScript name="js/selectAll.js" />
         <h2>${msg['page.lending.cart']}</h2>
         <h:form>
-            <h:commandButton action="${lendingsCartController.removeMarkedPositions()}"  value="${msg['page.common.cancel']}"/>
+            <h:commandButton
+                    rendered="${not empty lendingsCartController.cartPositions}"
+                    action="${lendingsCartController.removeMarkedPositions()}"  value="${msg['page.common.cancel']}"/>
             <h:dataTable var="lock" value="${lendingsCartController.cartPositions}">
                 <h:column>
                     <f:facet name="header">${msg['page.books.title']}</f:facet>
@@ -31,6 +33,9 @@
                     <h:selectBooleanCheckbox  value="#{lendingsCartController.markedPositions[lock]}" styleClass="mark" />
                 </h:column>
             </h:dataTable>
+
+            <h:commandButton rendered="${not empty lendingsCartController.cartPositions}"
+                             action="${lendingsCartController.rentElements}" value="${msg['page.books.rent']}" />
         </h:form>
     </ui:define>
 

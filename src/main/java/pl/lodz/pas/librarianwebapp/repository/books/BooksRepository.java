@@ -19,6 +19,8 @@ public interface BooksRepository {
 
     Optional<Book> findBookByUuid(UUID uuid);
 
+    Optional<BookCopy> findBookCopyByUuid(UUID uuid);
+
     List<BookCopy> findBookCopiesByIsbn(String isbn);
 
     Optional<BookCopy> findBookCopyByIsbnAndNumber(String isbn, int number);

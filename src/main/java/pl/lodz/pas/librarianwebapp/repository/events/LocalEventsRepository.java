@@ -5,13 +5,12 @@ import pl.lodz.pas.librarianwebapp.repository.events.data.*;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
+import pl.lodz.pas.librarianwebapp.repository.user.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class LocalEventsRepository implements EventsRepository {
@@ -85,6 +84,25 @@ public class LocalEventsRepository implements EventsRepository {
                 .filter(e -> e.getElementUuid().equals(uuid) && e.getReturnUuid().isEmpty())
                 .findAny()
                 .isEmpty();
+    }
+
+    @Override
+    public List<LendingEvent> findLendingEventsByUserLogin(String userLogin) {
+        return events.stream()
+                .filter(e -> e instanceof LendingEvent)
+                .map(e -> (LendingEvent) e)
+                .filter(u -> u.getCustomerLogin().equals(userLogin))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<ReturnEvent> findReturnEventByUuid(UUID uuid) {
+        return events.stream()
+                .filter(e -> e instanceof ReturnEvent)
+                .map(e -> (ReturnEvent) e)
+                .filter(returnEvent -> returnEvent.getUuid().equals(uuid))
+                .findAny();
+
     }
 
     @Override
