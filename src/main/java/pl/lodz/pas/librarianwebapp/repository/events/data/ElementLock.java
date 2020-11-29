@@ -4,24 +4,24 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class BookLock {
+public class ElementLock {
 
-    private UUID bookUuid;
+    private UUID elementUuid;
     private String userLogin;
     private LocalDateTime until;
 
-    public BookLock(UUID bookUuid, String userLogin, LocalDateTime until) {
-        this.bookUuid = bookUuid;
+    public ElementLock(UUID elementUuid, String userLogin, LocalDateTime until) {
+        this.elementUuid = elementUuid;
         this.userLogin = userLogin;
         this.until = until;
     }
 
-    public UUID getBookUuid() {
-        return bookUuid;
+    public UUID getElementUuid() {
+        return elementUuid;
     }
 
-    public void setBookUuid(UUID bookUuid) {
-        this.bookUuid = bookUuid;
+    public void setElementUuid(UUID elementUuid) {
+        this.elementUuid = elementUuid;
     }
 
     public LocalDateTime getUntil() {
@@ -36,13 +36,13 @@ public class BookLock {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BookLock bookLock = (BookLock) o;
-        return bookUuid.equals(bookLock.bookUuid);
+        ElementLock bookLock = (ElementLock) o;
+        return elementUuid.equals(bookLock.elementUuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookUuid);
+        return Objects.hash(elementUuid);
     }
 
     public String getUserLogin() {

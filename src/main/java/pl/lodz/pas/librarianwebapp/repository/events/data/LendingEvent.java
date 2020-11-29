@@ -1,17 +1,15 @@
 package pl.lodz.pas.librarianwebapp.repository.events.data;
 
-import pl.lodz.pas.librarianwebapp.repository.events.data.BookEvent;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-public class LendingEvent extends BookEvent {
+public class LendingEvent extends ElementEvent {
 
     private UUID returnUuid;
 
-    public LendingEvent(UUID uuid, LocalDateTime date, String customerLogin, UUID bookUuid) {
-        super(uuid, date, customerLogin, bookUuid);
+    public LendingEvent(UUID uuid, LocalDateTime date, String customerLogin, UUID elementUuid) {
+        super(uuid, date, customerLogin, elementUuid);
     }
 
     public void setReturnUuid(UUID returnUuid) {

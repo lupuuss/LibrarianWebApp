@@ -5,7 +5,7 @@ import pl.lodz.pas.librarianwebapp.repository.books.BooksRepository;
 import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
 import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
 import pl.lodz.pas.librarianwebapp.repository.events.EventsRepository;
-import pl.lodz.pas.librarianwebapp.repository.events.data.BookLock;
+import pl.lodz.pas.librarianwebapp.repository.events.data.ElementLock;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
@@ -205,7 +205,7 @@ public class BooksService {
             var copies = booksRepository.findBookCopiesByIsbnAndNotDamaged(book.getIsbn());
 
             var amount = copies.stream()
-                    .filter(copy -> eventsRepository.isBookAvailable(copy.getUuid()))
+                    .filter(copy -> eventsRepository.isElementAvailable(copy.getUuid()))
                     .count();
 
             booksMap.put(
@@ -223,23 +223,23 @@ public class BooksService {
         var copies = booksRepository.findBookCopiesByIsbnAndState(isbn, mapState(state));
 
         var optReservedCopy = copies.stream()
-                .filter(copy -> eventsRepository.isBookAvailable(copy.getUuid()))
+                .filter(copy -> eventsRepository.isElementAvailable(copy.getUuid()))
                 .findAny();
 
         if (optReservedCopy.isEmpty()) {
             return Optional.empty();
         }
 
-        BookLock lock;
+        ElementLock lock;
 
         try {
-            lock = new BookLock(
+            lock = new ElementLock(
                     optReservedCopy.get().getUuid(),
                     userLogin,
                     dateProvider.now().plusMinutes(reservationTimeInMinutes)
             );
 
-            eventsRepository.saveBookLock(lock);
+            eventsRepository.saveElementLock(lock);
 
         } catch (InconsistencyFoundException e) {
             e.printStackTrace();
@@ -272,7 +272,7 @@ public class BooksService {
                 bookCopyDto.getNumber()
         ).orElseThrow();
 
-        eventsRepository.deleteBookLock(bookCopy.getUuid(), user);
+        eventsRepository.deleteElementLock(bookCopy.getUuid(), user);
     }
 
     public Optional<BookDto> getBook(String isbn) {
@@ -296,7 +296,7 @@ public class BooksService {
 
             var copies = booksRepository.findBookCopiesByIsbnAndState(isbn, state);
 
-            if (copies.stream().anyMatch(copy -> eventsRepository.isBookAvailable(copy.getUuid()))) {
+            if (copies.stream().anyMatch(copy -> eventsRepository.isElementAvailable(copy.getUuid()))) {
                 availableStates.add(mapState(state));
             }
         }

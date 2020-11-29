@@ -17,7 +17,7 @@ import java.util.UUID;
 public class LocalEventsRepository implements EventsRepository {
 
     private final Set<Event> events = new HashSet<>();
-    private final Set<BookLock> locks = new HashSet<>();
+    private final Set<ElementLock> locks = new HashSet<>();
 
     @Inject
     private DateProvider dateProvider;
@@ -51,7 +51,7 @@ public class LocalEventsRepository implements EventsRepository {
         return events.stream()
                 .filter(e -> e instanceof LendingEvent)
                 .map(e -> (LendingEvent) e)
-                .filter(e -> e.getBookUuid().equals(event.getBookUuid()) && e.getReturnUuid().isEmpty())
+                .filter(e -> e.getElementUuid().equals(event.getElementUuid()) && e.getReturnUuid().isEmpty())
                 .findFirst();
     }
 
@@ -59,20 +59,20 @@ public class LocalEventsRepository implements EventsRepository {
         var result = events.stream()
                 .filter(e -> e instanceof LendingEvent)
                 .map(e -> (LendingEvent) e)
-                .filter(e -> e.getReturnUuid().isEmpty() && e.getBookUuid().equals(event.getBookUuid()))
+                .filter(e -> e.getReturnUuid().isEmpty() && e.getElementUuid().equals(event.getElementUuid()))
                 .findAny();
 
         if (result.isPresent()) {
-            throw new InconsistencyFoundException("Book is already lent!");
+            throw new InconsistencyFoundException("Element is already lent!");
         }
     }
 
     @Override
-    public Boolean isBookAvailable(UUID uuid) {
+    public Boolean isElementAvailable(UUID uuid) {
         var now = dateProvider.now();
 
         var isLocked = locks.stream()
-                .anyMatch(lock -> lock.getBookUuid().equals(uuid) &&
+                .anyMatch(lock -> lock.getElementUuid().equals(uuid) &&
                                   lock.getUntil().isAfter(now));
 
         if (isLocked) {
@@ -82,21 +82,21 @@ public class LocalEventsRepository implements EventsRepository {
         return events.stream()
                 .filter(e -> e instanceof LendingEvent)
                 .map(e -> (LendingEvent) e)
-                .filter(e -> e.getBookUuid().equals(uuid) && e.getReturnUuid().isEmpty())
+                .filter(e -> e.getElementUuid().equals(uuid) && e.getReturnUuid().isEmpty())
                 .findAny()
                 .isEmpty();
     }
 
     @Override
-    public void saveBookLock(BookLock lock) throws InconsistencyFoundException {
+    public void saveElementLock(ElementLock lock) throws InconsistencyFoundException {
 
         var isLockedByOtherUser = locks.stream()
-                .anyMatch(l -> l.getBookUuid().equals(lock.getBookUuid()) &&
+                .anyMatch(l -> l.getElementUuid().equals(lock.getElementUuid()) &&
                                l.getUntil().isAfter(dateProvider.now()) &&
                                !l.getUserLogin().equals(lock.getUserLogin()));
 
         if (isLockedByOtherUser) {
-            throw new InconsistencyFoundException("Book already locked!");
+            throw new InconsistencyFoundException("Element already locked!");
         }
 
         if (!locks.add(lock)) {
@@ -106,8 +106,8 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     @Override
-    public void deleteBookLock(UUID uuid, String user) {
-        locks.removeIf(lock -> lock.getUserLogin().equals(user) && lock.getBookUuid().equals(uuid));
+    public void deleteElementLock(UUID uuid, String user) {
+        locks.removeIf(lock -> lock.getUserLogin().equals(user) && lock.getElementUuid().equals(uuid));
     }
 
 
