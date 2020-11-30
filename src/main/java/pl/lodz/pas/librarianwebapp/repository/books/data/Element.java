@@ -3,7 +3,7 @@ package pl.lodz.pas.librarianwebapp.repository.books.data;
 import java.util.Objects;
 import java.util.UUID;
 
-public abstract class Element<T extends Element> {
+public abstract class Element<T extends Element<?>> {
     private final UUID uuid;
     private final String publisher;
     private final String title;
@@ -12,6 +12,10 @@ public abstract class Element<T extends Element> {
         this.uuid = uuid;
         this.publisher = publisher;
         this.title = title;
+    }
+
+    public Element(String publisher, String title) {
+        this(UUID.randomUUID(), publisher, title);
     }
 
     public UUID getUuid() {

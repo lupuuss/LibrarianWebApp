@@ -1,8 +1,13 @@
 package pl.lodz.pas.librarianwebapp.repository.user;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class User {
+
+    public enum Type {
+        ADMIN, EMPLOYEE, USER
+    }
 
     private UUID uuid;
 
@@ -14,15 +19,36 @@ public class User {
 
     private String email;
 
+    private Type type;
+
     private boolean active;
 
-    public User(UUID uuid, String login, String firstName, String lastName, String email, boolean active) {
+    public User(UUID uuid, String login, String firstName, String lastName, String email, Type type, boolean active) {
         this.uuid = uuid;
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.type = type;
         this.active = active;
+    }
+
+    public User(String login, String firstName, String lastName, String email, Type type, boolean active) {
+        this.uuid = UUID.randomUUID();
+        this.login = login;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.type = type;
+        this.active = active;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public String getLogin() {
@@ -80,8 +106,21 @@ public class User {
                 firstName,
                 lastName,
                 email,
-                active
+                type, active
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return uuid.equals(user.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
     }
 
     @Override

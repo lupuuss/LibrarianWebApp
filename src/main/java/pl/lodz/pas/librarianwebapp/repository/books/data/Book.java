@@ -15,6 +15,12 @@ public class Book extends Element<Book> {
         this.author = author;
     }
 
+    public Book(String isbn, String title, String author, String publisher) {
+        super(publisher, title);
+        this.isbn = isbn;
+        this.author = author;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

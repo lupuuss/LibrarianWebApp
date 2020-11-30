@@ -37,22 +37,7 @@ public class ElementsService {
     private DateProvider dateProvider;
 
     private ElementCopyDto.State mapState(ElementCopy.State state) {
-
-        switch (state) {
-
-            case NEW:
-                return ElementCopyDto.State.NEW;
-            case GOOD:
-                return ElementCopyDto.State.GOOD;
-            case USED:
-                return ElementCopyDto.State.USED;
-            case NEED_REPLACEMENT:
-                return ElementCopyDto.State.NEED_REPLACEMENT;
-            case DAMAGED:
-                return ElementCopyDto.State.DAMAGED;
-        }
-
-        throw new IllegalArgumentException("Mapping for passed state not found!");
+        return ElementCopyDto.State.valueOf(state.name());
     }
 
     private ElementCopy.State mapState(ElementCopyDto.State state) {
@@ -130,7 +115,6 @@ public class ElementsService {
             }
 
             booksRepository.addBookCopy(new BookCopy(
-                    UUID.randomUUID(),
                     book.get().getUuid(),
                     number,
                     mapState(state)
@@ -156,7 +140,6 @@ public class ElementsService {
             }
 
             magazinesRepository.addMagazineCopy(new MagazineCopy(
-                    UUID.randomUUID(),
                     magazine.get().getUuid(),
                     number,
                     mapState(state)
@@ -190,6 +173,52 @@ public class ElementsService {
                 .collect(Collectors.toList());
     }
 
+    private void degradeBookCopy(BookDto bookDto, ElementCopyDto copy) {
+
+        var toUpdate = booksRepository.findBookCopyByIsbnAndNumber(
+                bookDto.getIsbn(),
+                copy.getNumber()
+        );
+
+        if (toUpdate.isEmpty()) {
+            return;
+        }
+
+        var bookCopy = toUpdate.get();
+
+        var currentState = bookCopy.getState();
+        bookCopy.setState(BookCopy.State.degrade(currentState));
+
+        try {
+            booksRepository.updateBookCopy(bookCopy);
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void degradeMagazineCopy(MagazineDto magazineDto, ElementCopyDto copy) {
+        var toUpdate = magazinesRepository.findMagazineCopyByIssnAndIssueAndNumber(
+                magazineDto.getIssn(),
+                magazineDto.getIssue(),
+                copy.getNumber()
+        );
+
+        if (toUpdate.isEmpty()) {
+            return;
+        }
+
+        var magazineCopy = toUpdate.get();
+
+        var currentState = magazineCopy.getState();
+        magazineCopy.setState(MagazineCopy.State.degrade(currentState));
+
+        try {
+            magazinesRepository.updateMagazineCopy(magazineCopy);
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void degradeCopies(List<ElementCopyDto> copies) {
 
         for (var copy : copies) {
@@ -197,54 +226,57 @@ public class ElementsService {
             if (copy.getElement() instanceof BookDto) {
 
                 var book = (BookDto) copy.getElement();
-                var toUpdate = booksRepository.findBookCopyByIsbnAndNumber(
-                        book.getIsbn(),
-                        copy.getNumber()
-                );
 
-                if (toUpdate.isEmpty()) {
-                    continue;
-                }
-
-                var bookCopy = toUpdate.get();
-
-                var currentState = bookCopy.getState();
-                bookCopy.setState(BookCopy.State.degrade(currentState));
-
-                try {
-                    booksRepository.updateBookCopy(bookCopy);
-                } catch (RepositoryException e) {
-                    e.printStackTrace();
-                }
+                degradeBookCopy(book, copy);
 
             } else if(copy.getElement() instanceof MagazineDto) {
 
                 var magazine = (MagazineDto) copy.getElement();
-                var toUpdate = magazinesRepository.findMagazineCopyByIssnAndIssueAndNumber(
-                        magazine.getIssn(),
-                        magazine.getIssue(),
-                        copy.getNumber()
-                );
 
-                if (toUpdate.isEmpty()) {
-                    continue;
-                }
+                degradeMagazineCopy(magazine, copy);
 
-                var magazineCopy = toUpdate.get();
-
-                var currentState = magazineCopy.getState();
-                magazineCopy.setState(MagazineCopy.State.degrade(currentState));
-
-                try {
-                    magazinesRepository.updateMagazineCopy(magazineCopy);
-                } catch (RepositoryException e) {
-                    e.printStackTrace();
-                }
             } else {
                 throw new IllegalStateException("Unsupported element type!");
             }
         }
 
+    }
+
+    private void deleteBookCopy(ElementCopyDto copy) {
+        var book = (BookDto) copy.getElement();
+        var toRemove = booksRepository.findBookCopyByIsbnAndNumber(
+                book.getIsbn(),
+                copy.getNumber()
+        );
+
+        if (toRemove.isEmpty()) {
+            return;
+        }
+
+        try {
+            booksRepository.deleteBookCopy(toRemove.get());
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteMagazineCopy(ElementCopyDto copy) {
+        var magazine = (MagazineDto) copy.getElement();
+        var toRemove = magazinesRepository.findMagazineCopyByIssnAndIssueAndNumber(
+                magazine.getIssn(),
+                magazine.getIssue(),
+                copy.getNumber()
+        );
+
+        if (toRemove.isEmpty()) {
+            return;
+        }
+
+        try {
+            magazinesRepository.deleteMagazineCopy(toRemove.get());
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteCopies(List<ElementCopyDto> copies) {
@@ -253,40 +285,12 @@ public class ElementsService {
 
             if (copy.getElement() instanceof BookDto) {
 
-                var book = (BookDto) copy.getElement();
-                var toRemove = booksRepository.findBookCopyByIsbnAndNumber(
-                        book.getIsbn(),
-                        copy.getNumber()
-                );
-
-                if (toRemove.isEmpty()) {
-                    continue;
-                }
-
-                try {
-                    booksRepository.deleteBookCopy(toRemove.get());
-                } catch (RepositoryException e) {
-                    e.printStackTrace();
-                }
+                deleteBookCopy(copy);
 
             } else if(copy.getElement() instanceof MagazineDto) {
 
-                var magazine = (MagazineDto) copy.getElement();
-                var toRemove = magazinesRepository.findMagazineCopyByIssnAndIssueAndNumber(
-                        magazine.getIssn(),
-                        magazine.getIssue(),
-                        copy.getNumber()
-                );
+                deleteMagazineCopy(copy);
 
-                if (toRemove.isEmpty()) {
-                    continue;
-                }
-
-                try {
-                    magazinesRepository.deleteMagazineCopy(toRemove.get());
-                } catch (RepositoryException e) {
-                    e.printStackTrace();
-                }
             } else {
                 throw new IllegalStateException("Unsupported element type!");
             }
@@ -518,7 +522,6 @@ public class ElementsService {
 
         try{
             booksRepository.addBook(new Book(
-                    UUID.randomUUID(),
                     book.getIsbn(),
                     book.getTitle(),
                     book.getAuthor(),
@@ -534,7 +537,6 @@ public class ElementsService {
     public boolean addMagazine(MagazineDto magazine){
         try {
             magazinesRepository.addMagazine(new Magazine(
-                    UUID.randomUUID(),
                     magazine.getPublisher(),
                     magazine.getTitle(),
                     magazine.getIssn(),
@@ -550,13 +552,15 @@ public class ElementsService {
     public boolean addElement(ElementDto elementDto) {
 
         if (elementDto instanceof BookDto) {
+
             var book = (BookDto) elementDto;
             return addBook(book);
 
-
         } else if (elementDto instanceof MagazineDto) {
+
             var magazine = (MagazineDto) elementDto;
             return addMagazine(magazine);
+
         }
         return false;
 
@@ -591,7 +595,7 @@ public class ElementsService {
             }
 
             try {
-                eventsRepository.addEvent(new LendingEvent(UUID.randomUUID(), dateProvider.now(), userLogin, uuid));
+                eventsRepository.addEvent(new LendingEvent(dateProvider.now(), userLogin, uuid));
             } catch (RepositoryException e) {
                 e.printStackTrace();
             }
@@ -652,7 +656,7 @@ public class ElementsService {
 
             return new ElementCopyDto(
                     magazineCopy.get().getNumber(),
-                    new MagazineDto(magazine.getTitle(),magazine.getPublisher(),magazine.getIssn(),magazine.getIssue()),
+                    new MagazineDto(magazine.getTitle(),magazine.getPublisher(), magazine.getIssn(),magazine.getIssue()),
                     mapState(magazineCopy.get().getState())
             );
 

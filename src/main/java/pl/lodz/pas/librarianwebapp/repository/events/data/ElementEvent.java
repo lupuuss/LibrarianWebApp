@@ -12,6 +12,11 @@ public abstract class ElementEvent extends Event {
         this.elementUuid = elementUuid;
     }
 
+    public ElementEvent(LocalDateTime date, String customerLogin, UUID elementUuid) {
+        super(date, customerLogin);
+        this.elementUuid = elementUuid;
+    }
+
     public UUID getElementUuid() {
         return elementUuid;
     }

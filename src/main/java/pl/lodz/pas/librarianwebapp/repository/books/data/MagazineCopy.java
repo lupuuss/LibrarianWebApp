@@ -9,6 +9,11 @@ public class MagazineCopy extends ElementCopy<MagazineCopy> {
         super(uuid, elementUuid, number, state);
     }
 
+    public MagazineCopy(UUID elementUuid, int number, State state) {
+        super(elementUuid, number, state);
+    }
+
+
     @Override
     public MagazineCopy copy() {
         return new MagazineCopy(

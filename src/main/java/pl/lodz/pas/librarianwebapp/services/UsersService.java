@@ -9,7 +9,6 @@ import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -18,27 +17,35 @@ public class UsersService {
     @Inject
     private UsersRepository repository;
 
+    private User.Type mapType(UserDto.Type type) {
+        return User.Type.valueOf(type.name());
+    }
+
+    private UserDto.Type mapType(User.Type type) {
+        return UserDto.Type.valueOf(type.name());
+    }
+
     public List<UserDto> getAllUsers() {
         return repository.findAllUsers()
                 .stream()
-                .map(userDto -> new UserDto(
-                        userDto.getLogin(),
-                        userDto.getFirstName(),
-                        userDto.getLastName(),
-                        userDto.getEmail(),
-                        userDto.isActive()
+                .map(user -> new UserDto(
+                        user.getLogin(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail(),
+                        mapType(user.getType()),
+                        user.isActive()
                 )).collect(Collectors.toList());
     }
 
     public boolean addUser(UserDto user) {
 
         var newUser = new User(
-                UUID.randomUUID(),
                 user.getLogin(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.isActive()
+                mapType(user.getType()), user.isActive()
         );
 
         try {
@@ -65,5 +72,24 @@ public class UsersService {
                 }
             });
         }
+    }
+
+    public List<UserDto> getUsersByLoginContains(String query) {
+
+        if (query == null || query.equals("")) {
+            return getAllUsers();
+        }
+
+        return repository.findUserByLoginContains(query)
+                .stream()
+                .map(user -> new UserDto(
+                        user.getLogin(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail(),
+                        mapType(user.getType()),
+                        user.isActive()
+                ))
+                .collect(Collectors.toList());
     }
 }

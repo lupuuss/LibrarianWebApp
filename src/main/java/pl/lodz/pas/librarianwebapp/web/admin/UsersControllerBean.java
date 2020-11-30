@@ -18,10 +18,21 @@ public class UsersControllerBean {
     @Inject
     private UsersService service;
 
+    private String query;
+
     private final Map<UserDto, Boolean> marks = new HashMap<>();
 
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
     public List<UserDto> getAllUsers() {
-        return service.getAllUsers();
+
+        return service.getUsersByLoginContains(query);
     }
 
     public Map<UserDto, Boolean> getMarks() {
@@ -39,6 +50,10 @@ public class UsersControllerBean {
         service.updateUsersActive(getMarkedUsers(), true);
 
         return "users.xhtml?faces-redirect=true";
+    }
+
+    public String filter() {
+        return "users.xhtml?faces-redirect=true&query=" + query;
     }
 
     private List<UserDto> getMarkedUsers() {

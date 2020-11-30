@@ -18,8 +18,19 @@ public class ReturnEvent extends ElementEvent {
         this.amount = amount;
     }
 
+    public ReturnEvent(LocalDateTime date, String customerLogin, UUID elementUuid, PaymentCause cause, double amount) {
+        super(UUID.randomUUID(), date, customerLogin, elementUuid);
+        this.cause = cause;
+        this.amount = amount;
+    }
+
+
     public ReturnEvent(UUID uuid, LocalDateTime date, String customerLogin, UUID elementUuid) {
         this(uuid, date, customerLogin, elementUuid, PaymentCause.NONE, 0.0);
+    }
+
+    public ReturnEvent(LocalDateTime date, String customerLogin, UUID elementUuid) {
+        this(date, customerLogin, elementUuid, PaymentCause.NONE, 0.0);
     }
 
     public PaymentCause getCause() {

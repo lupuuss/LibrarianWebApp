@@ -78,4 +78,11 @@ public class LocalUsersRepository implements UsersRepository {
                 .map(User::copy)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<User> findUserByLoginContains(String query) {
+        return users.stream()
+                .filter(user -> user.getLogin().contains(query))
+                .collect(Collectors.toList());
+    }
 }

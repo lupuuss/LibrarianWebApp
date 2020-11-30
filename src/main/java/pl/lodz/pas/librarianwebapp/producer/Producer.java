@@ -20,9 +20,14 @@ public class Producer {
     public Consumer<List<User>> produceUsersInitializer() {
         return (users) -> {
 
-            users.add(new User(UUID.randomUUID(), "admin", "Jan", "Kowalski","jan.kowalski@wp.pl", true));
-            users.add(new User(UUID.randomUUID(), "joe", "Joe", "Doe","joe.doe@gmail.com", true));
-            users.add(new User(UUID.randomUUID(), "kid", "Some", "Kid","some.kid@yeet.com", true));
+            users.add(new User("admin", "Jan", "Kowalski",
+                    "jan.kowalski@wp.pl", User.Type.ADMIN, true));
+
+            users.add(new User("joe", "Joe", "Doe",
+                    "joe.doe@gmail.com", User.Type.EMPLOYEE, true));
+
+            users.add(new User("kid", "Some", "Kid",
+                    "some.kid@yeet.com", User.Type.USER, true));
         };
     }
 
@@ -53,6 +58,7 @@ public class Producer {
     @MagazinesRepositoryInitializer
     public BiConsumer<Set<Magazine>, Set<MagazineCopy>> produceMagazinesInitializer(){
         return ((magazines, magazineCopies) -> {
+
             UUID[] elementUuids = new UUID[] { UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID() , UUID.randomUUID(), UUID.randomUUID() };
             UUID[] uuids = new UUID[] {
                     UUID.randomUUID(), UUID.randomUUID(),

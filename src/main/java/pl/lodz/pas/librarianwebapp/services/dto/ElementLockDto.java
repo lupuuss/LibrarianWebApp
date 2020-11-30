@@ -5,7 +5,6 @@ import java.util.UUID;
 
 public class ElementLockDto {
 
-
     private ElementCopyDto copy;
     private String userLogin;
     private LocalDateTime until;

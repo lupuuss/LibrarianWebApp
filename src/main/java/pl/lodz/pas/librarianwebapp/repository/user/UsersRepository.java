@@ -2,6 +2,7 @@ package pl.lodz.pas.librarianwebapp.repository.user;
 
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
+import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +16,7 @@ public interface UsersRepository {
     void updateUser(User user) throws ObjectNotFoundException;
 
     List<User> findAllUsers();
+
+    List<User> findUserByLoginContains(String query);
+
 }

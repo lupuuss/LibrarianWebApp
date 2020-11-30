@@ -12,6 +12,10 @@ public class LendingEvent extends ElementEvent {
         super(uuid, date, customerLogin, elementUuid);
     }
 
+    public LendingEvent(LocalDateTime date, String customerLogin, UUID elementUuid) {
+        super(date, customerLogin, elementUuid);
+    }
+
     public void setReturnUuid(UUID returnUuid) {
         this.returnUuid = returnUuid;
     }

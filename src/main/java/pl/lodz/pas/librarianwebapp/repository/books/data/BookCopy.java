@@ -8,6 +8,10 @@ public class BookCopy extends ElementCopy<BookCopy> {
         super(uuid, bookUuid, number, state);
     }
 
+    public BookCopy(UUID bookUuid, int number, State state) {
+        super(bookUuid, number, state);
+    }
+
     @Override
     public BookCopy copy() {
         return new BookCopy(

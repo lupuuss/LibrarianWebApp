@@ -54,6 +54,10 @@ public abstract class ElementCopy <T extends ElementCopy<?>> {
         this.state = state;
     }
 
+    public ElementCopy(UUID elementUuid, int number, State state) {
+        this(UUID.randomUUID(), elementUuid, number, state);
+    }
+
     public UUID getUuid() {
         return uuid;
     }

@@ -2,6 +2,10 @@ package pl.lodz.pas.librarianwebapp.services.dto;
 
 public class UserDto {
 
+    public enum Type {
+        ADMIN, EMPLOYEE, USER
+    }
+
     private String login;
 
     private String firstName;
@@ -10,13 +14,16 @@ public class UserDto {
 
     private String email;
 
+    private Type type;
+
     private boolean active;
 
-    public UserDto(String login, String firstName, String lastName, String email, boolean active) {
+    public UserDto(String login, String firstName, String lastName, String email, Type type, boolean active) {
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.type = type;
         this.active = active;
     }
 
@@ -61,5 +68,13 @@ public class UserDto {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }

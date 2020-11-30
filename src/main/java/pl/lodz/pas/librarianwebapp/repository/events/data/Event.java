@@ -16,6 +16,10 @@ public abstract class Event {
         this.customerLogin = customerLogin;
     }
 
+    public Event(LocalDateTime date, String customerLogin) {
+        this(UUID.randomUUID(), date, customerLogin);
+    }
+
     public UUID getUuid() {
         return uuid;
     }

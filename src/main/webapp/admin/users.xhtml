@@ -6,36 +6,58 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+<f:metadata>
+    <f:viewParam name="query" value="#{usersController.query}" required="false"/>
+</f:metadata>
+
 <ui:composition template = "/common/template.xhtml">
     <ui:define name = "content">
         <h:outputScript name="js/selectAll.js" />
         <h:form>
-            <h:button outcome="addNewUser.xhtml" value="${msg['page.users.adduser']}"/>
-            <h:commandButton action="#{usersController.deactivateMarkedUsers}" value="${msg['page.users.deactivate']}" />
-            <h:commandButton action="#{usersController.activateMarkedUsers}" value="${msg['page.users.activate']}" />
-            <h:dataTable value="${usersController.allUsers}" var="user">
-                <h:column>
-                    <f:facet name="header">${msg['page.common.login']}</f:facet>
-                    #{user.login}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">${msg['page.common.email']}</f:facet>
-                    #{user.email}
-                </h:column>
+            <h:panelGrid columns="1">
+                <h:panelGroup>
+                    <h:button outcome="addNewUser.xhtml" value="${msg['page.users.adduser']}"/>
+                    <h:commandButton action="#{usersController.deactivateMarkedUsers}" value="${msg['page.users.deactivate']}" />
+                    <h:commandButton action="#{usersController.activateMarkedUsers}" value="${msg['page.users.activate']}" />
 
-                <h:column>
-                    <f:facet name="header">${msg['page.common.name.full']}</f:facet>
-                    #{user.firstName} #{user.lastName}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">${msg['page.common.active']}</f:facet>
-                    <h:selectBooleanCheckbox disabled="true" value="${user.active}" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
-                    <h:selectBooleanCheckbox  value="#{usersController.marks[user]}" styleClass="mark" />
-                </h:column>
-            </h:dataTable>
+                </h:panelGroup>
+
+                <h:panelGroup>
+                    <h:outputLabel for="filter">#{msg['page.users.filterByLogin']}:</h:outputLabel>
+                    <h:inputText
+                            id="filter"
+                            maxlength="25"
+                            value="#{usersController.query}"
+                            required="true"
+                            label="filter"
+                    />
+                    <h:commandButton action="#{usersController.filter}" value="${msg['page.users.filter']}" />
+                </h:panelGroup>
+
+                <h:dataTable value="${usersController.allUsers}" var="user">
+                    <h:column>
+                        <f:facet name="header">${msg['page.common.login']}</f:facet>
+                        #{user.login}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">${msg['page.common.email']}</f:facet>
+                        #{user.email}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">${msg['page.common.name.full']}</f:facet>
+                        #{user.firstName} #{user.lastName}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">${msg['page.common.active']}</f:facet>
+                        <h:selectBooleanCheckbox disabled="true" value="${user.active}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
+                        <h:selectBooleanCheckbox  value="#{usersController.marks[user]}" styleClass="mark" />
+                    </h:column>
+                </h:dataTable>
+            </h:panelGrid>
         </h:form>
     </ui:define>
 </ui:composition>

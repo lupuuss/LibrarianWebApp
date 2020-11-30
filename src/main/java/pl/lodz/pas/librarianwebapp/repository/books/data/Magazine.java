@@ -13,6 +13,12 @@ public class Magazine extends Element<Magazine> {
         this.issue = issue;
     }
 
+    public Magazine(String publisher, String title, String issn, int issue) {
+        super(publisher, title);
+        this.issn = issn;
+        this.issue = issue;
+    }
+
     public String getIssn() {
         return issn;
     }
