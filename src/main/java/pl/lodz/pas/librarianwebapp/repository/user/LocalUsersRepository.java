@@ -54,8 +54,6 @@ public class LocalUsersRepository implements UsersRepository {
         }
 
         users.add(user.copy());
-
-        System.out.println(users);
     }
 
     @Override

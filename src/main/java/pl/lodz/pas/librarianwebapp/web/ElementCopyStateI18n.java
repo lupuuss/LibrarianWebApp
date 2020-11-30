@@ -48,7 +48,6 @@ public enum ElementCopyStateI18n {
         var map = Arrays.stream(ElementCopyStateI18n.values())
                 .collect(Collectors.toMap(ElementCopyStateI18n::getTranslated, state -> state));
 
-        System.out.println("-------sadasds----" + map);
         return map.get(translated);
     }
 }

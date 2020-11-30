@@ -9,6 +9,7 @@ import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -91,5 +92,41 @@ public class UsersService {
                         user.isActive()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public Optional<UserDto> getUserByLogin(String loginToEdit) {
+        return repository.findUserByLogin(loginToEdit)
+                .map(user -> new UserDto(
+                        user.getLogin(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail(),
+                        mapType(user.getType()),
+                        user.isActive()
+                ));
+    }
+
+    public boolean updateUserByLogin(UserDto userDto) {
+
+        var optUser = repository.findUserByLogin(userDto.getLogin());
+
+        if (optUser.isEmpty()) {
+            return false;
+        }
+
+        var user = optUser.get();
+
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setActive(userDto.isActive());
+        user.setEmail(userDto.getEmail());
+
+        try {
+            repository.updateUser(user);
+            return true;
+        } catch (ObjectNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

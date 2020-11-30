@@ -6,6 +6,11 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+<f:metadata>
+    <f:viewParam name="login" required="false" value="#{newUserController.loginToEdit}"/>
+    <f:viewAction action="#{newUserController.initializeUser}"/>
+</f:metadata>
+
 <ui:composition template = "/common/template.xhtml">
 
     <ui:define name = "content">
@@ -17,7 +22,8 @@
                         maxlength="25"
                         required="true"
                         label="login"
-                        value="${newPersonController.user.login}"
+                        readonly="#{newUserController.loginToEdit != null}"
+                        value="${newUserController.user.login}"
                         requiredMessage="${msg['page.form.field.required']}"/>
                 <h:message for="login" />
 
@@ -27,7 +33,7 @@
                         maxlength="25"
                         required="true"
                         label="firstName"
-                        value="${newPersonController.user.firstName}"
+                        value="${newUserController.user.firstName}"
                         requiredMessage="${msg['page.form.field.required']}"/>
                 <h:message for="firstName" />
 
@@ -37,7 +43,7 @@
                         maxlength="25"
                         required="true"
                         label="lastName"
-                        value="${newPersonController.user.lastName}"
+                        value="${newUserController.user.lastName}"
                         requiredMessage="${msg['page.form.field.required']}"/>
                 <h:message for="lastName" />
 
@@ -46,23 +52,32 @@
                         id="email"
                         required="true"
                         label="email"
-                        value="${newPersonController.user.email}"
+                        value="${newUserController.user.email}"
                         requiredMessage="${msg['page.form.field.required']}"
                         validatorMessage="${msg['page.form.field.incorrectValue']}">
                     <f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
                 </h:inputText>
                 <h:message for="email" />
 
+                <h:outputLabel for="type">#{msg['page.users.type']}:</h:outputLabel>
+                <h:selectOneMenu
+                        id="type"
+                        required="true"
+                        value="${newUserController.userType}">
+                    <f:selectItems value="${newUserController.types}" />
+                </h:selectOneMenu>
+                <h:message for="type"/>
+
                 <h:outputLabel for="active">#{msg['page.common.active']}:</h:outputLabel>
                 <h:selectBooleanCheckbox
                         id="active"
                         required="true"
-                        value="${newPersonController.user.active}"/>
+                        value="${newUserController.user.active}"/>
                 <h:message for="active"/>
 
                 <h:commandButton
-                        value="${msg['page.common.add']}"
-                        action="#{newPersonController.createUser()}"/>
+                        value="${msg['page.common.save']}"
+                        action="#{newUserController.saveUser()}"/>
 
                 <h:button outcome="users.xhtml" value="${msg['page.common.cancel']}"/>
             </h:panelGrid>

@@ -28,7 +28,6 @@
                             id="filter"
                             maxlength="25"
                             value="#{usersController.query}"
-                            required="true"
                             label="filter"
                     />
                     <h:commandButton action="#{usersController.filter}" value="${msg['page.users.filter']}" />
@@ -55,6 +54,10 @@
                     <h:column>
                         <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
                         <h:selectBooleanCheckbox  value="#{usersController.marks[user]}" styleClass="mark" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header" />
+                        <h:button outcome="addNewUser.xhtml?login=${user.login}" value="${msg['page.common.edit']}"/>
                     </h:column>
                 </h:dataTable>
             </h:panelGrid>
