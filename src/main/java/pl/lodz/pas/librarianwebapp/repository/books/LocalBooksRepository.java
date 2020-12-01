@@ -224,6 +224,15 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
+    public List<BookCopy> findBookCopiesByIsbnContains(String query) {
+
+        return bookCopies.stream().filter(book ->
+                findBookByUuid(book.getElementUuid()).get().getIsbn().contains(query))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
     public void deleteBook(Book book) throws ObjectNotFoundException {
         if (!books.contains(book)) {
             throw new ObjectNotFoundException(Book.class.getSimpleName(), book.getIsbn());

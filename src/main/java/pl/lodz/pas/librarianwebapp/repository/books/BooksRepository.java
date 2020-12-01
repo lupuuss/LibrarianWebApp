@@ -40,4 +40,6 @@ public interface BooksRepository {
     void deleteBook(Book book) throws ObjectNotFoundException;
 
     void deleteBookCopy(BookCopy bookCopy) throws ObjectNotFoundException;
+
+    List<BookCopy> findBookCopiesByIsbnContains(String query);
 }

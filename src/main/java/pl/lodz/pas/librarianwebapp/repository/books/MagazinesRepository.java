@@ -41,4 +41,6 @@ public interface MagazinesRepository {
     void deleteMagazineCopy(MagazineCopy magazineCopy) throws ObjectNotFoundException;
 
     Optional<MagazineCopy> findMagazineCopyByUuid(UUID uuid);
+
+    List<MagazineCopy> findMagazineCopiesByIssnContains(String query);
 }

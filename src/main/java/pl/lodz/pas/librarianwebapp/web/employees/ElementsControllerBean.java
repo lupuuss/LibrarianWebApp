@@ -19,8 +19,18 @@ public class ElementsControllerBean {
     private ElementsService elementsService;
     private Map<ElementCopyDto, Boolean> marks = new HashMap<>();
 
+    private String query;
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
     public List<ElementCopyDto> getAllCopies() {
-        return elementsService.getAllCopies();
+        return elementsService.getCopiesByIssnIsbnContains(query);
     }
 
     public Map<ElementCopyDto, Boolean> getMarks() {
@@ -51,5 +61,9 @@ public class ElementsControllerBean {
                 .filter(Map.Entry::getValue)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
+    }
+
+    public String filter() {
+        return "elements.xhtml?faces-redirect=true&query=" + query;
     }
 }

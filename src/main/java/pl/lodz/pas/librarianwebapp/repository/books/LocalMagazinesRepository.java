@@ -182,6 +182,13 @@ public class LocalMagazinesRepository implements MagazinesRepository{
     }
 
 
+
+    @Override
+    public List<MagazineCopy> findMagazineCopiesByIssnContains(String query) {
+        return magazineCopies.stream().filter(magazineCopy ->
+                findMagazineByUuid(magazineCopy.getElementUuid()).get().getIssn().contains(query))
+                .collect(Collectors.toList());
+    }
     @Override
     public synchronized List<MagazineCopy> findMagazineCopiesByIssnAndIssueAndState(String issn, int issue, MagazineCopy.State state) {
         return findMagazineCopiesByIssnAndIssue(issn,issue)

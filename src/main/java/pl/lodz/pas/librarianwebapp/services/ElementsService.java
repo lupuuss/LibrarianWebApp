@@ -664,4 +664,33 @@ public class ElementsService {
 
         return null;
     }
+
+    public List<ElementCopyDto> getCopiesByIssnIsbnContains(String query) {
+
+        if(query == null || query.isBlank()){
+            return getAllCopies();
+        }
+
+        List<ElementCopyDto> copies = new ArrayList<>();
+
+        var booksByIsbn =  booksRepository.findBookCopiesByIsbnContains(query);
+              for(var x : booksByIsbn) {
+                  var book = booksRepository.findBookByUuid(x.getElementUuid()).orElseThrow();
+                  copies.add(new ElementCopyDto(x.getNumber(),
+                             new BookDto( book.getTitle(),book.getPublisher(),book.getIsbn(),book.getAuthor()),
+                             mapState(x.getState())));
+
+              }
+
+        var magazinesByIssn = magazinesRepository.findMagazineCopiesByIssnContains(query);
+              for(var x : magazinesByIssn){
+                  var magazine = magazinesRepository.findMagazineByUuid(x.getElementUuid()).orElseThrow();
+                  copies.add(new ElementCopyDto(x.getNumber(),
+                          new MagazineDto(magazine.getTitle(),magazine.getPublisher(),magazine.getIssn(),magazine.getIssue()),
+                          mapState(x.getState())));
+              }
+
+
+        return copies;
+    }
 }
