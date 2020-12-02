@@ -1,9 +1,10 @@
 package pl.lodz.pas.librarianwebapp.web.lendings;
 
 import pl.lodz.pas.librarianwebapp.DateProvider;
-import pl.lodz.pas.librarianwebapp.services.ElementsService;
+import pl.lodz.pas.librarianwebapp.services.LendingsService;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementLockDto;
+import pl.lodz.pas.librarianwebapp.web.MarksController;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -15,17 +16,14 @@ import java.util.stream.Collectors;
 
 @Named("lendingsCartController")
 @SessionScoped
-public class LendingsCartControllerBean implements Serializable {
+public class LendingsCartControllerBean extends MarksController<ElementLockDto> implements Serializable {
 
     @Inject
     private DateProvider dateProvider;
 
     private final Set<ElementLockDto> elementLocks = new HashSet<>();
-
-    private Map<ElementLockDto, Boolean> markedPositions = new HashMap<>();
-
     @Inject
-    private ElementsService service;
+    private LendingsService service;
 
     public String addToCart(String isbn,ElementCopyDto.State state) {
 
@@ -60,9 +58,9 @@ public class LendingsCartControllerBean implements Serializable {
         return FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
     }
 
-    public String removeMarkedPositions() {
+    public String removeMarked() {
 
-        var marked = markedPositions.entrySet()
+        var marked = getMarks().entrySet()
                 .stream()
                 .filter(Map.Entry::getValue)
                 .map(Map.Entry::getKey)
@@ -87,24 +85,14 @@ public class LendingsCartControllerBean implements Serializable {
 
     private void cleanOutdatedCartPositions() {
         elementLocks.removeIf(lock -> lock.getUntil().isBefore(dateProvider.now()));
-        markedPositions.entrySet().removeIf(entry -> !elementLocks.contains(entry.getKey()));
-    }
-
-    public Map<ElementLockDto, Boolean> getMarkedPositions() {
-
-        cleanOutdatedCartPositions();
-        return markedPositions;
-    }
-
-    public void setMarkedPositions(Map<ElementLockDto, Boolean> markedPositions) {
-        this.markedPositions = markedPositions;
+        getMarkedItems().removeIf(item -> !elementLocks.contains(item));
     }
 
     public String rentElements() {
 
         if (elementLocks.isEmpty()) return "";
 
-        var result = service.rentLockedItems(elementLocks, getLogin());
+        var result = service.lendLockedElements(elementLocks, getLogin());
 
         if (result) {
             elementLocks.clear();

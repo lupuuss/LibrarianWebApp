@@ -36,29 +36,6 @@ public class ElementsService {
     @Inject
     private DateProvider dateProvider;
 
-    private ElementCopyDto.State mapState(ElementCopy.State state) {
-        return ElementCopyDto.State.valueOf(state.name());
-    }
-
-    private ElementCopy.State mapState(ElementCopyDto.State state) {
-
-        switch (state) {
-
-            case NEW:
-                return ElementCopy.State.NEW;
-            case GOOD:
-                return ElementCopy.State.GOOD;
-            case USED:
-                return ElementCopy.State.USED;
-            case NEED_REPLACEMENT:
-                return ElementCopy.State.NEED_REPLACEMENT;
-            case DAMAGED:
-                return ElementCopy.State.DAMAGED;
-        }
-
-        throw new IllegalArgumentException("Mapping for passed state not found!");
-    }
-
     public List<ElementCopyDto> getAllCopies() {
 
         var books = booksRepository.findAllBooks();
@@ -77,7 +54,7 @@ public class ElementsService {
 
             var copiesForBook = booksRepository.findBookCopiesByIsbn(book.getIsbn())
                     .stream()
-                    .map(copy -> new ElementCopyDto(copy.getNumber(), bookDto, mapState(copy.getState())))
+                    .map(copy -> new ElementCopyDto(copy.getNumber(), bookDto, StateUtils.mapState(copy.getState())))
                     .collect(Collectors.toList());
 
             copies.addAll(copiesForBook);
@@ -94,7 +71,7 @@ public class ElementsService {
             var copiesForMagazine =
                     magazinesRepository.findMagazineCopiesByIssnAndIssue(magazine.getIssn(), magazine.getIssue())
                             .stream()
-                    .map(copy -> new ElementCopyDto(copy.getNumber(), magazineDto, mapState(copy.getState())))
+                    .map(copy -> new ElementCopyDto(copy.getNumber(), magazineDto, StateUtils.mapState(copy.getState())))
                     .collect(Collectors.toList());
 
             copies.addAll(copiesForMagazine);
@@ -117,7 +94,7 @@ public class ElementsService {
             booksRepository.addBookCopy(new BookCopy(
                     book.get().getUuid(),
                     number,
-                    mapState(state)
+                    StateUtils.mapState(state)
             ));
 
             return true;
@@ -142,7 +119,7 @@ public class ElementsService {
             magazinesRepository.addMagazineCopy(new MagazineCopy(
                     magazine.get().getUuid(),
                     number,
-                    mapState(state)
+                    StateUtils.mapState(state)
             ));
 
             return true;
@@ -337,132 +314,6 @@ public class ElementsService {
 
     }
 
-    public Optional<ElementLockDto> lockBook(String isbn, String userLogin, ElementCopyDto.State state) {
-
-        List<BookCopy> copies = booksRepository.findBookCopiesByIsbnAndState(isbn, mapState(state));
-
-        var optReservedCopy = copies.stream()
-                .filter(copy -> eventsRepository.isElementAvailable(copy.getUuid()))
-                .findAny();
-
-        if (optReservedCopy.isEmpty()) {
-            return Optional.empty();
-        }
-
-        ElementLock lock;
-
-        try {
-            lock = new ElementLock(
-                    optReservedCopy.get().getUuid(),
-                    userLogin,
-                    dateProvider.now().plusMinutes(reservationTimeInMinutes)
-            );
-
-            eventsRepository.saveElementLock(lock);
-
-        } catch (InconsistencyFoundException e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
-
-        var reservedCopy = optReservedCopy.get();
-
-        var book = booksRepository.findBookByUuid(reservedCopy.getElementUuid()).orElseThrow();
-        var bookDto = new BookDto(
-                book.getTitle(),
-                book.getPublisher(),
-                book.getIsbn(),
-                book.getAuthor()
-        );
-
-        var result = new ElementCopyDto(
-                reservedCopy.getNumber(),
-                bookDto,
-                mapState(reservedCopy.getState())
-        );
-
-        return Optional.of(new ElementLockDto(result, lock.getUserLogin(), lock.getUntil()));
-    }
-
-    public Optional<ElementLockDto> lockMagazine(String issn, int issue, String userLogin, ElementCopyDto.State state ){
-
-       List<MagazineCopy> copies = magazinesRepository.findMagazineCopiesByIssnAndIssueAndState(issn,issue,mapState(state));
-
-       var optReservedCopy = copies.stream()
-               .filter(copy -> eventsRepository.isElementAvailable(copy.getUuid()))
-               .findAny();
-
-       if (optReservedCopy.isEmpty()) {
-           return Optional.empty();
-       }
-
-       ElementLock lock;
-
-       try {
-           lock = new ElementLock(
-                   optReservedCopy.get().getUuid(),
-                   userLogin,
-                   dateProvider.now().plusMinutes(reservationTimeInMinutes)
-           );
-
-           eventsRepository.saveElementLock(lock);
-
-       } catch (InconsistencyFoundException e) {
-           e.printStackTrace();
-           return Optional.empty();
-       }
-
-       var reservedCopy = optReservedCopy.get();
-
-       var magazine = magazinesRepository.findMagazineByUuid(reservedCopy.getElementUuid()).orElseThrow();
-       var magazineDto = new MagazineDto(
-               magazine.getTitle(),
-               magazine.getPublisher(),
-               magazine.getIssn(),
-               magazine.getIssue()
-       );
-
-       var result = new ElementCopyDto(
-               reservedCopy.getNumber(),
-               magazineDto,
-               mapState(reservedCopy.getState())
-       );
-
-       return Optional.of(new ElementLockDto(result, lock.getUserLogin(), lock.getUntil()));
-    }
-
-    public void unlockElement(String user, ElementCopyDto elementCopyDto) {
-
-        ElementCopy<?> element;
-
-        if (elementCopyDto.getElement() instanceof BookDto) {
-
-            var book = (BookDto) elementCopyDto.getElement();
-
-            element = booksRepository.findBookCopyByIsbnAndNumber(
-                    book.getIsbn(),
-                    elementCopyDto.getNumber()
-            ).orElseThrow();
-
-        } else if (elementCopyDto.getElement() instanceof MagazineDto) {
-
-            var magazine = (MagazineDto) elementCopyDto.getElement();
-
-            element = magazinesRepository.findMagazineCopyByIssnAndIssueAndNumber(
-                    magazine.getIssn(),
-                    magazine.getIssue(),
-                    elementCopyDto.getNumber()
-            ).orElseThrow();
-
-        } else {
-
-            throw new IllegalStateException("Unsupported element type!");
-
-        }
-
-        eventsRepository.deleteElementLock(element.getUuid(), user);
-    }
-
     public Optional<BookDto> getBook(String isbn) {
         return booksRepository.findBookByIsbn(isbn).map(book -> new BookDto(
                 book.getTitle(),
@@ -485,7 +336,7 @@ public class ElementsService {
             var copies = booksRepository.findBookCopiesByIsbnAndState(isbn, state);
 
             if (copies.stream().anyMatch(copy -> eventsRepository.isElementAvailable(copy.getUuid()))) {
-                availableStates.add(mapState(state));
+                availableStates.add(StateUtils.mapState(state));
             }
         }
 
@@ -503,7 +354,7 @@ public class ElementsService {
             var copies = magazinesRepository.findMagazineCopiesByIssnAndIssueAndState(issn,issue,state);
 
             if (copies.stream().anyMatch(copy -> eventsRepository.isElementAvailable(copy.getUuid()))){
-                availableStates.add(mapState(state));
+                availableStates.add(StateUtils.mapState(state));
             }
         }
         return availableStates;
@@ -566,105 +417,6 @@ public class ElementsService {
 
     }
 
-    public boolean rentLockedItems(Set<ElementLockDto> elementLocks, String userLogin) {
-
-        if (!elementLocks.stream().allMatch(lock -> lock.getUntil().isAfter(dateProvider.now()))) {
-            return false;
-        }
-
-        for (var lock : elementLocks) {
-
-            var elementCopy = lock.getCopy();
-
-            UUID uuid;
-
-            if (elementCopy.getElement() instanceof BookDto) {
-                BookDto book = (BookDto) elementCopy.getElement();
-
-                uuid = booksRepository.findBookCopyByIsbnAndNumber(book.getIsbn(), elementCopy.getNumber())
-                        .orElseThrow()
-                        .getUuid();
-            } else if (elementCopy.getElement() instanceof MagazineDto) {
-                MagazineDto magazine = (MagazineDto) elementCopy.getElement();
-
-                uuid = magazinesRepository.findMagazineCopyByIssnAndIssueAndNumber(magazine.getIssn(), magazine.getIssue(), elementCopy.getNumber())
-                        .orElseThrow()
-                        .getUuid();
-            } else {
-                throw new IllegalStateException("Unsupported element type!");
-            }
-
-            try {
-                eventsRepository.addEvent(new LendingEvent(dateProvider.now(), userLogin, uuid));
-            } catch (RepositoryException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return true;
-    }
-
-    public List<LendEventDto> getLendingForUser(String user) {
-
-        var events = eventsRepository.findLendingEventsByUserLogin(user);
-
-        List<LendEventDto> eventDtos = new ArrayList<>();
-
-        for (var event : events) {
-
-            var copy = getElementCopyDtoByUuid(event.getElementUuid());
-
-            var lendDate = event.getDate();
-
-            LocalDateTime returnDate = null;
-
-            if (event.getReturnUuid().isPresent()) {
-                var returnEvent =
-                        eventsRepository.findReturnEventByUuid(event.getReturnUuid().get());
-
-                returnDate = returnEvent.orElseThrow().getDate();
-            }
-
-            eventDtos.add(new LendEventDto(copy, lendDate, returnDate, user));
-        }
-
-        return eventDtos;
-    }
-
-    private ElementCopyDto getElementCopyDtoByUuid(UUID uuid) {
-
-        var bookCopy = booksRepository.findBookCopyByUuid(uuid);
-
-        if (bookCopy.isPresent()) {
-
-            var book =
-                    booksRepository.findBookByUuid(bookCopy.get().getElementUuid())
-                            .orElseThrow();
-
-            return new ElementCopyDto(
-                    bookCopy.get().getNumber(),
-                    new BookDto(book.getTitle(), book.getPublisher(), book.getIsbn(), book.getAuthor()),
-                    mapState(bookCopy.get().getState())
-            );
-        }
-
-        var magazineCopy = magazinesRepository.findMagazineCopyByUuid(uuid);
-
-        if (magazineCopy.isPresent()) {
-            var magazine = magazinesRepository.findMagazineByUuid(magazineCopy.get().getElementUuid())
-                    .orElseThrow();
-
-            return new ElementCopyDto(
-                    magazineCopy.get().getNumber(),
-                    new MagazineDto(magazine.getTitle(),magazine.getPublisher(), magazine.getIssn(),magazine.getIssue()),
-                    mapState(magazineCopy.get().getState())
-            );
-
-        }
-
-        return null;
-    }
-
     public List<ElementCopyDto> getCopiesByIssnIsbnContains(String query) {
 
         if(query == null || query.isBlank()){
@@ -674,22 +426,29 @@ public class ElementsService {
         List<ElementCopyDto> copies = new ArrayList<>();
 
         var booksByIsbn =  booksRepository.findBookCopiesByIsbnContains(query);
-              for(var x : booksByIsbn) {
-                  var book = booksRepository.findBookByUuid(x.getElementUuid()).orElseThrow();
-                  copies.add(new ElementCopyDto(x.getNumber(),
-                             new BookDto( book.getTitle(),book.getPublisher(),book.getIsbn(),book.getAuthor()),
-                             mapState(x.getState())));
 
-              }
+        for (var x : booksByIsbn) {
+
+            var book = booksRepository.findBookByUuid(x.getElementUuid()).orElseThrow();
+
+            var bookDto = new BookDto( book.getTitle(), book.getPublisher(), book.getIsbn(), book.getAuthor());
+
+            copies.add(new ElementCopyDto(x.getNumber(), bookDto, StateUtils.mapState(x.getState())));
+        }
 
         var magazinesByIssn = magazinesRepository.findMagazineCopiesByIssnContains(query);
-              for(var x : magazinesByIssn){
-                  var magazine = magazinesRepository.findMagazineByUuid(x.getElementUuid()).orElseThrow();
-                  copies.add(new ElementCopyDto(x.getNumber(),
-                          new MagazineDto(magazine.getTitle(),magazine.getPublisher(),magazine.getIssn(),magazine.getIssue()),
-                          mapState(x.getState())));
-              }
 
+        for (var x : magazinesByIssn) {
+            var magazine = magazinesRepository.findMagazineByUuid(x.getElementUuid()).orElseThrow();
+            var magazineDto = new MagazineDto(
+                    magazine.getTitle(),
+                    magazine.getPublisher(),
+                    magazine.getIssn(),
+                    magazine.getIssue()
+            );
+
+            copies.add(new ElementCopyDto(x.getNumber(), magazineDto, StateUtils.mapState(x.getState())));
+        }
 
         return copies;
     }

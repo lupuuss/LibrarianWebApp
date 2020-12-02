@@ -2,6 +2,7 @@ package pl.lodz.pas.librarianwebapp.web.admin;
 
 import pl.lodz.pas.librarianwebapp.services.UsersService;
 import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
+import pl.lodz.pas.librarianwebapp.web.MarksController;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -13,14 +14,12 @@ import java.util.stream.Collectors;
 
 @Named("usersController")
 @RequestScoped
-public class UsersControllerBean {
+public class UsersControllerBean extends MarksController<UserDto> {
 
     @Inject
     private UsersService service;
 
     private String query;
-
-    private final Map<UserDto, Boolean> marks = new HashMap<>();
 
     public String getQuery() {
         return query;
@@ -35,33 +34,20 @@ public class UsersControllerBean {
         return service.getUsersByLoginContains(query);
     }
 
-    public Map<UserDto, Boolean> getMarks() {
-        return marks;
-    }
-
     public String deactivateMarkedUsers() {
 
-        service.updateUsersActive(getMarkedUsers(), false);
+        service.updateUsersActive(getMarkedItems(), false);
 
         return "users.xhtml?faces-redirect=true";
     }
 
     public String activateMarkedUsers() {
-        service.updateUsersActive(getMarkedUsers(), true);
+        service.updateUsersActive(getMarkedItems(), true);
 
         return "users.xhtml?faces-redirect=true";
     }
 
     public String filter() {
         return "users.xhtml?faces-redirect=true&query=" + query;
-    }
-
-    private List<UserDto> getMarkedUsers() {
-        return marks
-                .entrySet()
-                .stream()
-                .filter(Map.Entry::getValue)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
     }
 }

@@ -4,13 +4,15 @@ import pl.lodz.pas.librarianwebapp.DateProvider;
 import pl.lodz.pas.librarianwebapp.repository.events.data.*;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
-import pl.lodz.pas.librarianwebapp.repository.user.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class LocalEventsRepository implements EventsRepository {
@@ -20,6 +22,13 @@ public class LocalEventsRepository implements EventsRepository {
 
     @Inject
     private DateProvider dateProvider;
+
+
+    private Stream<LendingEvent> findLendingEvents() {
+        return events.stream()
+                .filter(e -> e instanceof LendingEvent)
+                .map(e -> (LendingEvent) e);
+    }
 
     @Override
     public void addEvent(Event event) throws RepositoryException {
@@ -47,10 +56,9 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     private Optional<LendingEvent> findCorrespondingLendEvent(ReturnEvent event) {
-        return events.stream()
-                .filter(e -> e instanceof LendingEvent)
-                .map(e -> (LendingEvent) e)
-                .filter(e -> e.getElementUuid().equals(event.getElementUuid()) && e.getReturnUuid().isEmpty())
+        return findLendingEvents()
+                .filter(e -> e.getElementUuid().equals(event.getElementUuid()) &&
+                             e.getReturnUuid().isEmpty())
                 .findFirst();
     }
 
@@ -88,9 +96,7 @@ public class LocalEventsRepository implements EventsRepository {
 
     @Override
     public List<LendingEvent> findLendingEventsByUserLogin(String userLogin) {
-        return events.stream()
-                .filter(e -> e instanceof LendingEvent)
-                .map(e -> (LendingEvent) e)
+        return findLendingEvents()
                 .filter(u -> u.getCustomerLogin().equals(userLogin))
                 .collect(Collectors.toList());
     }
@@ -104,6 +110,7 @@ public class LocalEventsRepository implements EventsRepository {
                 .findAny();
 
     }
+
 
     @Override
     public void saveElementLock(ElementLock lock) throws InconsistencyFoundException {
@@ -128,5 +135,64 @@ public class LocalEventsRepository implements EventsRepository {
         locks.removeIf(lock -> lock.getUserLogin().equals(user) && lock.getElementUuid().equals(uuid));
     }
 
+    @Override
+    public List<LendingEvent> findAllLendingEvents() {
+        return findLendingEvents()
+                .collect(Collectors.toList());
+    }
 
+    @Override
+    public List<LendingEvent> findLendingEventsByUserLoginContains(String loginQuery) {
+
+        return findLendingEvents()
+                .filter(event -> event.getCustomerLogin().contains(loginQuery))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteLendingEventByElementCopyUuidDate(UUID uuid, LocalDateTime date) {
+
+        var event = findLendingEvents()
+                .filter(e -> e.getElementUuid().equals(uuid) &&
+                             e.getDate().equals(date))
+                .findFirst();
+
+        if (event.isEmpty()) {
+            return;
+        }
+
+        events.remove(event.get());
+
+        var returnUuid = event.get().getReturnUuid();
+
+        returnUuid.ifPresent(value -> events.removeIf(e -> e.getUuid().equals(value)));
+    }
+
+    @Override
+    public Optional<LendingEvent> findLendingEventByElementCopyUuidDate(UUID uuid, LocalDateTime date) {
+        return findLendingEvents()
+                .filter(e -> e.getElementUuid().equals(uuid) &&
+                             e.getDate().equals(date))
+                .findFirst();
+    }
+
+    @Override
+    public void addReturnEvent(UUID lendEventUuid, LocalDateTime date, String customerLogin, UUID elementUuid) throws InconsistencyFoundException {
+
+        var lendingEventOpt = findLendingEvents()
+                .filter(event -> event.getUuid().equals(lendEventUuid))
+                .findFirst();
+
+        if (lendingEventOpt.isEmpty()) {
+            throw new InconsistencyFoundException(
+                    "No matching lending event with passed uuid: " + lendEventUuid.toString() + "!"
+            );
+        }
+
+        var returnEvent = new ReturnEvent(date, customerLogin, elementUuid);
+
+        lendingEventOpt.get().setReturnUuid(returnEvent.getUuid());
+
+        events.add(returnEvent);
+    }
 }

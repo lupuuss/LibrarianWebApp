@@ -1,4 +1,4 @@
-package pl.lodz.pas.librarianwebapp.services;
+package pl.lodz.pas.librarianwebapp.services.dto;
 
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 

@@ -16,8 +16,6 @@
         <h:outputScript name="js/selectAll.js" />
         <h:form>
             <h:panelGrid columns="1">
-
-
                 <h:panelGroup>
                     <h:button outcome="addNewElement.xhtml?type=book" value="${msg['page.books.addbook']}"/>
                     <h:button outcome="addNewElement.xhtml?type=magazine" value="${msg['page.books.addmagazine']}"/>
@@ -45,7 +43,6 @@
                         <h:outputLabel rendered="#{copy.element['class'].simpleName eq 'MagazineDto'}"
                                        value="#{copy.element.issn}"/>
                     </h:column>
-
                     <h:column>
                         <f:facet name="header">${msg['page.books.issue']}</f:facet>
                         <h:outputLabel rendered="#{copy.element['class'].simpleName eq 'MagazineDto'}"
@@ -65,7 +62,6 @@
                                 value="#{copy.state}"
                                 converter="pl.lodz.pas.librarianwebapp.web.converter.ElementCopyDtoStateConverter"/>
                     </h:column>
-
                     <h:column>
                         <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
                         <h:selectBooleanCheckbox  value="#{elementsController.marks[copy]}" styleClass="mark" />

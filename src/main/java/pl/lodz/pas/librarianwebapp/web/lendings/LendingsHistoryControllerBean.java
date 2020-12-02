@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.lendings;
 
-import pl.lodz.pas.librarianwebapp.services.ElementsService;
-import pl.lodz.pas.librarianwebapp.services.LendEventDto;
+import pl.lodz.pas.librarianwebapp.services.LendingsService;
+import pl.lodz.pas.librarianwebapp.services.dto.LendEventDto;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -14,13 +14,13 @@ import java.util.List;
 public class LendingsHistoryControllerBean {
 
     @Inject
-    private ElementsService service;
+    private LendingsService service;
 
     private String getLogin() {
         return FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
     }
 
     public List<LendEventDto> getLendingsHistory() {
-        return service.getLendingForUser(getLogin());
+        return service.getLendingsForUser(getLogin());
     }
 }

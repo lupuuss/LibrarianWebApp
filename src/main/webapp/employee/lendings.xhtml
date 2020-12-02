@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<f:metadata>
+    <f:viewParam name="clientQuery" value="#{lendingsManagementController.clientQuery}"/>
+    <f:viewParam name="elementQuery" value="#{lendingsManagementController.elementQuery}" />
+</f:metadata>
+
+<ui:composition template = "/common/template.xhtml">
+    <ui:define name = "content">
+        <h:outputScript name="js/selectAll.js" />
+        <h:form>
+            <h:panelGrid columns="1">
+                <h:panelGroup>
+                    <h:commandButton action="#{lendingsManagementController.returnMarked}" value="${msg['page.lending.return']}"/>
+                    <h:commandButton action="#{lendingsManagementController.removeMarked}" value="${msg['page.lending.remove']}"/>
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:outputLabel for="elementFilter">#{msg['page.books.filterByIsbnIssn']}:</h:outputLabel>
+                    <h:inputText
+                            id="elementFilter"
+                            maxlength="25"
+                            value="#{lendingsManagementController.elementQuery}"
+                            label="filter"
+                    />
+                </h:panelGroup>
+
+                <h:panelGroup>
+                    <h:outputLabel for="clientFilter">#{msg['page.users.filterByLogin']}:</h:outputLabel>
+                    <h:inputText
+                            id="clientFilter"
+                            maxlength="25"
+                            value="#{lendingsManagementController.clientQuery}"
+                            label="filter"
+                    />
+                </h:panelGroup>
+
+                <h:commandButton action="#{lendingsManagementController.filter}" value="${msg['page.users.filter']}" />
+
+                <h:dataTable value="${lendingsManagementController.filteredLendings}" var="lending">
+                    <h:column>
+                        <f:facet name="header">${msg['page.common.login']}</f:facet>
+                        <h:outputText value="#{lending.login}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">${msg['page.books.date.lend']}</f:facet>
+                        <h:outputText value="#{lending.lendDate}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">${msg['page.books.date.return']}</f:facet>
+                        <h:outputText value="#{lending.returnDate}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">${msg['page.books.ref']}</f:facet>
+                        <h:outputLabel rendered="#{lending.copy.element['class'].simpleName eq 'BookDto'}"
+                                       value="#{lending.copy.element.isbn}"/>
+                        <h:outputLabel rendered="#{lending.copy.element['class'].simpleName eq 'MagazineDto'}"
+                                       value="#{lending.copy.element.issn}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">${msg['page.books.issue']}</f:facet>
+                        <h:outputLabel rendered="#{lending.copy.element['class'].simpleName eq 'MagazineDto'}"
+                                       value="#{lending.copy.element.issue}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">${msg['page.books.number']}</f:facet>
+                        #{lending.copy.number}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">${msg['page.books.title']}</f:facet>
+                        #{lending.copy.element.title}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">${msg['page.books.state']}</f:facet>
+                        <h:outputText
+                                value="#{lending.copy.state}"
+                                converter="pl.lodz.pas.librarianwebapp.web.converter.ElementCopyDtoStateConverter"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
+                        <h:selectBooleanCheckbox  value="#{lendingsManagementController.marks[lending]}" styleClass="mark" />
+                    </h:column>
+
+                </h:dataTable>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

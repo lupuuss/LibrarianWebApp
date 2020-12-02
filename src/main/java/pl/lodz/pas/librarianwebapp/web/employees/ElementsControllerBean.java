@@ -2,6 +2,7 @@ package pl.lodz.pas.librarianwebapp.web.employees;
 
 import pl.lodz.pas.librarianwebapp.services.ElementsService;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
+import pl.lodz.pas.librarianwebapp.web.MarksController;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -13,11 +14,10 @@ import java.util.stream.Collectors;
 
 @Named("elementsController")
 @RequestScoped
-public class ElementsControllerBean {
+public class ElementsControllerBean extends MarksController<ElementCopyDto> {
 
     @Inject
     private ElementsService elementsService;
-    private Map<ElementCopyDto, Boolean> marks = new HashMap<>();
 
     private String query;
 
@@ -33,34 +33,18 @@ public class ElementsControllerBean {
         return elementsService.getCopiesByIssnIsbnContains(query);
     }
 
-    public Map<ElementCopyDto, Boolean> getMarks() {
-        return marks;
-    }
-
-    public void setMarks(Map<ElementCopyDto, Boolean> marks) {
-        this.marks = marks;
-    }
-
     public String degradeMarkedCopies() {
 
-        elementsService.degradeCopies(getMarkedCopies());
+        elementsService.degradeCopies(getMarkedItems());
 
         return "elements.xhtml?faces-redirect=true";
     }
 
     public String removeMarkedCopies() {
 
-        elementsService.deleteCopies(getMarkedCopies());
+        elementsService.deleteCopies(getMarkedItems());
 
         return "elements.xhtml?faces-redirect=true";
-    }
-
-    private List<ElementCopyDto> getMarkedCopies() {
-        return marks.entrySet()
-                .stream()
-                .filter(Map.Entry::getValue)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
     }
 
     public String filter() {

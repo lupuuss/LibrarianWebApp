@@ -13,7 +13,7 @@
         <h:form>
             <h:commandButton
                     rendered="${not empty lendingsCartController.cartPositions}"
-                    action="${lendingsCartController.removeMarkedPositions()}"  value="${msg['page.common.cancel']}"/>
+                    action="${lendingsCartController.removeMarked()}" value="${msg['page.common.cancel']}"/>
             <h:dataTable var="lock" value="${lendingsCartController.cartPositions}">
                 <h:column>
                     <f:facet name="header">${msg['page.books.title']}</f:facet>
@@ -30,7 +30,7 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
-                    <h:selectBooleanCheckbox  value="#{lendingsCartController.markedPositions[lock]}" styleClass="mark" />
+                    <h:selectBooleanCheckbox  value="#{lendingsCartController.marks[lock]}" styleClass="mark" />
                 </h:column>
             </h:dataTable>
 
