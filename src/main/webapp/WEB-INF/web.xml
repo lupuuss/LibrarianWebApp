@@ -68,6 +68,24 @@
     </security-constraint>
 
 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Error page</web-resource-name>
+            <url-pattern>/error.xhtml</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>
+                EMPLOYEES
+            </role-name>
+            <role-name>
+                ADMINS
+            </role-name>
+            <role-name>
+                USERS
+            </role-name>
+        </auth-constraint>
+    </security-constraint>
+
     <login-config>
         <auth-method>
             FORM
