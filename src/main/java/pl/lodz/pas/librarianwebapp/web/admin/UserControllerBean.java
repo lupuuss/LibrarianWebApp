@@ -84,7 +84,7 @@ public class UserControllerBean {
         if (result) {
             return "usersList.xhtml?faces-redirect=true";
         } else {
-            return "userOperationFailed.xhtml?faces-redirect=true";
+            return "/error.xhtml?faces-redirect=true&errorId=operationFailed";
         }
     }
 }

@@ -34,12 +34,12 @@ public class LendingsCartControllerBean extends MarksController<ElementLockDto> 
         var bookCopy = service.lockBook(isbn, userLogin, state);
 
         if (bookCopy.isEmpty()) {
-            return "error.xhtml?faces-redirect=true";
+            return "/error.xhtml?faces-redirect=true&errorId=addToCartError";
         }
 
         elementLocks.add(bookCopy.get());
 
-        return "elementsList.xhtml?faces-redirect=true";
+        return "elements.xhtml?faces-redirect=true";
     }
 
     public String addToCart(String issn, Integer issue, ElementCopyDto.State state){
@@ -48,12 +48,12 @@ public class LendingsCartControllerBean extends MarksController<ElementLockDto> 
         var magazineCopy = service.lockMagazine(issn,issue, userLogin, state);
 
         if (magazineCopy.isEmpty()) {
-            return "error.xhtml?faces-redirect=true";
+            return "/error.xhtml?faces-redirect=true&errorId=addToCartError";
         }
 
         elementLocks.add(magazineCopy.get());
 
-        return "elementsList.xhtml?faces-redirect=true";
+        return "elements.xhtml?faces-redirect=true";
     }
 
     private String getLogin() {
@@ -90,7 +90,7 @@ public class LendingsCartControllerBean extends MarksController<ElementLockDto> 
         getMarkedItems().removeIf(item -> !elementLocks.contains(item));
     }
 
-    public String rentElements() {
+    public String lendElements() {
 
         if (elementLocks.isEmpty()) return "";
 
@@ -100,7 +100,7 @@ public class LendingsCartControllerBean extends MarksController<ElementLockDto> 
             elementLocks.clear();
             return "elementsList.xhtml?faces-redirect=true";
         } else {
-            return "error.xhtml?faces-redirect=true";
+            return "/error.xhtml?faces-redirect=true&errorId=lendError";
         }
     }
 }

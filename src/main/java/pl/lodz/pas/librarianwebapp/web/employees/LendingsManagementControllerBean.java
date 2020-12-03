@@ -45,9 +45,9 @@ public class LendingsManagementControllerBean extends MarksController<LendEventD
         return service.getFilteredLendings(clientQuery, elementQuery);
     }
 
-    public String removeMarked(){
+    public String removeMarkedNotReturned(){
 
-        service.removeLendingEvents(getMarkedItems());
+        service.removeNotReturnedLendings(getMarkedItems());
 
         return "lendings.xhtml?faces-redirect=true";
     }

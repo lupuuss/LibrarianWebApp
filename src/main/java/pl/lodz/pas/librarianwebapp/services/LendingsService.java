@@ -9,9 +9,9 @@ import pl.lodz.pas.librarianwebapp.repository.books.data.MagazineCopy;
 import pl.lodz.pas.librarianwebapp.repository.events.EventsRepository;
 import pl.lodz.pas.librarianwebapp.repository.events.data.ElementLock;
 import pl.lodz.pas.librarianwebapp.repository.events.data.LendingEvent;
-import pl.lodz.pas.librarianwebapp.repository.events.data.ReturnEvent;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
+import pl.lodz.pas.librarianwebapp.repository.user.UsersRepository;
 import pl.lodz.pas.librarianwebapp.services.dto.*;
 
 import javax.enterprise.context.RequestScoped;
@@ -36,9 +36,18 @@ public class LendingsService {
     @Inject
     private EventsRepository eventsRepository;
 
+    @Inject
+    private UsersRepository usersRepository;
+
     private final long reservationTimeInMinutes = 30;
 
     public boolean lendLockedElements(Set<ElementLockDto> elementLocks, String userLogin) {
+
+        var user = usersRepository.findUserByLogin(userLogin);
+
+        if (user.isEmpty() || !user.get().isActive()) {
+            return false;
+        }
 
         if (!elementLocks.stream().allMatch(lock -> lock.getUntil().isAfter(dateProvider.now()))) {
             return false;
@@ -186,31 +195,25 @@ public class LendingsService {
 
         List<BookCopy> copies = booksRepository.findBookCopiesByIsbnAndState(isbn, StateUtils.mapState(state));
 
-        var optReservedCopy = copies.stream()
+        var user = usersRepository.findUserByLogin(userLogin);
+
+        if (user.isEmpty() || !user.get().isActive()) {
+            return Optional.empty();
+        }
+
+        var optReservedBook = copies.stream()
                 .filter(copy -> eventsRepository.isElementAvailable(copy.getUuid()))
                 .findAny();
 
-        if (optReservedCopy.isEmpty()) {
+        if (optReservedBook.isEmpty()) {
             return Optional.empty();
         }
 
-        ElementLock lock;
+        var reservedCopy = optReservedBook.get();
 
-        try {
-            lock = new ElementLock(
-                    optReservedCopy.get().getUuid(),
-                    userLogin,
-                    dateProvider.now().plusMinutes(reservationTimeInMinutes)
-            );
+        ElementLock lock = getLockForElementCopy(userLogin, reservedCopy);
 
-            eventsRepository.saveElementLock(lock);
-
-        } catch (InconsistencyFoundException e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
-
-        var reservedCopy = optReservedCopy.get();
+        if (lock == null) return Optional.empty();
 
         var book = booksRepository.findBookByUuid(reservedCopy.getElementUuid()).orElseThrow();
         var bookDto = new BookDto(
@@ -229,35 +232,31 @@ public class LendingsService {
         return Optional.of(new ElementLockDto(result, lock.getUserLogin(), lock.getUntil()));
     }
 
-    public Optional<ElementLockDto> lockMagazine(String issn, int issue, String userLogin, ElementCopyDto.State state ){
+    public Optional<ElementLockDto> lockMagazine(String issn, int issue, String userLogin, ElementCopyDto.State state ) {
 
         List<MagazineCopy> copies = magazinesRepository.findMagazineCopiesByIssnAndIssueAndState(issn, issue, StateUtils.mapState(state));
 
-        var optReservedCopy = copies.stream()
+        var user = usersRepository.findUserByLogin(userLogin);
+
+        if (user.isEmpty() || !user.get().isActive()) {
+            return Optional.empty();
+        }
+
+        var optReservedMagazine = copies.stream()
                 .filter(copy -> eventsRepository.isElementAvailable(copy.getUuid()))
                 .findAny();
 
-        if (optReservedCopy.isEmpty()) {
+        if (optReservedMagazine.isEmpty()) {
             return Optional.empty();
         }
 
-        ElementLock lock;
+        var reservedCopy = optReservedMagazine.get();
 
-        try {
-            lock = new ElementLock(
-                    optReservedCopy.get().getUuid(),
-                    userLogin,
-                    dateProvider.now().plusMinutes(reservationTimeInMinutes)
-            );
+        ElementLock lock = getLockForElementCopy(userLogin, reservedCopy);
 
-            eventsRepository.saveElementLock(lock);
-
-        } catch (InconsistencyFoundException e) {
-            e.printStackTrace();
+        if (lock == null) {
             return Optional.empty();
         }
-
-        var reservedCopy = optReservedCopy.get();
 
         var magazine = magazinesRepository.findMagazineByUuid(reservedCopy.getElementUuid()).orElseThrow();
         var magazineDto = new MagazineDto(
@@ -274,6 +273,26 @@ public class LendingsService {
         );
 
         return Optional.of(new ElementLockDto(result, lock.getUserLogin(), lock.getUntil()));
+    }
+
+    private ElementLock getLockForElementCopy(String userLogin, ElementCopy<?> copy) {
+        ElementLock lock;
+
+        try {
+            lock = new ElementLock(
+                    copy.getUuid(),
+                    userLogin,
+                    dateProvider.now().plusMinutes(reservationTimeInMinutes)
+            );
+
+            eventsRepository.saveElementLock(lock);
+
+            return lock;
+
+        } catch (InconsistencyFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void unlockElement(String user, ElementCopyDto elementCopyDto) {
@@ -308,8 +327,13 @@ public class LendingsService {
         eventsRepository.deleteElementLock(element.getUuid(), user);
     }
 
-    public void removeLendingEvents(List<LendEventDto> lendingEvents) {
-        for(var event : lendingEvents){
+    public void removeNotReturnedLendings(List<LendEventDto> lendingEvents) {
+
+        var events = lendingEvents.stream()
+                .filter(lend -> lend.getReturnDate() == null)
+                .collect(Collectors.toList());
+
+        for (var event : events){
 
             var copy = getElementCopyByDto(event.getCopy());
 

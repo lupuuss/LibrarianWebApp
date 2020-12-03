@@ -1,6 +1,7 @@
 package pl.lodz.pas.librarianwebapp.repository.events;
 
 import pl.lodz.pas.librarianwebapp.DateProvider;
+import pl.lodz.pas.librarianwebapp.repository.books.data.Element;
 import pl.lodz.pas.librarianwebapp.repository.events.data.*;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
@@ -32,7 +33,7 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     @Override
-    public void addEvent(Event event) throws RepositoryException {
+    public synchronized void addEvent(Event event) throws RepositoryException {
 
         if (events.contains(event)) {
             throw new ObjectAlreadyExistsException(event.getClass().getSimpleName(), event.getUuid().toString());
@@ -76,7 +77,7 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     @Override
-    public Boolean isElementAvailable(UUID uuid) {
+    public synchronized Boolean isElementAvailable(UUID uuid) {
         var now = dateProvider.now();
 
         var isLocked = locks.stream()
@@ -96,14 +97,14 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     @Override
-    public List<LendingEvent> findLendingEventsByUserLogin(String userLogin) {
+    public synchronized List<LendingEvent> findLendingEventsByUserLogin(String userLogin) {
         return findLendingEvents()
                 .filter(u -> u.getCustomerLogin().equals(userLogin))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<ReturnEvent> findReturnEventByUuid(UUID uuid) {
+    public synchronized Optional<ReturnEvent> findReturnEventByUuid(UUID uuid) {
         return events.stream()
                 .filter(e -> e instanceof ReturnEvent)
                 .map(e -> (ReturnEvent) e)
@@ -114,7 +115,7 @@ public class LocalEventsRepository implements EventsRepository {
 
 
     @Override
-    public void saveElementLock(ElementLock lock) throws InconsistencyFoundException {
+    public synchronized void saveElementLock(ElementLock lock) throws InconsistencyFoundException {
 
         var isLockedByOtherUser = locks.stream()
                 .anyMatch(l -> l.getElementUuid().equals(lock.getElementUuid()) &&
@@ -132,18 +133,18 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     @Override
-    public void deleteElementLock(UUID uuid, String user) {
+    public synchronized void deleteElementLock(UUID uuid, String user) {
         locks.removeIf(lock -> lock.getUserLogin().equals(user) && lock.getElementUuid().equals(uuid));
     }
 
     @Override
-    public List<LendingEvent> findAllLendingEvents() {
+    public synchronized List<LendingEvent> findAllLendingEvents() {
         return findLendingEvents()
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<LendingEvent> findLendingEventsByUserLoginContains(String loginQuery) {
+    public synchronized List<LendingEvent> findLendingEventsByUserLoginContains(String loginQuery) {
 
         return findLendingEvents()
                 .filter(event -> event.getCustomerLogin().contains(loginQuery))
@@ -151,7 +152,7 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     @Override
-    public void deleteLendingEventByElementCopyUuidDate(UUID uuid, LocalDateTime date) {
+    public synchronized void deleteLendingEventByElementCopyUuidDate(UUID uuid, LocalDateTime date) {
 
         var event = findLendingEvents()
                 .filter(e -> e.getElementUuid().equals(uuid) &&
@@ -170,7 +171,7 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     @Override
-    public Optional<LendingEvent> findLendingEventByElementCopyUuidDate(UUID uuid, LocalDateTime date) {
+    public synchronized Optional<LendingEvent> findLendingEventByElementCopyUuidDate(UUID uuid, LocalDateTime date) {
         return findLendingEvents()
                 .filter(e -> e.getElementUuid().equals(uuid) &&
                              e.getDate().equals(date))
@@ -178,7 +179,7 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     @Override
-    public void addReturnEvent(UUID lendEventUuid, LocalDateTime date, String customerLogin, UUID elementUuid) throws InconsistencyFoundException {
+    public synchronized void addReturnEvent(UUID lendEventUuid, LocalDateTime date, String customerLogin, UUID elementUuid) throws InconsistencyFoundException {
 
         var lendingEventOpt = findLendingEvents()
                 .filter(event -> event.getUuid().equals(lendEventUuid))
@@ -195,5 +196,16 @@ public class LocalEventsRepository implements EventsRepository {
         lendingEventOpt.get().setReturnUuid(returnEvent.getUuid());
 
         events.add(returnEvent);
+    }
+
+    @Override
+    public synchronized void clearDanglingReferencesFor(UUID uuid) {
+
+        events.stream()
+                .filter(e -> e instanceof ElementEvent)
+                .map(e -> (ElementEvent) e)
+                .filter(e -> e.getElementUuid().equals(uuid))
+                .forEach(e -> e.setElementUuid(null));
+
     }
 }

@@ -46,7 +46,10 @@ public class LendElementControllerBean implements Serializable {
 
         if (element.isEmpty()) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("error.xhtml");
+                FacesContext
+                        .getCurrentInstance()
+                        .getExternalContext()
+                        .redirect( "/error.xhtml?errorId=elementNotFound");
             } catch (IOException e) {
                 e.printStackTrace();
             }

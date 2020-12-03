@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:metadata>
+    <f:param name="errorId" />
+</f:metadata>
+<ui:composition template = "/common/template.xhtml">
+
+    <ui:define name = "content">
+        <h:panelGrid columns="1">
+            <h:outputLabel value="#{msg['page.errors.basic']}" />
+
+            <h:outputLabel value="#{msg['page.errors.lendError']}" rendered="#{param['errorId'] eq 'lendError'}"/>
+
+            <h:outputLabel value="#{msg['page.errors.addToCartError']}" rendered="#{param['errorId'] eq 'addToCartError'}"/>
+
+            <h:outputLabel value="#{msg['page.errors.operationFailed']}" rendered="#{param['errorId'] eq 'operationFailed'}"/>
+
+            <h:outputLabel value="#{msg['page.errors.elementNotFound']}" rendered="#{param['errorId'] eq 'elemetNotFound'}"/>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>
+</html>

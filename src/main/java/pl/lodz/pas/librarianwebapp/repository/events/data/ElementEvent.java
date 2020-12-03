@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public abstract class ElementEvent extends Event {
 
-    private final UUID elementUuid;
+    private UUID elementUuid;
 
     public ElementEvent(UUID uuid, LocalDateTime date, String customerLogin, UUID elementUuid) {
         super(uuid, date, customerLogin);
@@ -19,5 +19,9 @@ public abstract class ElementEvent extends Event {
 
     public UUID getElementUuid() {
         return elementUuid;
+    }
+
+    public void setElementUuid(UUID elementUuid) {
+        this.elementUuid = elementUuid;
     }
 }

@@ -232,6 +232,7 @@ public class ElementsService {
 
         try {
             booksRepository.deleteBookCopy(toRemove.get());
+            eventsRepository.clearDanglingReferencesFor(toRemove.get().getUuid());
         } catch (RepositoryException e) {
             e.printStackTrace();
         }
