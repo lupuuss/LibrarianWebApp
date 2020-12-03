@@ -1,6 +1,6 @@
 package pl.lodz.pas.librarianwebapp.services.dto;
 
-public abstract class ElementDto {
+public abstract class ElementDto implements Comparable<ElementDto> {
 
     private String title;
     private String publisher;
@@ -27,5 +27,17 @@ public abstract class ElementDto {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    @Override
+    public int compareTo(ElementDto o) {
+
+        if (getClass() == o.getClass()) {
+            return 0;
+        } else if (this instanceof BookDto) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 }

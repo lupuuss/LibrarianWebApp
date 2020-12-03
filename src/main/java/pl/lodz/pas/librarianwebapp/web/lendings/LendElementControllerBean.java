@@ -108,9 +108,9 @@ public class LendElementControllerBean implements Serializable {
 
     public String addCurrentElementToCart() {
 
-        if(issue == null){
+        if (issue == null){
             return lendingsCartControllerBean.addToCart(ref, state.toElementState());
         }
-        return lendingsCartControllerBean.addToCart(ref,issue, state.toElementState());
+        return lendingsCartControllerBean.addToCart(ref, issue, state.toElementState());
     }
 }

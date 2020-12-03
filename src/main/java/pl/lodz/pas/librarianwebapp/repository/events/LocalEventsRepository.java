@@ -27,7 +27,9 @@ public class LocalEventsRepository implements EventsRepository {
     private Stream<LendingEvent> findLendingEvents() {
         return events.stream()
                 .filter(e -> e instanceof LendingEvent)
-                .map(e -> (LendingEvent) e);
+                .map(e -> (LendingEvent) e)
+                .sorted(Comparator.comparing(LendingEvent::getDate)
+                                  .thenComparing(Event::getUuid));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package pl.lodz.pas.librarianwebapp.services.dto;
 
+import java.util.Comparator;
+
 public class BookDto extends ElementDto {
 
     private String isbn;
@@ -29,6 +31,19 @@ public class BookDto extends ElementDto {
 
     public String getAuthor() {
         return author;
+    }
+
+    @Override
+    public int compareTo(ElementDto o) {
+        var superResult = super.compareTo(o);
+
+        if (superResult != 0) {
+            return superResult;
+        }
+
+        var comparator = Comparator.comparing(BookDto::getIsbn);
+
+        return comparator.compare(this, (BookDto) o);
     }
 }
 

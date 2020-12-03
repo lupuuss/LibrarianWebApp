@@ -279,7 +279,7 @@ public class ElementsService {
     public Map<ElementDto, Long> getAvailableCopiesCount() {
 
         var books = booksRepository.findAllBooks();
-        var booksMap = new HashMap<ElementDto, Long>();
+        var booksMap = new TreeMap<ElementDto, Long>();
 
         for (var book : books) {
             var copies = booksRepository.findBookCopiesByIsbnAndNotDamaged(book.getIsbn());
