@@ -22,12 +22,14 @@
                     <h:outputLabel for="isbn">#{msg['page.books.isbn']}:</h:outputLabel>
                     <h:inputText
                             id="isbn"
-                            maxlength="25"
+                            maxlength="8"
                             required="true"
                             label="isbn"
                             value="${elementController.element.isbn}"
+                            validatorMessage="${msg['page.form.field.validation']}"
                             requiredMessage="${msg['page.form.field.required']}">
-                    <f:validateRegex pattern="([a-zA-Z0-9]{8})" />
+                        <f:validateRegex pattern="([a-zA-Z0-9]{8})"  />
+          \
                     </h:inputText>
                     <h:message for="isbn" />
                 </h:panelGroup>
@@ -36,10 +38,11 @@
                     <h:outputLabel for="issn">#{msg['page.books.issn']}:</h:outputLabel>
                     <h:inputText
                             id="issn"
-                            maxlength="25"
+                            maxlength="8"
                             required="true"
                             label="issn"
                             value="${elementController.element.issn}"
+                            validatorMessage="${msg['page.form.field.validation']}"
                             requiredMessage="${msg['page.form.field.required']}">
                     <f:validateRegex pattern="([a-zA-Z0-9]{8})" />
                     </h:inputText>
