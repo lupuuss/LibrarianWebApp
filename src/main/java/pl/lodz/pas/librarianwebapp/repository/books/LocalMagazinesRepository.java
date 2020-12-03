@@ -23,8 +23,8 @@ public class LocalMagazinesRepository implements MagazinesRepository{
     @MagazinesRepositoryInitializer
     private BiConsumer<Set<Magazine>, Set<MagazineCopy>> magazinesInitializer;
 
-    private final Set<Magazine> magazines = new HashSet<>();
-    private final Set<MagazineCopy> magazineCopies = new HashSet<>();
+    private final Set<Magazine> magazines = new TreeSet<>(Comparator.comparing(Magazine::getIssn).thenComparing(Magazine::getIssue));
+    private final Set<MagazineCopy> magazineCopies = new TreeSet<>(Comparator.comparing(MagazineCopy::getUuid));
 
 
 
@@ -92,6 +92,7 @@ public class LocalMagazinesRepository implements MagazinesRepository{
                 .stream()
                 .filter(copy ->copy.getState() != MagazineCopy.State.DAMAGED &&
                                copy.getState() != MagazineCopy.State.NEED_REPLACEMENT)
+                .map(MagazineCopy::copy)
                 .collect(Collectors.toList());
     }
 
@@ -147,7 +148,7 @@ public class LocalMagazinesRepository implements MagazinesRepository{
 
     @Override
     public synchronized void updateMagazineCopy(MagazineCopy magazineCopy) throws RepositoryException {
-        if(!magazineCopies.contains(magazineCopy)){
+        if (!magazineCopies.contains(magazineCopy)){
             throw new ObjectNotFoundException(MagazineCopy.class.getSimpleName(), magazineCopy.getUuid().toString());
         }
 
@@ -185,8 +186,11 @@ public class LocalMagazinesRepository implements MagazinesRepository{
 
     @Override
     public List<MagazineCopy> findMagazineCopiesByIssnContains(String query) {
-        return magazineCopies.stream().filter(magazineCopy ->
-                findMagazineByUuid(magazineCopy.getElementUuid()).get().getIssn().contains(query))
+        return magazineCopies.stream()
+                .filter(magazineCopy -> findMagazineByUuid(magazineCopy.getElementUuid())
+                        .orElseThrow()
+                        .getIssn()
+                        .contains(query))
                 .collect(Collectors.toList());
     }
     @Override
@@ -194,6 +198,7 @@ public class LocalMagazinesRepository implements MagazinesRepository{
         return findMagazineCopiesByIssnAndIssue(issn,issue)
                 .stream()
                 .filter(copy -> copy.getState() == state)
+                .map(MagazineCopy::copy)
                 .collect(Collectors.toList());
     }
 }

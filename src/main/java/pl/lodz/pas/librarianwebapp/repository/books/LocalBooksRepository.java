@@ -22,8 +22,8 @@ public class LocalBooksRepository implements BooksRepository {
     private BiConsumer<Set<Book>,Set<BookCopy>> booksInitializer;
 
 
-    private final Set<Book> books = new HashSet<>();
-    private final Set<BookCopy> bookCopies = new HashSet<>();
+    private final Set<Book> books = new TreeSet<>(Comparator.comparing(Book::getIsbn));
+    private final Set<BookCopy> bookCopies = new TreeSet<>(Comparator.comparing(BookCopy::getUuid));
 
     @PostConstruct
     private void initializeBooks() {
@@ -59,7 +59,7 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
-    public Optional<Book> findBookByUuid(UUID uuid) {
+    public synchronized Optional<Book> findBookByUuid(UUID uuid) {
         return books.stream()
                 .filter(book -> book.getUuid().equals(uuid))
                 .findFirst()
@@ -67,7 +67,7 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
-    public Optional<BookCopy> findBookCopyByUuid(UUID uuid) {
+    public synchronized Optional<BookCopy> findBookCopyByUuid(UUID uuid) {
         return bookCopies.stream()
                 .filter(bookCopy -> bookCopy.getUuid().equals(uuid))
                 .findAny()
@@ -140,7 +140,7 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
-    public Optional<BookCopy> findBookCopyByIsbnAndNumber(String isbn, int number) {
+    public synchronized Optional<BookCopy> findBookCopyByIsbnAndNumber(String isbn, int number) {
 
         var book = findBookByIsbn(isbn);
 
@@ -149,12 +149,13 @@ public class LocalBooksRepository implements BooksRepository {
         }
 
         return bookCopies.stream()
-                .filter(copy -> copy.getElementUuid().equals(book.get().getUuid()) && copy.getNumber() == number)
+                .filter(copy -> copy.getElementUuid().equals(book.get().getUuid()) &&
+                                copy.getNumber() == number)
                 .findFirst();
     }
 
     @Override
-    public List<BookCopy> findBookCopiesByIsbnAndState(String isbn, BookCopy.State state) {
+    public synchronized List<BookCopy> findBookCopiesByIsbnAndState(String isbn, BookCopy.State state) {
 
         var book = findBookByIsbn(isbn);
 
@@ -164,6 +165,7 @@ public class LocalBooksRepository implements BooksRepository {
 
         return bookCopies.stream()
                 .filter(copy -> copy.getState() == state && copy.getElementUuid().equals(book.get().getUuid()))
+                .map(BookCopy::copy)
                 .collect(Collectors.toList());
     }
 
@@ -214,7 +216,7 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
-    public void deleteBookCopy(BookCopy bookCopy) throws ObjectNotFoundException {
+    public synchronized void deleteBookCopy(BookCopy bookCopy) throws ObjectNotFoundException {
 
         if (!bookCopies.contains(bookCopy)) {
             throw new ObjectNotFoundException(BookCopy.class.getSimpleName(), bookCopy.getUuid().toString());
@@ -224,16 +226,20 @@ public class LocalBooksRepository implements BooksRepository {
     }
 
     @Override
-    public List<BookCopy> findBookCopiesByIsbnContains(String query) {
+    public synchronized List<BookCopy> findBookCopiesByIsbnContains(String query) {
 
-        return bookCopies.stream().filter(book ->
-                findBookByUuid(book.getElementUuid()).get().getIsbn().contains(query))
+        return bookCopies.stream()
+                .filter(book -> findBookByUuid(book.getElementUuid())
+                        .orElseThrow()
+                        .getIsbn()
+                        .contains(query))
+                .map(BookCopy::copy)
                 .collect(Collectors.toList());
 
     }
 
     @Override
-    public void deleteBook(Book book) throws ObjectNotFoundException {
+    public synchronized void deleteBook(Book book) throws ObjectNotFoundException {
         if (!books.contains(book)) {
             throw new ObjectNotFoundException(Book.class.getSimpleName(), book.getIsbn());
         }

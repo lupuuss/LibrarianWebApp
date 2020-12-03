@@ -7,10 +7,7 @@ import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializ
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -74,13 +71,16 @@ public class LocalUsersRepository implements UsersRepository {
     public List<User> findAllUsers() {
         return users.stream()
                 .map(User::copy)
+                .sorted(Comparator.comparing(User::getLogin))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<User> findUserByLoginContains(String query) {
         return users.stream()
+                .map(User::copy)
                 .filter(user -> user.getLogin().contains(query))
+                .sorted(Comparator.comparing(User::getLogin))
                 .collect(Collectors.toList());
     }
 }
