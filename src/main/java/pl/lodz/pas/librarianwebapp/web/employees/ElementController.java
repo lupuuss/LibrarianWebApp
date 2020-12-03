@@ -11,9 +11,9 @@ import javax.inject.Named;
 import java.io.Serializable;
 
 
-@Named("newElementController")
+@Named("elementController")
 @ViewScoped
-public class NewElementController implements Serializable {
+public class ElementController implements Serializable {
 
     @Inject
     private ElementsService elementsService;
@@ -52,7 +52,7 @@ public class NewElementController implements Serializable {
         var result = elementsService.addElement(elementDto);
 
         if (result) {
-            return "elements.xhtml?faces-redirect=true";
+            return "elementsList.xhtml?faces-redirect=true";
         } else {
             return "creationFailed.xhtml?faces-redirect=true";
         }

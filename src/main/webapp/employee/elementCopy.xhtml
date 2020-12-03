@@ -13,24 +13,24 @@
 
 
                 <h:outputLabel for="elementRef">#{msg['page.books.ref']}:</h:outputLabel>
-                <h:selectOneMenu id="elementRef" value="#{newElementCopyController.reference}" >
-                    <f:selectItems value="#{newElementCopyController.references}" />
+                <h:selectOneMenu id="elementRef" value="#{elementCopyController.reference}" >
+                    <f:selectItems value="#{elementCopyController.references}" />
                 </h:selectOneMenu>
                 <h:message for="elementRef" />
 
                 <h:outputLabel for="state">#{msg['page.books.state']}:</h:outputLabel>
                 <h:selectOneMenu
                         id="state"
-                        value="#{newElementCopyController.state}">
-                    <f:selectItems value="#{newElementCopyController.states}" />
+                        value="#{elementCopyController.state}">
+                    <f:selectItems value="#{elementCopyController.states}" />
                 </h:selectOneMenu>
                 <h:message for="state" />
 
                 <h:commandButton
                         value="${msg['page.common.add']}"
-                        action="#{newElementCopyController.createElementCopy}"/>
+                        action="#{elementCopyController.createElementCopy}"/>
 
-                <h:button outcome="elements.xhtml" value="${msg['page.common.cancel']}"/>
+                <h:button outcome="elementsList.xhtml" value="${msg['page.common.cancel']}"/>
 
             </h:panelGrid>
         </h:form>

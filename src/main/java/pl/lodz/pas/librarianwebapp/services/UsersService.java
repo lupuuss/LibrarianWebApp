@@ -120,6 +120,7 @@ public class UsersService {
         user.setLastName(userDto.getLastName());
         user.setActive(userDto.isActive());
         user.setEmail(userDto.getEmail());
+        user.setType(mapType(userDto.getType()));
 
         try {
             repository.updateUser(user);

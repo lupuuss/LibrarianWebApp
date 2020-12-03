@@ -6,18 +6,17 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <ui:composition>
-    Librarian <h:button
-        rendered="${request.servletPath.contains('/lendings/')}"
-        value="${msg['page.lending.cart']}"
-        style="float: right"
-        outcome="/lendings/cart.xhtml" />
 
-    <h:button
-            rendered="${request.servletPath.contains('/lendings/')}"
-            value="${msg['page.lending.yourRents']}"
+    <h:panelGrid>
+        <ui:repeat value="#{navigationController.breadcrumbs}" var="page">
+            >> <h:link outcome="#{page.link}" value="#{page.name}"/>
+        </ui:repeat>
+    </h:panelGrid>
+
+    Librarian
+
+    <h:outputLabel
             style="float: right"
-            outcome="/lendings/yourRents.xhtml" />
-
-
+            value="#{navigationController.userName}"/>
 </ui:composition>
 </html>

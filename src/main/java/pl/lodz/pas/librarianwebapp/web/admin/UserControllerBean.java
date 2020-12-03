@@ -10,9 +10,9 @@ import javax.inject.Named;
 import java.util.Arrays;
 import java.util.List;
 
-@Named("newUserController")
+@Named("userController")
 @RequestScoped
-public class NewUserControllerBean {
+public class UserControllerBean {
 
     @Inject
     UsersService service;
@@ -82,9 +82,9 @@ public class NewUserControllerBean {
         }
 
         if (result) {
-            return "users.xhtml?faces-redirect=true";
+            return "usersList.xhtml?faces-redirect=true";
         } else {
-            return "userCreationFailed.xhtml?faces-redirect=true";
+            return "userOperationFailed.xhtml?faces-redirect=true";
         }
     }
 }

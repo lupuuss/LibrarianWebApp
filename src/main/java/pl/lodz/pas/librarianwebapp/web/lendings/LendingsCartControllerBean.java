@@ -7,9 +7,11 @@ import pl.lodz.pas.librarianwebapp.services.dto.ElementLockDto;
 import pl.lodz.pas.librarianwebapp.web.MarksController;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,7 +39,7 @@ public class LendingsCartControllerBean extends MarksController<ElementLockDto> 
 
         elementLocks.add(bookCopy.get());
 
-        return "elements.xhtml?faces-redirect=true";
+        return "elementsList.xhtml?faces-redirect=true";
     }
 
     public String addToCart(String issn, Integer issue, ElementCopyDto.State state){
@@ -51,7 +53,7 @@ public class LendingsCartControllerBean extends MarksController<ElementLockDto> 
 
         elementLocks.add(magazineCopy.get());
 
-        return "elements.xhtml?faces-redirect=true";
+        return "elementsList.xhtml?faces-redirect=true";
     }
 
     private String getLogin() {
@@ -96,7 +98,7 @@ public class LendingsCartControllerBean extends MarksController<ElementLockDto> 
 
         if (result) {
             elementLocks.clear();
-            return "elements.xhtml?faces-redirect=true";
+            return "elementsList.xhtml?faces-redirect=true";
         } else {
             return "error.xhtml?faces-redirect=true";
         }

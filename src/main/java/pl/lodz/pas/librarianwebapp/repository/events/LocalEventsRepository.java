@@ -4,7 +4,6 @@ import pl.lodz.pas.librarianwebapp.DateProvider;
 import pl.lodz.pas.librarianwebapp.repository.events.data.*;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
-import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
 
 import javax.enterprise.context.ApplicationScoped;

@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Named("usersController")
+@Named("usersListController")
 @RequestScoped
-public class UsersControllerBean extends MarksController<UserDto> {
+public class UsersListControllerBean extends MarksController<UserDto> {
 
     @Inject
     private UsersService service;
@@ -38,16 +38,16 @@ public class UsersControllerBean extends MarksController<UserDto> {
 
         service.updateUsersActive(getMarkedItems(), false);
 
-        return "users.xhtml?faces-redirect=true";
+        return "usersList.xhtml?faces-redirect=true";
     }
 
     public String activateMarkedUsers() {
         service.updateUsersActive(getMarkedItems(), true);
 
-        return "users.xhtml?faces-redirect=true";
+        return "usersList.xhtml?faces-redirect=true";
     }
 
     public String filter() {
-        return "users.xhtml?faces-redirect=true&query=" + query;
+        return "usersList.xhtml?faces-redirect=true&query=" + query;
     }
 }

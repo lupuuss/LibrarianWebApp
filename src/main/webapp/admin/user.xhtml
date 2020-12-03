@@ -7,8 +7,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <f:metadata>
-    <f:viewParam name="login" required="false" value="#{newUserController.loginToEdit}"/>
-    <f:viewAction action="#{newUserController.initializeUser}"/>
+    <f:viewParam name="login" required="false" value="#{userController.loginToEdit}"/>
+    <f:viewAction action="#{userController.initializeUser}"/>
 </f:metadata>
 
 <ui:composition template = "/common/template.xhtml">
@@ -22,8 +22,8 @@
                         maxlength="25"
                         required="true"
                         label="login"
-                        readonly="#{newUserController.loginToEdit != null}"
-                        value="${newUserController.user.login}"
+                        readonly="#{userController.loginToEdit != null}"
+                        value="${userController.user.login}"
                         requiredMessage="${msg['page.form.field.required']}"/>
                 <h:message for="login" />
 
@@ -33,7 +33,7 @@
                         maxlength="25"
                         required="true"
                         label="firstName"
-                        value="${newUserController.user.firstName}"
+                        value="${userController.user.firstName}"
                         requiredMessage="${msg['page.form.field.required']}"/>
                 <h:message for="firstName" />
 
@@ -43,7 +43,7 @@
                         maxlength="25"
                         required="true"
                         label="lastName"
-                        value="${newUserController.user.lastName}"
+                        value="${userController.user.lastName}"
                         requiredMessage="${msg['page.form.field.required']}"/>
                 <h:message for="lastName" />
 
@@ -52,7 +52,7 @@
                         id="email"
                         required="true"
                         label="email"
-                        value="${newUserController.user.email}"
+                        value="${userController.user.email}"
                         requiredMessage="${msg['page.form.field.required']}"
                         validatorMessage="${msg['page.form.field.incorrectValue']}">
                     <f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
@@ -63,8 +63,8 @@
                 <h:selectOneMenu
                         id="type"
                         required="true"
-                        value="${newUserController.userType}">
-                    <f:selectItems value="${newUserController.types}" />
+                        value="${userController.userType}">
+                    <f:selectItems value="${userController.types}" />
                 </h:selectOneMenu>
                 <h:message for="type"/>
 
@@ -72,14 +72,14 @@
                 <h:selectBooleanCheckbox
                         id="active"
                         required="true"
-                        value="${newUserController.user.active}"/>
+                        value="${userController.user.active}"/>
                 <h:message for="active"/>
 
                 <h:commandButton
                         value="${msg['page.common.save']}"
-                        action="#{newUserController.saveUser()}"/>
+                        action="#{userController.saveUser()}"/>
 
-                <h:button outcome="users.xhtml" value="${msg['page.common.cancel']}"/>
+                <h:button outcome="usersList.xhtml" value="${msg['page.common.cancel']}"/>
             </h:panelGrid>
         </h:form>
     </ui:define>

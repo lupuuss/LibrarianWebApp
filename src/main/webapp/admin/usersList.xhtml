@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <f:metadata>
-    <f:viewParam name="query" value="#{usersController.query}" required="false"/>
+    <f:viewParam name="query" value="#{usersListController.query}" required="false"/>
 </f:metadata>
 
 <ui:composition template = "/common/template.xhtml">
@@ -16,10 +16,10 @@
         <h:form>
             <h:panelGrid columns="1">
                 <h:panelGroup>
-                    <h:button outcome="addNewUser.xhtml" value="${msg['page.users.adduser']}"/>
-                    <h:commandButton action="#{usersController.deactivateMarkedUsers}" value="${msg['page.users.deactivate']}" />
-                    <h:commandButton action="#{usersController.activateMarkedUsers}" value="${msg['page.users.activate']}" />
+                    <h:button outcome="user.xhtml" value="${msg['page.users.adduser']}"/>
 
+                    <h:commandButton action="#{usersListController.activateMarkedUsers}" value="${msg['page.users.activate']}" />
+                    <h:commandButton action="#{usersListController.deactivateMarkedUsers}" value="${msg['page.users.deactivate']}" />
                 </h:panelGroup>
 
                 <h:panelGroup>
@@ -27,13 +27,13 @@
                     <h:inputText
                             id="filter"
                             maxlength="25"
-                            value="#{usersController.query}"
+                            value="#{usersListController.query}"
                             label="filter"
                     />
-                    <h:commandButton action="#{usersController.filter}" value="${msg['page.users.filter']}" />
+                    <h:commandButton action="#{usersListController.filter}" value="${msg['page.users.filter']}" />
                 </h:panelGroup>
 
-                <h:dataTable value="${usersController.allUsers}" var="user">
+                <h:dataTable value="${usersListController.allUsers}" var="user">
                     <h:column>
                         <f:facet name="header">${msg['page.common.login']}</f:facet>
                         #{user.login}
@@ -53,11 +53,11 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header"><h:selectBooleanCheckbox styleClass="masterMark" onclick="selectAll()"/></f:facet>
-                        <h:selectBooleanCheckbox  value="#{usersController.marks[user]}" styleClass="mark" />
+                        <h:selectBooleanCheckbox value="#{usersListController.marks[user]}" styleClass="mark" />
                     </h:column>
                     <h:column>
                         <f:facet name="header" />
-                        <h:button outcome="addNewUser.xhtml?login=${user.login}" value="${msg['page.common.edit']}"/>
+                        <h:button outcome="user.xhtml?login=${user.login}" value="${msg['page.common.edit']}"/>
                     </h:column>
                 </h:dataTable>
             </h:panelGrid>

@@ -7,10 +7,15 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:panelGrid columns="1">
 
-        <h:button value="${msg['page.menu.manage.users']}" outcome="/admin/users.xhtml" rendered="${request.isUserInRole('ADMINS')}"/>
-        <h:button value="${msg['page.menu.manage.books']}" outcome="/employee/elements.xhmtl" rendered="${request.isUserInRole('EMPLOYEES') or request.isUserInRole('ADMINS')}"/>
+        <h:button value="${msg['page.menu.manage.users']}" outcome="/admin/usersList.xhtml" rendered="${request.isUserInRole('ADMINS')}"/>
+        <h:button value="${msg['page.menu.manage.books']}" outcome="/employee/elementsList.xhmtl" rendered="${request.isUserInRole('EMPLOYEES') or request.isUserInRole('ADMINS')}"/>
         <h:button value="${msg['page.menu.manage.lendings']}" outcome="/employee/lendings.xhtml" rendered="${request.isUserInRole('EMPLOYEES') or request.isUserInRole('ADMINS')}" />
         <h:button value="${msg['page.menu.lendings']}" outcome="/lendings/elements.xhtml" />
+        <h:button value="${msg['page.lending.yourLendings']}" outcome="/lendings/your.xhtml" />
+        <h:button value="${msg['page.lending.cart']}" outcome="/lendings/cart.xhtml" />
 
+        <h:form>
+            <h:commandButton action="#{navigationController.logout}" value="${msg['page.menu.logout']}"/>
+        </h:form>
     </h:panelGrid>
 </html>

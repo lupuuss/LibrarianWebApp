@@ -10,9 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Named("newElementCopyController")
+@Named("elementCopyController")
 @RequestScoped
-public class NewElementCopyControllerBean {
+public class ElementCopyControllerBean {
 
     @Inject
     private ElementsService elementsService;
@@ -65,7 +65,7 @@ public class NewElementCopyControllerBean {
         }
 
         if (result) {
-            return "elements.xhtml?faces-redirect=true";
+            return "elementsList.xhtml?faces-redirect=true";
         } else {
             return "creationFailed.xhtml?faces-redirect=true";
         }

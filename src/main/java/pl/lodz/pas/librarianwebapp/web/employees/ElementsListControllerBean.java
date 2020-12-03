@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Named("elementsController")
+@Named("elementsListController")
 @RequestScoped
-public class ElementsControllerBean extends MarksController<ElementCopyDto> {
+public class ElementsListControllerBean extends MarksController<ElementCopyDto> {
 
     @Inject
     private ElementsService elementsService;
@@ -37,17 +37,17 @@ public class ElementsControllerBean extends MarksController<ElementCopyDto> {
 
         elementsService.degradeCopies(getMarkedItems());
 
-        return "elements.xhtml?faces-redirect=true";
+        return "elementsList.xhtml?faces-redirect=true";
     }
 
     public String removeMarkedCopies() {
 
         elementsService.deleteCopies(getMarkedItems());
 
-        return "elements.xhtml?faces-redirect=true";
+        return "elementsList.xhtml?faces-redirect=true";
     }
 
     public String filter() {
-        return "elements.xhtml?faces-redirect=true&query=" + query;
+        return "elementsList.xhtml?faces-redirect=true&query=" + query;
     }
 }
