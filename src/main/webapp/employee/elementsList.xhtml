@@ -67,6 +67,18 @@
                         <h:selectBooleanCheckbox value="#{elementsListController.marks[copy]}" styleClass="mark" />
                     </h:column>
 
+                    <h:column>
+                        <f:facet name="header" />
+                        <h:button outcome="element.xhtml?ref=${copy.element.isbn}"
+                                  rendered="#{copy.element['class'].simpleName eq 'BookDto'}"
+                                  value="${msg['page.common.edit']}"/>
+
+                        <h:button outcome="element.xhtml?ref=${copy.element.issn}&amp;issue=${copy.element.issue}"
+                                  rendered="#{copy.element['class'].simpleName eq 'MagazineDto'}"
+                                  value="${msg['page.common.edit']}"/>
+
+                    </h:column>
+
                 </h:dataTable>
             </h:panelGrid>
         </h:form>

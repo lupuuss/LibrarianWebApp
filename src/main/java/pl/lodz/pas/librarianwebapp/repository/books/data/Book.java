@@ -38,8 +38,6 @@ public class Book extends Element<Book> {
         return isbn;
     }
 
-
-
     public String getAuthor() {
         return author;
     }

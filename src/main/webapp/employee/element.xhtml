@@ -8,7 +8,9 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <f:metadata>
-    <f:viewParam id="type" name="type" value="#{elementController.elementType}" required="true" />
+    <f:viewParam name="type" value="#{elementController.elementType}" required="false" />
+    <f:viewParam name="ref" value="#{elementController.reference}" required="false" />
+    <f:viewParam name="issue" value="#{elementController.issue}" required="false" />
     <f:viewAction action="#{elementController.initializeElement}"/>
 </f:metadata>
 
@@ -26,6 +28,7 @@
                             required="true"
                             label="isbn"
                             value="${elementController.element.isbn}"
+                            readonly="${elementController.elementType == null}"
                             validatorMessage="${msg['page.form.field.validation']}"
                             requiredMessage="${msg['page.form.field.required']}">
                         <f:validateRegex pattern="([a-zA-Z0-9]{8})"  />
@@ -42,6 +45,7 @@
                             required="true"
                             label="issn"
                             value="${elementController.element.issn}"
+                            readonly="${elementController.elementType == null}"
                             validatorMessage="${msg['page.form.field.validation']}"
                             requiredMessage="${msg['page.form.field.required']}">
                     <f:validateRegex pattern="([a-zA-Z0-9]{8})" />
@@ -56,6 +60,7 @@
                             maxlength="25"
                             required="true"
                             label="issue"
+                            readonly="${elementController.elementType == null}"
                             value="${elementController.element.issue}"
                             requiredMessage="${msg['page.form.field.required']}"/>
                     <h:message for="issue" />
@@ -95,11 +100,18 @@
                     <h:message for="author" />
                 </h:panelGroup>
 
-                <h:commandButton
-                        value="${msg['page.common.add']}"
-                        action="#{elementController.createElement}"/>
+                <h:panelGroup>
+                    <h:commandButton
+                            value="${msg['page.common.save']}"
+                            rendered="${elementController.elementType == null}"
+                            action="#{elementController.saveElement}"/>
+                    <h:commandButton
+                            value="${msg['page.common.add']}"
+                            rendered="${elementController.elementType != null}"
+                            action="#{elementController.saveElement}"/>
 
-                <h:button outcome="elementsList.xhtml" value="${msg['page.common.cancel']}"/>
+                    <h:button outcome="elementsList.xhtml" value="${msg['page.common.cancel']}"/>
+                </h:panelGroup>
             </h:panelGrid>
         </h:form>
     </ui:define>

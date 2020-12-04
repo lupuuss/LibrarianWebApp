@@ -6,8 +6,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:metadata>
-    <f:viewParam id="ref" name="ref" value="#{lendElementController.ref}" required="true" />
-    <f:viewParam id="issue" name="issue" value="#{lendElementController.issue}" required="false" />
+    <f:viewParam name="ref" value="#{lendElementController.ref}" required="true" />
+    <f:viewParam name="issue" value="#{lendElementController.issue}" required="false" />
 
     <f:viewAction action="#{lendElementController.initializeBook}" onPostback="true"/>
 </f:metadata>

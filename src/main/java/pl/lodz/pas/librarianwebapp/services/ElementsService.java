@@ -9,6 +9,7 @@ import pl.lodz.pas.librarianwebapp.repository.events.data.ElementLock;
 import pl.lodz.pas.librarianwebapp.repository.events.data.LendingEvent;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
+import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
 import pl.lodz.pas.librarianwebapp.services.dto.*;
 
@@ -452,5 +453,63 @@ public class ElementsService {
         }
 
         return copies;
+    }
+
+    public boolean updateElement(ElementDto elementDto) {
+
+        if (elementDto instanceof BookDto) {
+            return updateBook((BookDto) elementDto);
+        } else if (elementDto instanceof MagazineDto) {
+            return updateMagazine((MagazineDto) elementDto);
+        } else {
+            throw new IllegalStateException("Unsupported element type!");
+        }
+    }
+
+    private boolean updateMagazine(MagazineDto elementDto) {
+
+        var magazineOpt = magazinesRepository.findMagazineByIssnAndIssue(
+                elementDto.getIssn(),
+                elementDto.getIssue()
+        );
+
+        if (magazineOpt.isEmpty()) {
+            return false;
+        }
+
+        var updatedMagazine = magazineOpt.get();
+
+        updatedMagazine.setPublisher(elementDto.getPublisher());
+        updatedMagazine.setTitle(elementDto.getTitle());
+
+        try {
+            magazinesRepository.updateMagazine(updatedMagazine);
+            return true;
+        } catch (ObjectNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean updateBook(BookDto elementDto) {
+        var bookOpt = booksRepository.findBookByIsbn(elementDto.getIsbn());
+
+        if (bookOpt.isEmpty()){
+            return false;
+        }
+
+        var updatedBook = bookOpt.get();
+
+        updatedBook.setAuthor(elementDto.getAuthor());
+        updatedBook.setTitle(elementDto.getTitle());
+        updatedBook.setPublisher(elementDto.getPublisher());
+
+        try {
+            booksRepository.updateBook(updatedBook);
+            return true;
+        } catch (ObjectNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -5,8 +5,8 @@ import java.util.UUID;
 
 public abstract class Element<T extends Element<?>> {
     private final UUID uuid;
-    private final String publisher;
-    private final String title;
+    private String publisher;
+    private String title;
 
     public Element(UUID uuid, String publisher, String title) {
         this.uuid = uuid;
@@ -28,6 +28,14 @@ public abstract class Element<T extends Element<?>> {
 
     public String getTitle() {
         return title;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public abstract T copy();
