@@ -19,7 +19,7 @@ body {
 
 #header {
     text-align: center;
-    background-color:#637aad;
+    background-color:#43D1AF;
     font-size: 25px;
     color:aliceblue;
 }
@@ -54,9 +54,8 @@ body {
 input[type="submit"],
 input[type="button"] {
     width: 200px;
-    box-shadow:inset 0px 1px 0px 0px #7a8eb9;
-    background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%);
-    background-color:#637aad;
+    box-shadow:inset 0px 1px 0px 0px #43D1AF;
+    background-color:#43D1AF;
     border:1px solid #314179;
     display:inline-block;
     cursor:pointer;
@@ -71,7 +70,7 @@ input[type="button"] {
 
 input[type="submit"]:hover {
     background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%);
-    background-color:#5972a7;
+    background-color:#54E2BF;
 }
 
 input[type="submit"]:active {
