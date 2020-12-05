@@ -25,6 +25,7 @@ body {
     font-size: 25px;
     color:aliceblue;
 }
+
 #header a {
     text-decoration: none
 }
@@ -70,11 +71,13 @@ input[type="button"] {
     margin:  5px;
 }
 
+input[type="button"]:hover,
 input[type="submit"]:hover {
 
     background-color:#54E2BF;
 }
 
+input[type="button"]:active,
 input[type="submit"]:active {
     position:relative;
     top:1px;
