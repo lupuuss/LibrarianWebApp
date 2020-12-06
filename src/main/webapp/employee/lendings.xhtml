@@ -49,11 +49,15 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">${msg['page.books.date.lend']}</f:facet>
-                        <h:outputText value="#{lending.lendDate}"/>
+                        <h:outputText value="#{lending.lendDate}">
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" />
+                        </h:outputText>
                     </h:column>
                     <h:column>
                         <f:facet name="header">${msg['page.books.date.return']}</f:facet>
-                        <h:outputText value="#{lending.returnDate}"/>
+                        <h:outputText value="#{lending.returnDate}">
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" />
+                        </h:outputText>
                     </h:column>
                     <h:column>
                         <f:facet name="header">${msg['page.books.ref']}</f:facet>

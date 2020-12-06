@@ -8,10 +8,10 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <f:metadata>
-    <f:viewParam name="type" value="#{elementController.elementType}" required="false" />
-    <f:viewParam name="ref" value="#{elementController.reference}" required="false" />
-    <f:viewParam name="issue" value="#{elementController.issue}" required="false" />
-    <f:viewAction action="#{elementController.initializeElement}"/>
+    <f:viewParam name="type" value="${elementController.elementType}" required="false"  />
+    <f:viewParam name="ref" value="${elementController.reference}" required="false" />
+    <f:viewParam name="issue" value="${elementController.issue}" required="false" />
+    <f:viewAction action="${elementController.initializeElement}"/>
 </f:metadata>
 
 <ui:composition template = "/common/template.xhtml">
@@ -32,7 +32,6 @@
                             validatorMessage="${msg['page.form.field.validation']}"
                             requiredMessage="${msg['page.form.field.required']}">
                         <f:validateRegex pattern="([a-zA-Z0-9]{8})"  />
-          \
                     </h:inputText>
                     <h:message for="isbn" />
                 </h:panelGroup>
@@ -77,6 +76,7 @@
                             requiredMessage="${msg['page.form.field.required']}"/>
                     <h:message for="title" />
                 </h:panelGroup>
+
                 <h:panelGroup>
                     <h:outputLabel for="publisher">#{msg['page.books.publisher']}:</h:outputLabel>
                     <h:inputText
@@ -88,6 +88,7 @@
                             requiredMessage="${msg['page.form.field.required']}"/>
                     <h:message for="publisher" />
                 </h:panelGroup>
+
                 <h:panelGroup rendered="#{elementController.element['class'].simpleName eq 'BookDto'}">
                     <h:outputLabel for="author">#{msg['page.books.author']}:</h:outputLabel>
                     <h:inputText

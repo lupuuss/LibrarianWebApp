@@ -9,7 +9,6 @@
 
     <ui:define name = "content">
         <h:outputScript name="js/selectAll.js" />
-        <h2>${msg['page.lending.cart']}</h2>
         <h:form>
             <h:commandButton
                     rendered="${not empty lendingsCartController.cartPositions}"
@@ -35,7 +34,7 @@
             </h:dataTable>
 
             <h:commandButton rendered="${not empty lendingsCartController.cartPositions}"
-                             action="${lendingsCartController.lendElements}" value="${msg['page.books.rent']}" />
+                             action="${lendingsCartController.lendElements}" value="${msg['page.books.lend']}" />
         </h:form>
     </ui:define>
 

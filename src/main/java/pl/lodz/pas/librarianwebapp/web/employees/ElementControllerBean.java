@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Named("elementController")
 @ViewScoped
-public class ElementController implements Serializable {
+public class ElementControllerBean implements Serializable {
 
     @Inject
     private ElementsService elementsService;
@@ -56,7 +56,7 @@ public class ElementController implements Serializable {
                 FacesContext
                         .getCurrentInstance()
                         .getExternalContext()
-                        .redirect( "/error.xhtml?errorId=elementNotFound");
+                        .redirect( "/librarian/error.xhtml?errorId=elementNotFound");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -96,7 +96,7 @@ public class ElementController implements Serializable {
         if (result) {
             return "elementsList.xhtml?faces-redirect=true";
         } else {
-            return "/error.xhtml?faces-redirect=true?errorId=operationFailed";
+            return "/error.xhtml?faces-redirect=true&errorId=operationFailed";
         }
     }
 

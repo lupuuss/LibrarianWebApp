@@ -22,12 +22,16 @@
 
                 <h:column>
                     <f:facet name="header">${msg['page.books.date.lend']}</f:facet>
-                    <h:outputText value="#{event.lendDate}"/>
+                    <h:outputText value="#{event.lendDate}" >
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" />
+                    </h:outputText>
                 </h:column>
 
                 <h:column>
                     <f:facet name="header">${msg['page.books.date.return']}</f:facet>
-                    <h:outputText value="#{event.returnDate}"/>
+                    <h:outputText value="#{event.returnDate}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" />
+                    </h:outputText>
                 </h:column>
             </h:dataTable>
         </f:view>

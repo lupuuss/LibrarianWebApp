@@ -16,7 +16,9 @@ import pl.lodz.pas.librarianwebapp.services.dto.*;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -140,15 +142,15 @@ public class LendingsService {
 
             var copy = getElementCopyDtoByUuid(event.getElementUuid());
 
-            var lendDate = event.getDate();
+            var lendDate = Timestamp.valueOf(event.getDate());
 
-            LocalDateTime returnDate = null;
+            Date returnDate = null;
 
             if (event.getReturnUuid().isPresent()) {
                 var returnEvent =
                         eventsRepository.findReturnEventByUuid(event.getReturnUuid().get());
 
-                returnDate = returnEvent.orElseThrow().getDate();
+                returnDate = Timestamp.valueOf(returnEvent.orElseThrow().getDate());
             }
 
             eventDtos.add(new LendEventDto(copy, lendDate, returnDate, event.getCustomerLogin()));
@@ -344,6 +346,9 @@ public class LendingsService {
             eventsRepository.deleteLendingEventByElementCopyUuidDate(
                     copy.get().getUuid(),
                     event.getLendDate()
+                            .toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime()
             );
         }
 
@@ -381,6 +386,9 @@ public class LendingsService {
             var lendingEventOpt = eventsRepository.findLendingEventByElementCopyUuidDate(
                     copy.get().getUuid(),
                     eventDto.getLendDate()
+                            .toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime()
             );
 
             if (lendingEventOpt.isPresent()) {

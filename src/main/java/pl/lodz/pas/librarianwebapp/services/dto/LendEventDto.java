@@ -3,15 +3,16 @@ package pl.lodz.pas.librarianwebapp.services.dto;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class LendEventDto {
 
     private ElementCopyDto copy;
-    private LocalDateTime lendDate;
-    private LocalDateTime returnDate;
+    private Date lendDate;
+    private Date returnDate;
     private String login;
 
-    public LendEventDto(ElementCopyDto copy, LocalDateTime lendDate, LocalDateTime returnDate, String login) {
+    public LendEventDto(ElementCopyDto copy, Date lendDate, Date returnDate, String login) {
         this.copy = copy;
         this.lendDate = lendDate;
         this.returnDate = returnDate;
@@ -26,19 +27,19 @@ public class LendEventDto {
         this.copy = copy;
     }
 
-    public LocalDateTime getLendDate() {
+    public Date getLendDate() {
         return lendDate;
     }
 
-    public void setLendDate(LocalDateTime lendDate) {
+    public void setLendDate(Date lendDate) {
         this.lendDate = lendDate;
     }
 
-    public LocalDateTime getReturnDate() {
+    public Date getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(LocalDateTime returnDate) {
+    public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
     }
 

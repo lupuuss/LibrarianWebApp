@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--suppress ELValidationInJSP -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -11,7 +12,6 @@
 
     <f:viewAction action="#{lendElementController.initializeBook}" onPostback="true"/>
 </f:metadata>
-<h:message for="ref" />
 
 <ui:composition template = "/common/template.xhtml">
 
@@ -39,18 +39,18 @@
 
                 <h:outputText value="${msg['page.books.publisher']}: ${lendElementController.element.publisher}" />
 
-                <h:outputLabel for="state">#{msg['page.books.state']}:</h:outputLabel>
+                <h:outputText for="state" value="#{msg['page.books.state']}:"/>
                 <h:selectOneMenu
                         id="state"
                         value="#{lendElementController.state}">
                     <f:selectItems value="#{lendElementController.availableStates}" />
                 </h:selectOneMenu>
                 <h:message for="state" />
+
                 <h:commandButton
                         value="#{msg['page.common.add']}"
                         action="#{lendElementController.addCurrentElementToCart}"/>
             </h:panelGrid>
-
         </h:form>
     </ui:define>
 </ui:composition>
