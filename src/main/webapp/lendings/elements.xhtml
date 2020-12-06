@@ -9,7 +9,7 @@
 <ui:composition template = "/common/template.xhtml">
 
     <ui:define name = "content">
-        <h:dataTable var="entry" value="#{lendingsController.availableBooksCopiesCount}">
+        <h:dataTable styleClass="data-table"  var="entry" value="#{lendingsController.availableBooksCopiesCount}">
             <h:column>
                 <f:facet name="header">#{msg['page.books.title']}</f:facet>
                 #{entry.key.title}

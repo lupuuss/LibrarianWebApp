@@ -14,7 +14,7 @@
             <h:commandButton
                     rendered="${not empty lendingsCartController.cartPositions}"
                     action="${lendingsCartController.removeMarked()}" value="${msg['page.common.cancel']}"/>
-            <h:dataTable var="lock" value="${lendingsCartController.cartPositions}">
+            <h:dataTable styleClass="data-table"  var="lock" value="${lendingsCartController.cartPositions}">
                 <h:column>
                     <f:facet name="header">${msg['page.books.title']}</f:facet>
                     #{lock.copy.element.title}

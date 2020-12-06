@@ -42,7 +42,7 @@
 
                 <h:commandButton action="#{lendingsManagementController.filter}" value="${msg['page.users.filter']}" />
 
-                <h:dataTable value="${lendingsManagementController.filteredLendings}" var="lending">
+                <h:dataTable styleClass="data-table" value="${lendingsManagementController.filteredLendings}" var="lending">
                     <h:column>
                         <f:facet name="header">${msg['page.common.login']}</f:facet>
                         <h:outputText value="#{lending.login}"/>

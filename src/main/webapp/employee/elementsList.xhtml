@@ -35,7 +35,7 @@
                     <h:commandButton action="#{elementsListController.filter}" value="${msg['page.users.filter']}" />
                 </h:panelGroup>
 
-                <h:dataTable value="${elementsListController.allCopies}" var="copy">
+                <h:dataTable styleClass="data-table"  value="${elementsListController.allCopies}" var="copy">
                     <h:column>
                         <f:facet name="header">${msg['page.books.ref']}</f:facet>
                         <h:outputLabel rendered="#{copy.element['class'].simpleName eq 'BookDto'}"

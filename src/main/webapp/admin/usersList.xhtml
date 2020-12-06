@@ -33,7 +33,7 @@
                     <h:commandButton action="#{usersListController.filter}" value="${msg['page.users.filter']}" />
                 </h:panelGroup>
 
-                <h:dataTable value="${usersListController.allUsers}" var="user">
+                <h:dataTable styleClass="data-table" value="${usersListController.allUsers}" var="user">
                     <h:column>
                         <f:facet name="header">${msg['page.common.login']}</f:facet>
                         #{user.login}
