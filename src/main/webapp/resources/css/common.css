@@ -113,4 +113,8 @@ td, tr {
     min-width: 100px;
 }
 
-
+input[type="button"]:disabled,
+input[type="button"][disabled] {
+    background-color:#c0c0c0;
+    cursor: no-drop;
+}
