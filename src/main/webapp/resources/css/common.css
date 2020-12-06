@@ -116,5 +116,6 @@ td, tr {
 input[type="button"]:disabled,
 input[type="button"][disabled] {
     background-color:#c0c0c0;
+    box-shadow: none;
     cursor: no-drop;
 }
