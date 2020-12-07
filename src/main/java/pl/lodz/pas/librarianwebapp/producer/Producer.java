@@ -39,9 +39,9 @@ public class Producer {
             UUID[] uuids = new UUID[] { UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID() };
             String[] isbn = new String[] { "zaq12wsx", "qwerty12", "xsw21qaz" };
 
-            books.add(new Book(uuids[0], isbn[0], "Diuna1", "Sapkowski", "ZSRR"));
-            books.add(new Book(uuids[1], isbn[1], "Diuna2", "Morawiecki", "Fabryka Slow"));
-            books.add(new Book(uuids[2], isbn[2], "Diuna3", "Kaczynski", "Polska Ksiazka"));
+            books.add(new Book(uuids[0], isbn[0], "Diuna", "Herbert", "MAG"));
+            books.add(new Book(uuids[1], isbn[1], "Wiedzmin", "Sapkowski", "Fabryka Slow"));
+            books.add(new Book(uuids[2], isbn[2], "Harry Potter", "Rowling", "Polska Ksiazka"));
 
             copies.add(new BookCopy(UUID.randomUUID(), uuids[0],0, BookCopy.State.GOOD));
             copies.add(new BookCopy(UUID.randomUUID(), uuids[1],0, BookCopy.State.USED));
@@ -71,7 +71,7 @@ public class Producer {
             magazines.add(new Magazine(elementUuids[0],"Fnatic","Fraszki",issn[0],3));
             magazines.add(new Magazine(elementUuids[1],"Gamers2","Sport",issn[1],2));
             magazines.add(new Magazine(elementUuids[2],"Fnatic","Fraszki",issn[0],2));
-            magazines.add(new Magazine(elementUuids[3],"Republika Konga","Polska Niepodległa",issn[2],1));
+            magazines.add(new Magazine(elementUuids[3],"Ford","Pudelek",issn[2],1));
             magazines.add(new Magazine(elementUuids[4],"Nickelodeon","Fakt",issn[3],2));
 
             magazineCopies.add(new MagazineCopy(uuids[0],elementUuids[0], 0, ElementCopy.State.NEW));
