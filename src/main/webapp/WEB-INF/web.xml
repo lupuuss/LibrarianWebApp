@@ -48,9 +48,6 @@
             <role-name>
                 EMPLOYEES
             </role-name>
-            <role-name>
-                ADMINS
-            </role-name>
         </auth-constraint>
     </security-constraint>
 
@@ -79,12 +76,6 @@
             <url-pattern>/error.xhtml</url-pattern>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>
-                EMPLOYEES
-            </role-name>
-            <role-name>
-                ADMINS
-            </role-name>
             <role-name>
                 USERS
             </role-name>
