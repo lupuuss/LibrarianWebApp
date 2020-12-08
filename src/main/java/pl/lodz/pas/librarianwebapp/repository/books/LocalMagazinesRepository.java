@@ -26,8 +26,6 @@ public class LocalMagazinesRepository implements MagazinesRepository{
     private final Set<Magazine> magazines = new TreeSet<>(Comparator.comparing(Magazine::getIssn).thenComparing(Magazine::getIssue));
     private final Set<MagazineCopy> magazineCopies = new TreeSet<>(Comparator.comparing(MagazineCopy::getUuid));
 
-
-
     @PostConstruct
     private void initializeMagazines(){
         if(magazinesInitializer != null){

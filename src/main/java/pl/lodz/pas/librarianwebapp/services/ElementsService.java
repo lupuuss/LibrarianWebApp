@@ -22,9 +22,6 @@ import java.util.stream.Collectors;
 @RequestScoped
 public class ElementsService {
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final long reservationTimeInMinutes = 1;
-
     @Inject
     private BooksRepository booksRepository;
 
@@ -33,9 +30,6 @@ public class ElementsService {
 
     @Inject
     private EventsRepository eventsRepository;
-
-    @Inject
-    private DateProvider dateProvider;
 
     public List<ElementCopyDto> getAllCopies() {
 
