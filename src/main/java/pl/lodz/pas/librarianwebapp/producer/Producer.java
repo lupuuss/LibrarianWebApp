@@ -53,7 +53,6 @@ public class Producer {
         };
     }
 
-
     @Produces
     @MagazinesRepositoryInitializer
     public BiConsumer<Set<Magazine>, Set<MagazineCopy>> produceMagazinesInitializer(){

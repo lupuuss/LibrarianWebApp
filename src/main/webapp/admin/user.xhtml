@@ -75,16 +75,8 @@
                         value="${userController.user.active}"/>
                 <h:message for="active"/>
 
-
                 <h:commandButton
                         value="${msg['page.common.save']}"
-                        rendered="${userController.loginToEdit != null}"
-                        action="#{userController.saveUser()}"/>
-
-
-                <h:commandButton
-                        value="${msg['page.common.add']}"
-                        rendered="${userController.loginToEdit == null}"
                         action="#{userController.saveUser()}"/>
 
                 <h:button outcome="usersList.xhtml" value="${msg['page.common.cancel']}"/>
