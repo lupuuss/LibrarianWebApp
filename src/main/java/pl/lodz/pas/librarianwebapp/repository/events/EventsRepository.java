@@ -5,7 +5,6 @@ import pl.lodz.pas.librarianwebapp.repository.events.data.Event;
 import pl.lodz.pas.librarianwebapp.repository.events.data.LendingEvent;
 import pl.lodz.pas.librarianwebapp.repository.events.data.ReturnEvent;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
-import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
 
 import java.time.LocalDateTime;

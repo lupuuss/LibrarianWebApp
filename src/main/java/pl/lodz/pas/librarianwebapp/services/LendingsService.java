@@ -17,7 +17,6 @@ import pl.lodz.pas.librarianwebapp.services.dto.*;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;

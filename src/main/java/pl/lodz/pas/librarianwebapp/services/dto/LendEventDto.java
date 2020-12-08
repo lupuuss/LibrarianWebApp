@@ -1,8 +1,5 @@
 package pl.lodz.pas.librarianwebapp.services.dto;
 
-import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
-
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class LendEventDto {

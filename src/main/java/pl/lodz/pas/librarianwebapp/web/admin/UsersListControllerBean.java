@@ -7,10 +7,7 @@ import pl.lodz.pas.librarianwebapp.web.MarksController;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Named("usersListController")
 @RequestScoped

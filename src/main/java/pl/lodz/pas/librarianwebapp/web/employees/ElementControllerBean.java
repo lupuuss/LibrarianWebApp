@@ -2,10 +2,8 @@ package pl.lodz.pas.librarianwebapp.web.employees;
 
 import pl.lodz.pas.librarianwebapp.services.ElementsService;
 import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
-import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementDto;
 import pl.lodz.pas.librarianwebapp.services.dto.MagazineDto;
-import pl.lodz.pas.librarianwebapp.web.ElementCopyStateI18n;
 
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -13,9 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Named("elementController")

@@ -1,21 +1,22 @@
 package pl.lodz.pas.librarianwebapp.services;
 
-import pl.lodz.pas.librarianwebapp.DateProvider;
 import pl.lodz.pas.librarianwebapp.repository.books.BooksRepository;
 import pl.lodz.pas.librarianwebapp.repository.books.MagazinesRepository;
-import pl.lodz.pas.librarianwebapp.repository.books.data.*;
+import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
+import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
+import pl.lodz.pas.librarianwebapp.repository.books.data.Magazine;
+import pl.lodz.pas.librarianwebapp.repository.books.data.MagazineCopy;
 import pl.lodz.pas.librarianwebapp.repository.events.EventsRepository;
-import pl.lodz.pas.librarianwebapp.repository.events.data.ElementLock;
-import pl.lodz.pas.librarianwebapp.repository.events.data.LendingEvent;
-import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
-import pl.lodz.pas.librarianwebapp.services.dto.*;
+import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
+import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
+import pl.lodz.pas.librarianwebapp.services.dto.ElementDto;
+import pl.lodz.pas.librarianwebapp.services.dto.MagazineDto;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 

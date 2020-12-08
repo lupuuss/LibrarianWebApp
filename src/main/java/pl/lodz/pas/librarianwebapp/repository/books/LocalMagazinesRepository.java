@@ -1,7 +1,8 @@
 package pl.lodz.pas.librarianwebapp.repository.books;
 
 import pl.lodz.pas.librarianwebapp.producer.annotations.MagazinesRepositoryInitializer;
-import pl.lodz.pas.librarianwebapp.repository.books.data.*;
+import pl.lodz.pas.librarianwebapp.repository.books.data.Magazine;
+import pl.lodz.pas.librarianwebapp.repository.books.data.MagazineCopy;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
@@ -12,7 +13,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 

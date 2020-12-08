@@ -1,6 +1,5 @@
 package pl.lodz.pas.librarianwebapp.web.navigation;
 
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -8,8 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @SessionScoped
 @Named("navigationController")

@@ -1,8 +1,8 @@
 package pl.lodz.pas.librarianwebapp.repository.user;
 
+import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializer;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
-import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializer;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;

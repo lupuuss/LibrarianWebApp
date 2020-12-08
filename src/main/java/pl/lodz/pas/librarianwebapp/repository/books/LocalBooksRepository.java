@@ -1,11 +1,12 @@
 package pl.lodz.pas.librarianwebapp.repository.books;
 
-import pl.lodz.pas.librarianwebapp.repository.books.data.*;
+import pl.lodz.pas.librarianwebapp.producer.annotations.BooksRepositoryInitializer;
+import pl.lodz.pas.librarianwebapp.repository.books.data.Book;
+import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectNotFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.RepositoryException;
-import pl.lodz.pas.librarianwebapp.producer.annotations.BooksRepositoryInitializer;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;

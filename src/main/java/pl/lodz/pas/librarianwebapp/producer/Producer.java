@@ -1,10 +1,10 @@
 package pl.lodz.pas.librarianwebapp.producer;
 
+import pl.lodz.pas.librarianwebapp.producer.annotations.BooksRepositoryInitializer;
 import pl.lodz.pas.librarianwebapp.producer.annotations.MagazinesRepositoryInitializer;
+import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializer;
 import pl.lodz.pas.librarianwebapp.repository.books.data.*;
 import pl.lodz.pas.librarianwebapp.repository.user.User;
-import pl.lodz.pas.librarianwebapp.producer.annotations.BooksRepositoryInitializer;
-import pl.lodz.pas.librarianwebapp.producer.annotations.UsersRepositoryInitializer;
 
 import javax.enterprise.inject.Produces;
 import java.util.List;

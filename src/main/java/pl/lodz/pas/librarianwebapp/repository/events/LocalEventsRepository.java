@@ -1,7 +1,6 @@
 package pl.lodz.pas.librarianwebapp.repository.events;
 
 import pl.lodz.pas.librarianwebapp.DateProvider;
-import pl.lodz.pas.librarianwebapp.repository.books.data.Element;
 import pl.lodz.pas.librarianwebapp.repository.events.data.*;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.InconsistencyFoundException;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
