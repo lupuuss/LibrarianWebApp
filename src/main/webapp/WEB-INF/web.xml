@@ -18,13 +18,13 @@
     </welcome-file-list>
 
     <security-role>
-        <role-name>ADMINS</role-name>
+        <role-name>ADMIN</role-name>
     </security-role>
     <security-role>
-        <role-name>EMPLOYEES</role-name>
+        <role-name>EMPLOYEE</role-name>
     </security-role>
     <security-role>
-        <role-name>USERS</role-name>
+        <role-name>USER</role-name>
     </security-role>
 
     <security-constraint>
@@ -44,7 +44,7 @@
         </web-resource-collection>
         <auth-constraint>
             <role-name>
-                ADMINS
+                ADMIN
             </role-name>
         </auth-constraint>
     </security-constraint>
@@ -56,7 +56,7 @@
         </web-resource-collection>
         <auth-constraint>
             <role-name>
-                EMPLOYEES
+                EMPLOYEE
             </role-name>
         </auth-constraint>
     </security-constraint>
@@ -68,7 +68,7 @@
         </web-resource-collection>
         <auth-constraint>
             <role-name>
-                USERS
+                USER
             </role-name>
         </auth-constraint>
     </security-constraint>

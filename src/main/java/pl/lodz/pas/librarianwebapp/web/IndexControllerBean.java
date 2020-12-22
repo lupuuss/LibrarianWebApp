@@ -13,15 +13,15 @@ public class IndexControllerBean {
 
         try {
 
-            if (context.isUserInRole("ADMINS")) {
+            if (context.isUserInRole("ADMIN")) {
 
                 context.redirect("admin/usersList.xhtml");
 
-            } else if (context.isUserInRole("EMPLOYEES")) {
+            } else if (context.isUserInRole("EMPLOYEE")) {
 
                 context.redirect("employee/elementsList.xhtml");
 
-            } else if (context.isUserInRole("USERS")) {
+            } else if (context.isUserInRole("USER")) {
 
                 context.redirect("lendings/elements.xhtml");
             } else {

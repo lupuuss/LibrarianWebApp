@@ -1,5 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.navigation;
 
+import pl.lodz.pas.librarianwebapp.web.UserTypeI18n;
+
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -7,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 @SessionScoped
@@ -44,5 +47,19 @@ public class NavigationControllerBean implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getRole() {
+
+        var context = FacesContext.getCurrentInstance().getExternalContext();
+
+        var roles = Arrays.stream(UserTypeI18n.values()).map(Enum::name);
+
+        var role = roles
+                .filter(context::isUserInRole)
+                .findFirst()
+                .orElse("EMPTY");
+
+        return UserTypeI18n.valueOf(role).getTranslated();
     }
 }

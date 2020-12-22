@@ -3,15 +3,15 @@
     "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
 <glassfish-web-app>
     <security-role-mapping>
-        <role-name>ADMINS</role-name>
+        <role-name>ADMIN</role-name>
         <group-name>Administrators</group-name>
     </security-role-mapping>
     <security-role-mapping>
-        <role-name>EMPLOYEES</role-name>
+        <role-name>EMPLOYEE</role-name>
         <group-name>Employees</group-name>
     </security-role-mapping>
     <security-role-mapping>
-        <role-name>USERS</role-name>
+        <role-name>USER</role-name>
         <group-name>Users</group-name>
     </security-role-mapping>
 </glassfish-web-app>
