@@ -31,9 +31,11 @@
                             readonly="${elementController.elementType == null}"
                             validatorMessage="${msg['page.form.field.validation']}"
                             requiredMessage="${msg['page.form.field.required']}">
-                        <f:validateRegex pattern="([a-zA-Z0-9]{8})"  />
+                        <f:validateRegex pattern="([a-zA-Z0-9]{8})" />
+                        <f:ajax event="change" execute="isbn" render="isbnMsg" />
+                        <f:ajax event="focus" execute="isbn" render="isbnMsg" />
                     </h:inputText>
-                    <h:message for="isbn" />
+                    <h:message id="isbnMsg" for="isbn" />
                 </h:panelGroup>
 
                 <h:panelGroup rendered="#{elementController.element['class'].simpleName eq 'MagazineDto'}">
@@ -47,9 +49,11 @@
                             readonly="${elementController.elementType == null}"
                             validatorMessage="${msg['page.form.field.validation']}"
                             requiredMessage="${msg['page.form.field.required']}">
-                    <f:validateRegex pattern="([a-zA-Z0-9]{8})" />
+                        <f:ajax event="change" execute="issn" render="issnMsg" />
+                        <f:ajax event="focus" execute="issn" render="issnMsg" />
+                        <f:validateRegex pattern="([a-zA-Z0-9]{8})" />
                     </h:inputText>
-                    <h:message for="issn" />
+                    <h:message id="issnMsg" for="issn" />
                 </h:panelGroup>
 
                 <h:panelGroup rendered="#{elementController.element['class'].simpleName eq 'MagazineDto'}">
@@ -61,8 +65,11 @@
                             label="issue"
                             readonly="${elementController.elementType == null}"
                             value="${elementController.element.issue}"
-                            requiredMessage="${msg['page.form.field.required']}"/>
-                    <h:message for="issue" />
+                            requiredMessage="${msg['page.form.field.required']}">
+                        <f:ajax event="change" execute="issue" render="issueMsg" />
+                        <f:ajax event="focus" execute="issue" render="issueMsg" />
+                    </h:inputText>
+                    <h:message id="issueMsg" for="issue" />
                 </h:panelGroup>
 
                 <h:panelGroup>
@@ -73,8 +80,11 @@
                             required="true"
                             label="title"
                             value="${elementController.element.title}"
-                            requiredMessage="${msg['page.form.field.required']}"/>
-                    <h:message for="title" />
+                            requiredMessage="${msg['page.form.field.required']}">
+                        <f:ajax event="change" execute="title" render="titleMsg" />
+                        <f:ajax event="focus" execute="title" render="titleMsg" />
+                    </h:inputText>
+                    <h:message id="titleMsg" for="title" />
                 </h:panelGroup>
 
                 <h:panelGroup>
@@ -85,8 +95,11 @@
                             required="true"
                             label="publisher"
                             value="${elementController.element.publisher}"
-                            requiredMessage="${msg['page.form.field.required']}"/>
-                    <h:message for="publisher" />
+                            requiredMessage="${msg['page.form.field.required']}">
+                        <f:ajax event="change" execute="publisher" render="publisherMsg" />
+                        <f:ajax event="focus" execute="publisher" render="publisherMsg" />
+                    </h:inputText>
+                    <h:message id="publisherMsg" for="publisher" />
                 </h:panelGroup>
 
                 <h:panelGroup rendered="#{elementController.element['class'].simpleName eq 'BookDto'}">
@@ -97,8 +110,11 @@
                             required="true"
                             label="author"
                             value="${elementController.element.author}"
-                            requiredMessage="${msg['page.form.field.required']}"/>
-                    <h:message for="author" />
+                            requiredMessage="${msg['page.form.field.required']}">
+                        <f:ajax event="change" execute="author" render="authorMsg" />
+                        <f:ajax event="focus" execute="author" render="authorMsg" />
+                    </h:inputText>
+                    <h:message id="authorMsg" for="author" />
                 </h:panelGroup>
 
                 <h:panelGroup>

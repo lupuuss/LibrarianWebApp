@@ -24,8 +24,11 @@
                         label="login"
                         readonly="#{userController.loginToEdit != null}"
                         value="${userController.user.login}"
-                        requiredMessage="${msg['page.form.field.required']}"/>
-                <h:message for="login" />
+                        requiredMessage="${msg['page.form.field.required']}">
+                    <f:ajax event="change" execute="login" render="loginMsg" />
+                    <f:ajax event="focus" execute="login" render="loginMsg" />`
+                </h:inputText>
+                <h:message id="loginMsg" for="login" />
 
                 <h:outputLabel for="firstName">#{msg['page.common.name.first']}:</h:outputLabel>
                 <h:inputText
@@ -34,8 +37,12 @@
                         required="true"
                         label="firstName"
                         value="${userController.user.firstName}"
-                        requiredMessage="${msg['page.form.field.required']}"/>
-                <h:message for="firstName" />
+                        requiredMessage="${msg['page.form.field.required']}">
+                <f:ajax event="change" execute="firstName" render="firstNameMsg" />
+                <f:ajax event="focus" execute="firstName" render="firstNameMsg" />
+
+                </h:inputText>
+                <h:message id="firstNameMsg" for="firstName" />
 
                 <h:outputLabel value="#{msg['page.common.name.last']}:" for="lastName"/>
                 <h:inputText
@@ -44,8 +51,14 @@
                         required="true"
                         label="lastName"
                         value="${userController.user.lastName}"
-                        requiredMessage="${msg['page.form.field.required']}"/>
-                <h:message for="lastName" />
+                        requiredMessage="${msg['page.form.field.required']}">
+
+                    <f:ajax event="change" execute="lastName" render="lastNameMsg" />
+                    <f:ajax event="focus" execute="lastName" render="lastNameMsg" />
+
+                </h:inputText>
+
+                <h:message id="lastNameMsg" for="lastName" />
 
                 <h:outputLabel for="email">#{msg['page.common.email']}:</h:outputLabel>
                 <h:inputText
@@ -56,8 +69,11 @@
                         requiredMessage="${msg['page.form.field.required']}"
                         validatorMessage="${msg['page.form.field.incorrectValue']}">
                     <f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
+
+                    <f:ajax event="change" execute="email" render="emailMsg" />
+                    <f:ajax event="focus" execute="email" render="emailMsg" />
                 </h:inputText>
-                <h:message for="email" />
+                <h:message id="emailMsg" for="email" />
 
                 <h:outputLabel for="type">#{msg['page.users.type']}:</h:outputLabel>
                 <h:selectOneMenu
