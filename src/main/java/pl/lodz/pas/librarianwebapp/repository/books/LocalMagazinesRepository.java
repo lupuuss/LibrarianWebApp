@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @ApplicationScoped
@@ -173,7 +174,7 @@ public class LocalMagazinesRepository implements MagazinesRepository{
     }
 
     @Override
-    public Optional<MagazineCopy> findMagazineCopyByUuid(UUID uuid) {
+    public synchronized Optional<MagazineCopy> findMagazineCopyByUuid(UUID uuid) {
         return magazineCopies.stream()
                 .filter(magazineCopy -> magazineCopy.getUuid().equals(uuid))
                 .findAny()
@@ -181,16 +182,33 @@ public class LocalMagazinesRepository implements MagazinesRepository{
     }
 
 
-
-    @Override
-    public List<MagazineCopy> findMagazineCopiesByIssnContains(String query) {
+    private Stream<MagazineCopy> streamMagazineCopiesByIssnContains(String query) {
         return magazineCopies.stream()
                 .filter(magazineCopy -> findMagazineByUuid(magazineCopy.getElementUuid())
                         .orElseThrow()
                         .getIssn()
-                        .contains(query))
+                        .contains(query));
+    }
+
+    @Override
+    public synchronized List<MagazineCopy> findMagazineCopiesByIssnContains(String query) {
+        return streamMagazineCopiesByIssnContains(query)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public synchronized List<MagazineCopy> findMagazineCopiesByIssnContains(String query, int limit, int offset) {
+        return streamMagazineCopiesByIssnContains(query)
+                .skip(offset)
+                .limit(limit)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public synchronized int countMagazineCopiesByIssnContains(String query) {
+        return (int) streamMagazineCopiesByIssnContains(query).count();
+    }
+
     @Override
     public synchronized List<MagazineCopy> findMagazineCopiesByIssnAndIssueAndState(String issn, int issue, MagazineCopy.State state) {
         return findMagazineCopiesByIssnAndIssue(issn,issue)

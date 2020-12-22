@@ -77,7 +77,7 @@ input[type="button"] {
 input[type="button"]:hover,
 input[type="submit"]:hover {
 
-    background-color:#54E2BF;
+    background-color: #54e2bf;
 }
 
 input[type="button"]:active,
@@ -107,6 +107,11 @@ table {
 .data-table {
     text-align: center;
 }
+
+.current-button {
+    background-color: #dd531d !important;
+}
+
 
 td, tr {
     padding-right: 10px;

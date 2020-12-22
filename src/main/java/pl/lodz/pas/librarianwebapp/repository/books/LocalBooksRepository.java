@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class LocalBooksRepository implements BooksRepository {
@@ -226,17 +227,34 @@ public class LocalBooksRepository implements BooksRepository {
         bookCopies.remove(bookCopy);
     }
 
-    @Override
-    public synchronized List<BookCopy> findBookCopiesByIsbnContains(String query) {
-
+    private Stream<BookCopy> streamBookCopiesByIsbnContains(String query) {
         return bookCopies.stream()
                 .filter(book -> findBookByUuid(book.getElementUuid())
                         .orElseThrow()
                         .getIsbn()
                         .contains(query))
-                .map(BookCopy::copy)
+                .map(BookCopy::copy);
+    }
+
+    @Override
+    public synchronized List<BookCopy> findBookCopiesByIsbnContains(String query) {
+
+        return streamBookCopiesByIsbnContains(query)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public synchronized List<BookCopy> findBookCopiesByIsbnContains(String query, int limit, int offset) {
+         return streamBookCopiesByIsbnContains(query)
+                 .skip(offset)
+                 .limit(limit)
+                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public int countBookCopiesByIsbnContains(String query) {
+        return (int) streamBookCopiesByIsbnContains(query).count();
     }
 
     @Override

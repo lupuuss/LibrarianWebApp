@@ -14,11 +14,15 @@ import pl.lodz.pas.librarianwebapp.services.dto.BookDto;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementDto;
 import pl.lodz.pas.librarianwebapp.services.dto.MagazineDto;
+import pl.lodz.pas.librarianwebapp.services.pages.Page;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
 
 @RequestScoped
 public class ElementsService {
@@ -421,11 +425,22 @@ public class ElementsService {
             return getAllCopies();
         }
 
-        List<ElementCopyDto> copies = new ArrayList<>();
-
         var booksByIsbn =  booksRepository.findBookCopiesByIsbnContains(query);
 
-        for (var x : booksByIsbn) {
+        List<ElementCopyDto> copies = new ArrayList<>(booksToCopies(booksByIsbn));
+
+        var magazinesByIssn = magazinesRepository.findMagazineCopiesByIssnContains(query);
+
+        copies.addAll(magazinesToCopies(magazinesByIssn));
+
+        return copies;
+    }
+
+    private List<ElementCopyDto> booksToCopies(List<BookCopy> bookCopies) {
+
+        var copies = new ArrayList<ElementCopyDto>();
+
+        for (var x : bookCopies) {
 
             var book = booksRepository.findBookByUuid(x.getElementUuid()).orElseThrow();
 
@@ -434,9 +449,14 @@ public class ElementsService {
             copies.add(new ElementCopyDto(x.getNumber(), bookDto, StateUtils.mapState(x.getState())));
         }
 
-        var magazinesByIssn = magazinesRepository.findMagazineCopiesByIssnContains(query);
+        return copies;
+    }
 
-        for (var x : magazinesByIssn) {
+    private List<ElementCopyDto> magazinesToCopies(List<MagazineCopy> magazineCopies) {
+
+        var copies = new ArrayList<ElementCopyDto>();
+
+        for (var x : magazineCopies) {
             var magazine = magazinesRepository.findMagazineByUuid(x.getElementUuid()).orElseThrow();
             var magazineDto = new MagazineDto(
                     magazine.getTitle(),
@@ -449,6 +469,52 @@ public class ElementsService {
         }
 
         return copies;
+    }
+
+    public int getCopiesPagesCountByIssnIsbn(String query, int pageSize) {
+        int size = booksRepository.countBookCopiesByIsbnContains(query) +
+                   magazinesRepository.countMagazineCopiesByIssnContains(query);
+
+        return size / pageSize + ((size % pageSize == 0) ? 0 : 1);
+    }
+
+    public Page<ElementCopyDto> getCopiesPageByIssnIsbnContains(String query, int pageSize, int pageNumber) {
+        int bookCopiesCount = booksRepository.countBookCopiesByIsbnContains(query);
+        int magazinesCopiesCount = magazinesRepository.countMagazineCopiesByIssnContains(query);
+
+        int copiesCount = bookCopiesCount + magazinesCopiesCount;
+
+        int firstItemNumber = pageNumber * pageSize;
+
+        int booksNumber = min(pageSize, bookCopiesCount - firstItemNumber);
+
+        var copies = new ArrayList<ElementCopyDto>();
+
+        if (booksNumber > 0) {
+            var books = booksRepository.findBookCopiesByIsbnContains(query, pageSize, firstItemNumber);
+
+            copies.addAll(booksToCopies(books));
+        }
+
+        if (copies.size() == pageSize) {
+            return new Page<>(pageNumber, copies);
+        }
+
+        int firstMagazineItem;
+
+        if (booksNumber <= 0) {
+            firstMagazineItem = abs(booksNumber);
+        } else {
+            firstMagazineItem = 0;
+        }
+
+        var magazinesLimit = pageSize - copies.size();
+
+        var magazines = magazinesRepository.findMagazineCopiesByIssnContains(query, magazinesLimit, firstMagazineItem);
+
+        copies.addAll(magazinesToCopies(magazines));
+
+        return new Page<>(pageNumber, copies);
     }
 
     public boolean updateElement(ElementDto elementDto) {

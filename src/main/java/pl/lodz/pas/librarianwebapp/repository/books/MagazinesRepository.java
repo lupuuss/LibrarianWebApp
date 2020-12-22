@@ -1,5 +1,6 @@
 package pl.lodz.pas.librarianwebapp.repository.books;
 
+import pl.lodz.pas.librarianwebapp.repository.books.data.BookCopy;
 import pl.lodz.pas.librarianwebapp.repository.books.data.Magazine;
 import pl.lodz.pas.librarianwebapp.repository.books.data.MagazineCopy;
 import pl.lodz.pas.librarianwebapp.repository.exceptions.ObjectAlreadyExistsException;
@@ -43,4 +44,8 @@ public interface MagazinesRepository {
     Optional<MagazineCopy> findMagazineCopyByUuid(UUID uuid);
 
     List<MagazineCopy> findMagazineCopiesByIssnContains(String query);
+
+    List<MagazineCopy> findMagazineCopiesByIssnContains(String query, int limit, int offset);
+
+    int countMagazineCopiesByIssnContains(String query);
 }

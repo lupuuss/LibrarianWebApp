@@ -9,6 +9,9 @@
 
 <f:metadata>
     <f:viewParam name="query" value="#{elementsListController.query}" required="false"/>
+    <f:viewParam name="pageSize" value="#{elementsListController.pageSize}" required="false" />
+    <f:viewParam name="pageNumber" value="#{elementsListController.pageNumber}" required="false" />
+    <f:viewAction action="#{elementsListController.init}" />
 </f:metadata>
 
 <ui:composition template = "/common/template.xhtml">
@@ -24,6 +27,7 @@
                     <h:commandButton action="#{elementsListController.degradeMarkedCopies}" value="${msg['page.books.degrade']}" />
                     <h:commandButton action="#{elementsListController.removeMarkedCopies}" value="${msg['page.books.remove']}" />
                 </h:panelGroup>
+
                 <h:panelGroup>
                     <h:outputLabel for="filter">#{msg['page.books.filterByIsbnIssn']}:</h:outputLabel>
                     <h:inputText
@@ -33,11 +37,27 @@
                             label="filter"
                     />
                     <h:commandButton value="${msg['page.users.filter']}">
+                        <f:setPropertyActionListener target="#{elementsListController.pageNumber}" value="0" />
                         <f:ajax render="@form" execute="filter" />
                     </h:commandButton>
                 </h:panelGroup>
 
-                <h:dataTable styleClass="data-table" value="${elementsListController.filteredCopies}" var="copy">
+                <h:panelGroup>
+
+                    <ui:repeat value="#{elementsListController.pageSizeVariants}" var="size">
+                        <h:commandButton
+                                styleClass="#{elementsListController.pageSize == size ? 'current-button' : ''}"
+                                value="#{size}">
+                            <f:setPropertyActionListener target="#{elementsListController.pageSize}" value="#{size}" />
+                            <f:setPropertyActionListener target="#{elementsListController.pageNumber}" value="0" />
+                            <f:ajax render="@form"/>
+                        </h:commandButton>
+                    </ui:repeat>
+
+                </h:panelGroup>
+
+                <h:dataTable styleClass="data-table" value="${elementsListController.currentPage.content}" var="copy">
+
                     <h:column>
                         <f:facet name="header">${msg['page.books.ref']}</f:facet>
                         <h:outputLabel rendered="#{copy.element['class'].simpleName eq 'BookDto'}"
@@ -82,6 +102,13 @@
                     </h:column>
 
                 </h:dataTable>
+
+                <ui:repeat value="#{elementsListController.pages}" var="i">
+                    <h:commandButton styleClass="#{elementsListController.pageNumber == i ? 'current-button' : ''}" value="#{i + 1}">
+                        <f:setPropertyActionListener target="#{elementsListController.pageNumber}" value="#{i}" />
+                        <f:ajax render="@form"/>
+                    </h:commandButton>
+                </ui:repeat>
             </h:panelGrid>
         </h:form>
     </ui:define>

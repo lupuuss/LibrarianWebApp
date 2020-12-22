@@ -43,4 +43,8 @@ public interface BooksRepository {
     void deleteBookCopy(BookCopy bookCopy) throws ObjectNotFoundException;
 
     List<BookCopy> findBookCopiesByIsbnContains(String query);
+
+    List<BookCopy> findBookCopiesByIsbnContains(String query, int limit, int offset);
+
+    int countBookCopiesByIsbnContains(String query);
 }
