@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.converter;
 
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
-import pl.lodz.pas.librarianwebapp.web.ElementCopyStateI18n;
+import pl.lodz.pas.librarianwebapp.web.localization.ElementCopyStateI18n;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

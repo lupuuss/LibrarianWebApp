@@ -1,6 +1,6 @@
 package pl.lodz.pas.librarianwebapp.web.navigation;
 
-import pl.lodz.pas.librarianwebapp.web.UserTypeI18n;
+import pl.lodz.pas.librarianwebapp.web.localization.UserTypeI18n;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;

@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.converter;
 
 import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
-import pl.lodz.pas.librarianwebapp.web.UserTypeI18n;
+import pl.lodz.pas.librarianwebapp.web.localization.UserTypeI18n;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

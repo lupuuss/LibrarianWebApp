@@ -1,7 +1,7 @@
 package pl.lodz.pas.librarianwebapp.web.employees;
 
 import pl.lodz.pas.librarianwebapp.services.ElementsService;
-import pl.lodz.pas.librarianwebapp.web.ElementCopyStateI18n;
+import pl.lodz.pas.librarianwebapp.web.localization.ElementCopyStateI18n;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;

@@ -2,7 +2,7 @@ package pl.lodz.pas.librarianwebapp.web.admin;
 
 import pl.lodz.pas.librarianwebapp.services.UsersService;
 import pl.lodz.pas.librarianwebapp.services.dto.UserDto;
-import pl.lodz.pas.librarianwebapp.web.UserTypeI18n;
+import pl.lodz.pas.librarianwebapp.web.localization.UserTypeI18n;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;

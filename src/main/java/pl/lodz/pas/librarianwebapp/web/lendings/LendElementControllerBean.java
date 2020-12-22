@@ -3,7 +3,7 @@ package pl.lodz.pas.librarianwebapp.web.lendings;
 import pl.lodz.pas.librarianwebapp.services.ElementsService;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 import pl.lodz.pas.librarianwebapp.services.dto.ElementDto;
-import pl.lodz.pas.librarianwebapp.web.ElementCopyStateI18n;
+import pl.lodz.pas.librarianwebapp.web.localization.ElementCopyStateI18n;
 
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
