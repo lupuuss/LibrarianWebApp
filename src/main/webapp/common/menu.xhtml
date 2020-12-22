@@ -10,9 +10,9 @@
         <h:button value="${msg['page.menu.manage.users']}" outcome="/admin/usersList.xhtml" rendered="${request.isUserInRole('ADMINS')}"/>
         <h:button value="${msg['page.menu.manage.books']}" outcome="/employee/elementsList.xhmtl" rendered="${request.isUserInRole('EMPLOYEES')}" />
         <h:button value="${msg['page.menu.manage.lendings']}" outcome="/employee/lendings.xhtml" rendered="${request.isUserInRole('EMPLOYEES')}" />
-        <h:button value="${msg['page.menu.lendings']}" outcome="/lendings/elements.xhtml" />
-        <h:button value="${msg['page.lending.yourLendings']}" outcome="/lendings/your.xhtml" />
-        <h:button value="${msg['page.lending.cart']}" outcome="/lendings/cart.xhtml" />
+        <h:button value="${msg['page.menu.lendings']}" outcome="/lendings/elements.xhtml" rendered="${request.isUserInRole('USERS')}"/>
+        <h:button value="${msg['page.lending.yourLendings']}" outcome="/lendings/your.xhtml" rendered="${request.isUserInRole('USERS')}"/>
+        <h:button value="${msg['page.lending.cart']}" outcome="/lendings/cart.xhtml" rendered="${request.isUserInRole('USERS')}"/>
 
         <h:form>
             <h:commandButton action="#{navigationController.logout}" value="${msg['page.menu.logout']}"/>
