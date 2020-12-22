@@ -32,7 +32,9 @@
                             value="#{elementsListController.query}"
                             label="filter"
                     />
-                    <h:commandButton action="#{elementsListController.filter}" value="${msg['page.users.filter']}" />
+                    <h:commandButton value="${msg['page.users.filter']}">
+                        <f:ajax render="@form" execute="filter" />
+                    </h:commandButton>
                 </h:panelGroup>
 
                 <h:dataTable styleClass="data-table" value="${elementsListController.filteredCopies}" var="copy">

@@ -40,7 +40,9 @@
                     />
                 </h:panelGroup>
 
-                <h:commandButton action="#{lendingsManagementController.filter}" value="${msg['page.users.filter']}" />
+                <h:commandButton value="${msg['page.users.filter']}">
+                    <f:ajax render="@form" execute="elementFilter clientFilter"/>
+                </h:commandButton>
 
                 <h:dataTable styleClass="data-table" value="${lendingsManagementController.filteredLendings}" var="lending">
                     <h:column>

@@ -20,14 +20,18 @@ public class ElementsListControllerBean extends MarksController<ElementCopyDto> 
 
     private List<ElementCopyDto> copies;
 
-    private String query;
+    private String query = "";
 
     public String getQuery() {
         return query;
     }
 
     public void setQuery(String query) {
+
+        if (this.query != null && this.query.equals(query)) return;
+
         this.query = query;
+        this.copies = null;
     }
 
     public List<ElementCopyDto> getFilteredCopies() {

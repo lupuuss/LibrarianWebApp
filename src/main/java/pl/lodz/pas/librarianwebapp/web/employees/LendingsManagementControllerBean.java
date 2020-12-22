@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @ViewScoped
 public class LendingsManagementControllerBean extends MarksController<LendEventDto> implements Serializable {
 
-    private String clientQuery;
-    private String elementQuery;
+    private String clientQuery = "";
+    private String elementQuery = "";
 
     private List<LendEventDto> events;
 
@@ -29,7 +29,11 @@ public class LendingsManagementControllerBean extends MarksController<LendEventD
     }
 
     public void setClientQuery(String clientQuery) {
+
+        if (this.clientQuery != null && this.clientQuery.equals(clientQuery)) return;
+
         this.clientQuery = clientQuery;
+        events = null;
     }
 
     public String getElementQuery() {
@@ -37,7 +41,11 @@ public class LendingsManagementControllerBean extends MarksController<LendEventD
     }
 
     public void setElementQuery(String elementQuery) {
+
+        if (this.elementQuery != null && this.elementQuery.equals(elementQuery)) return;
+
         this.elementQuery = elementQuery;
+        events = null;
     }
 
     public List<LendEventDto> getFilteredLendings(){
@@ -46,6 +54,7 @@ public class LendingsManagementControllerBean extends MarksController<LendEventD
 
             return events;
         }
+
         events = service.getFilteredLendings(clientQuery, elementQuery);
 
         return events;

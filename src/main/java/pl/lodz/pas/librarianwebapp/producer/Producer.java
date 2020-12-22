@@ -28,6 +28,9 @@ public class Producer {
 
             users.add(new User("kid", "Some", "Kid",
                     "some.kid@yeet.com", User.Type.USER, true));
+
+            users.add(new User("yeet", "Yeet", "Kid",
+                    "yeet.kid@yeet.com", User.Type.USER, true));
         };
     }
 
