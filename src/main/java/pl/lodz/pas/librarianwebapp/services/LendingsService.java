@@ -338,22 +338,28 @@ public class LendingsService {
 
             var copy = getElementCopyByDto(event.getCopy());
 
+            var date = event.getLendDate()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+
             if (copy.isEmpty()) {
+
+                eventsRepository.deleteDanglingEventByDateAndUser(event.getLogin(), date);
+
                 continue;
             }
 
-            eventsRepository.deleteLendingEventByElementCopyUuidDate(
-                    copy.get().getUuid(),
-                    event.getLendDate()
-                            .toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime()
-            );
+            eventsRepository.deleteLendingEventByElementCopyUuidDate(copy.get().getUuid(), date);
         }
 
     }
 
     private Optional<ElementCopy<?>> getElementCopyByDto(ElementCopyDto copy) {
+
+        if (copy == null) {
+            return Optional.empty();
+        }
 
         if (copy.getElement() instanceof BookDto) {
             return booksRepository.findBookCopyByIsbnAndNumber(

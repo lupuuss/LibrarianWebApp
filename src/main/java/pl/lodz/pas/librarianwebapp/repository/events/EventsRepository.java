@@ -32,6 +32,8 @@ public interface EventsRepository {
 
     void deleteLendingEventByElementCopyUuidDate(UUID uuid, LocalDateTime date);
 
+    void deleteDanglingEventByDateAndUser(String login, LocalDateTime date);
+
     Optional<LendingEvent> findLendingEventByElementCopyUuidDate(UUID uuid, LocalDateTime date);
 
     void addReturnEvent(UUID lendEventUuid, LocalDateTime now, String customerLogin, UUID elementUuid) throws InconsistencyFoundException;

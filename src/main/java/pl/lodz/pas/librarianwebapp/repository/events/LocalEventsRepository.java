@@ -170,6 +170,25 @@ public class LocalEventsRepository implements EventsRepository {
     }
 
     @Override
+    public synchronized void deleteDanglingEventByDateAndUser(String login, LocalDateTime date) {
+        var event = findLendingEvents()
+                .filter(e -> e.getElementUuid() == null &&
+                        e.getCustomerLogin().equals(login) &&
+                        e.getDate().equals(date))
+                .findAny();
+
+        if (event.isEmpty()) {
+            return;
+        }
+
+        events.remove(event.get());
+
+        var returnUuid = event.get().getReturnUuid();
+
+        returnUuid.ifPresent(value -> events.removeIf(e -> e.getUuid().equals(value)));
+    }
+
+    @Override
     public synchronized Optional<LendingEvent> findLendingEventByElementCopyUuidDate(UUID uuid, LocalDateTime date) {
         return findLendingEvents()
                 .filter(e -> e.getElementUuid().equals(uuid) &&
@@ -203,7 +222,7 @@ public class LocalEventsRepository implements EventsRepository {
         events.stream()
                 .filter(e -> e instanceof ElementEvent)
                 .map(e -> (ElementEvent) e)
-                .filter(e -> e.getElementUuid().equals(uuid))
+                .filter(e -> e.getElementUuid() != null && e.getElementUuid().equals(uuid))
                 .forEach(e -> e.setElementUuid(null));
 
     }

@@ -248,6 +248,7 @@ public class ElementsService {
 
         try {
             magazinesRepository.deleteMagazineCopy(toRemove.get());
+            eventsRepository.clearDanglingReferencesFor(toRemove.get().getUuid());
         } catch (RepositoryException e) {
             e.printStackTrace();
         }
