@@ -24,8 +24,16 @@
                     <h:button outcome="element.xhtml?type=magazine" value="${msg['page.books.addmagazine']}"/>
 
                     <h:button outcome="elementCopy.xhtml" value="${msg['page.books.addelementcopy']}"/>
-                    <h:commandButton action="#{elementsListController.degradeMarkedCopies}" value="${msg['page.books.degrade']}" />
-                    <h:commandButton action="#{elementsListController.removeMarkedCopies}" value="${msg['page.books.remove']}" />
+
+                    <h:commandButton
+                            onclick="return confirmSelection('#{msg['page.warning.degrade']}')"
+                            action="#{elementsListController.degradeMarkedCopies}"
+                            value="${msg['page.books.degrade']}" />
+
+                    <h:commandButton
+                            onclick="return confirmSelection('#{msg['page.warning.delete']}')"
+                            action="#{elementsListController.removeMarkedCopies}"
+                            value="${msg['page.books.remove']}"/>
                 </h:panelGroup>
 
                 <h:panelGroup>

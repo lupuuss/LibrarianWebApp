@@ -11,8 +11,11 @@
         <h:outputScript name="js/selectAll.js" />
         <h:form>
             <h:commandButton
+                    onclick="return confirmSelection('#{msg['page.warning.delete']}')"
                     rendered="${not empty lendingsCartController.cartPositions}"
-                    action="${lendingsCartController.removeMarked()}" value="${msg['page.common.cancel']}"/>
+                    action="${lendingsCartController.removeMarked()}"
+                    value="${msg['page.common.cancel']}">
+            </h:commandButton>
             <h:dataTable styleClass="data-table"  var="lock" value="${lendingsCartController.cartPositions}">
                 <h:column>
                     <f:facet name="header">${msg['page.books.title']}</f:facet>
@@ -33,8 +36,11 @@
                 </h:column>
             </h:dataTable>
 
-            <h:commandButton rendered="${not empty lendingsCartController.cartPositions}"
-                             action="${lendingsCartController.lendElements}" value="${msg['page.books.lend']}" />
+            <h:commandButton
+                    onclick="return confirm('#{msg['page.warning.lend']}')"
+                    rendered="${not empty lendingsCartController.cartPositions}"
+                    action="${lendingsCartController.lendElements}" value="${msg['page.books.lend']}">
+            </h:commandButton>
         </h:form>
     </ui:define>
 

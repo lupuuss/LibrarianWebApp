@@ -17,8 +17,14 @@
         <h:form>
             <h:panelGrid columns="1">
                 <h:panelGroup>
-                    <h:commandButton action="#{lendingsManagementController.returnMarked}" value="${msg['page.lending.return']}"/>
-                    <h:commandButton action="#{lendingsManagementController.removeMarkedNotReturned}" value="${msg['page.lending.remove']}"/>
+                    <h:commandButton
+                            onclick="return confirmSelection('#{msg['page.warning.return']}')"
+                            action="#{lendingsManagementController.returnMarked}"
+                            value="${msg['page.lending.return']}"/>
+                    <h:commandButton
+                            onclick="return confirmSelection('#{msg['page.warning.delete']}')"
+                            action="#{lendingsManagementController.removeMarkedNotReturned}"
+                            value="${msg['page.lending.remove']}"/>
                 </h:panelGroup>
                 <h:panelGroup>
                     <h:outputLabel for="elementFilter">#{msg['page.books.filterByIsbnIssn']}:</h:outputLabel>

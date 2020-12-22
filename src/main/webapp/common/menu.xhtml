@@ -15,7 +15,10 @@
         <h:button value="${msg['page.lending.cart']}" outcome="/lendings/cart.xhtml" rendered="${request.isUserInRole('USER')}"/>
 
         <h:form>
-            <h:commandButton action="#{navigationController.logout}" value="${msg['page.menu.logout']}"/>
+            <h:commandButton
+                    onclick="return confirm('#{msg['page.warning.logout']}')"
+                    action="#{navigationController.logout}"
+                    value="${msg['page.menu.logout']}" />
         </h:form>
     </h:panelGrid>
 </html>

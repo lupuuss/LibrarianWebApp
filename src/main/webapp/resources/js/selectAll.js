@@ -7,3 +7,12 @@ function selectAll() {
         element.checked = checkbox.checked
     }
 }
+
+function confirmSelection(msg) {
+
+    const markedElements = document.querySelectorAll('.mark:checked').length
+
+    if (markedElements === 0) return false
+
+    return confirm(msg)
+}

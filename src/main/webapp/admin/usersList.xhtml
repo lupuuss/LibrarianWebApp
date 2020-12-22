@@ -18,8 +18,14 @@
                 <h:panelGroup>
                     <h:button outcome="user.xhtml" value="${msg['page.users.adduser']}"/>
 
-                    <h:commandButton action="#{usersListController.activateMarkedUsers}" value="${msg['page.users.activate']}" />
-                    <h:commandButton action="#{usersListController.deactivateMarkedUsers}" value="${msg['page.users.deactivate']}" />
+                    <h:commandButton
+                            onclick="return confirmSelection('#{msg['page.warning.activate']}')"
+                            action="#{usersListController.activateMarkedUsers}"
+                            value="${msg['page.users.activate']}"/>
+                    <h:commandButton
+                            onclick="return confirmSelection('#{msg['page.warning.deactivate']}')"
+                            action="#{usersListController.deactivateMarkedUsers}"
+                            value="${msg['page.users.deactivate']}"/>
                 </h:panelGroup>
 
                 <h:panelGroup>
