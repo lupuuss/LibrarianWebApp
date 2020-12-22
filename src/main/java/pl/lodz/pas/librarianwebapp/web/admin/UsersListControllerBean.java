@@ -16,7 +16,7 @@ public class UsersListControllerBean extends MarksController<UserDto> {
     @Inject
     private UsersService service;
 
-    private String query;
+    private String query = "";
 
     public String getQuery() {
         return query;
