@@ -11,28 +11,33 @@
 
 <h:body>
     <div id="logging">
-        <form class="login-form" action="j_security_check" method="post">
+        <h:form styleClass="login-form">
             <h:panelGrid>
                 <h1>Librarian</h1>
-                <h:outputLabel for="j_username">#{msg['page.common.login']}</h:outputLabel>
+                <h:outputLabel for="username">#{msg['page.common.login']}</h:outputLabel>
                 <h:inputText
-                        id="j_username"
+                        id="username"
                         maxlength="25"
                         required="true"
                         label="login"
+                        value="${authController.username}"
                         requiredMessage="${msg['page.form.field.required']}"
                         />
+                <h:message for="username"/>
 
-                <h:outputLabel for="j_password">#{msg['page.auth.password']}</h:outputLabel>
+                <h:outputLabel for="password">#{msg['page.auth.password']}</h:outputLabel>
                 <h:inputSecret
-                        id="j_password"
+                        id="password"
                         maxlength="25"
                         required="true"
                         label="password"
+                        value="${authController.password}"
                         requiredMessage="${msg['page.form.field.required']}"/>
-                <input id="loggin-button" type="submit" value="#{msg['page.auth.loginAction']}"/>
+                <h:message for="password"/>
+
+                <h:commandButton action="#{authController.login}" value="#{msg['page.auth.loginAction']}" />
             </h:panelGrid>
-        </form>
+        </h:form>
 
     </div>
 
