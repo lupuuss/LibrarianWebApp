@@ -35,13 +35,13 @@ public class UsersListControllerBean extends MarksController<UserDto> {
 
         service.updateUsersActive(getMarkedItems(), false);
 
-        return "usersList.xhtml?faces-redirect=true";
+        return "usersList.xhtml?faces-redirect=true&query=" + query;
     }
 
     public String activateMarkedUsers() {
         service.updateUsersActive(getMarkedItems(), true);
 
-        return "usersList.xhtml?faces-redirect=true";
+        return "usersList.xhtml?faces-redirect=true&query=" + query;
     }
 
     public String filter() {

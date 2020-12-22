@@ -64,7 +64,7 @@ public class LendingsManagementControllerBean extends MarksController<LendEventD
 
         service.removeNotReturnedLendings(getMarkedItems());
 
-        return "lendings.xhtml?faces-redirect=true";
+        return "lendings.xhtml?faces-redirect=true&" + produceParamsString();
     }
 
     public String returnMarked(){
@@ -75,12 +75,15 @@ public class LendingsManagementControllerBean extends MarksController<LendEventD
 
         service.returnLendings(itemsToReturn);
 
-        return "lendings.xhtml?faces-redirect=true";
+        return "lendings.xhtml?faces-redirect=true&" + produceParamsString();
     }
 
     public String filter() {
-        return "lendings.xhtml?faces-redirect=true" +
-                "&clientQuery=" + clientQuery +
+        return "lendings.xhtml?faces-redirect=true&" + produceParamsString();
+    }
+
+    private String produceParamsString() {
+        return "clientQuery=" + clientQuery +
                 "&elementQuery=" + elementQuery;
     }
 }
