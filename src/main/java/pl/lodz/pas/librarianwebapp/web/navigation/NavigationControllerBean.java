@@ -19,11 +19,15 @@ public class NavigationControllerBean implements Serializable {
     @Inject
     private PagesTree pagesTree;
 
-    public List<PageNode> getBreadcrumbs() {
-        var currentLocation = FacesContext
+    private String getCurrentLocation() {
+        return FacesContext
                 .getCurrentInstance()
                 .getExternalContext()
                 .getRequestServletPath();
+    }
+
+    public List<PageNode> getBreadcrumbs() {
+        var currentLocation = getCurrentLocation();
 
         var params = FacesContext.getCurrentInstance()
                 .getExternalContext()
@@ -32,6 +36,12 @@ public class NavigationControllerBean implements Serializable {
         return pagesTree.getBreadcrumbs(currentLocation, params);
     }
 
+    public String getPageTitle() {
+
+        var currentLocation = getCurrentLocation();
+
+        return pagesTree.getPageTitle(currentLocation);
+    }
 
     public String getUserName() {
         return FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();

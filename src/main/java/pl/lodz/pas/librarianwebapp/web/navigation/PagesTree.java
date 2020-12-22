@@ -120,4 +120,17 @@ public class PagesTree {
     public List<PageNode> getRootNodes() {
         return rootNodes;
     }
+
+    public String getPageTitle(String currentLocation) {
+
+        var breadcrumbs = getBreadcrumbs(currentLocation, Collections.emptyMap());
+
+        if (breadcrumbs.isEmpty()) {
+            return currentLocation;
+        }
+
+        var lastNode = breadcrumbs.get(breadcrumbs.size() - 1);
+
+        return lastNode.getName();
+    }
 }
