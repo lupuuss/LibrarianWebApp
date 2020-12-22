@@ -5,16 +5,20 @@ import pl.lodz.pas.librarianwebapp.services.dto.ElementCopyDto;
 import pl.lodz.pas.librarianwebapp.web.MarksController;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.Serializable;
 import java.util.List;
 
 @Named("elementsListController")
-@RequestScoped
-public class ElementsListControllerBean extends MarksController<ElementCopyDto> {
+@ViewScoped
+public class ElementsListControllerBean extends MarksController<ElementCopyDto> implements Serializable {
 
     @Inject
     private ElementsService elementsService;
+
+    private List<ElementCopyDto> copies;
 
     private String query;
 
@@ -26,8 +30,15 @@ public class ElementsListControllerBean extends MarksController<ElementCopyDto> 
         this.query = query;
     }
 
-    public List<ElementCopyDto> getAllCopies() {
-        return elementsService.getCopiesByIssnIsbnContains(query);
+    public List<ElementCopyDto> getFilteredCopies() {
+
+        if (copies != null) {
+            return copies;
+        }
+
+        copies = elementsService.getCopiesByIssnIsbnContains(query);
+
+        return copies;
     }
 
     public String degradeMarkedCopies() {

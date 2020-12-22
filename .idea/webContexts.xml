@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/auth/login.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/auth" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/common/menu.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/common" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/employee/addNewBook.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/employee" />
       </map>
     </option>

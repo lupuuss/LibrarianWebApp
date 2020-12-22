@@ -5,17 +5,21 @@ import pl.lodz.pas.librarianwebapp.services.dto.LendEventDto;
 import pl.lodz.pas.librarianwebapp.web.MarksController;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Named("lendingsManagementController")
-@RequestScoped
-public class LendingsManagementControllerBean extends MarksController<LendEventDto> {
+@ViewScoped
+public class LendingsManagementControllerBean extends MarksController<LendEventDto> implements Serializable {
 
     private String clientQuery;
     private String elementQuery;
+
+    private List<LendEventDto> events;
 
     @Inject
     private LendingsService service;
@@ -36,13 +40,15 @@ public class LendingsManagementControllerBean extends MarksController<LendEventD
         this.elementQuery = elementQuery;
     }
 
-    public List<LendEventDto> getLendings() {
-        return service.getAllLendings();
-    }
-
     public List<LendEventDto> getFilteredLendings(){
 
-        return service.getFilteredLendings(clientQuery, elementQuery);
+        if (events != null) {
+
+            return events;
+        }
+        events = service.getFilteredLendings(clientQuery, elementQuery);
+
+        return events;
     }
 
     public String removeMarkedNotReturned(){
