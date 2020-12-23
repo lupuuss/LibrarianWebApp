@@ -67,9 +67,12 @@ public class NavigationControllerBean implements Serializable {
 
         var role = roles
                 .filter(context::isUserInRole)
-                .findFirst()
-                .orElse("EMPTY");
+                .findFirst();
 
-        return UserTypeI18n.valueOf(role).getTranslated();
+        if (role.isEmpty()) {
+            return "-";
+        }
+
+        return UserTypeI18n.valueOf(role.get()).getTranslated();
     }
 }

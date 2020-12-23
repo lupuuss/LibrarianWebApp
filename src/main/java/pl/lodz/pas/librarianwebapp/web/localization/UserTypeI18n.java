@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public enum UserTypeI18n {
-    ADMIN, EMPLOYEE, USER, EMPTY;
+    ADMIN, EMPLOYEE, USER;
 
 
     public String getTranslated() {
@@ -22,8 +22,6 @@ public enum UserTypeI18n {
                 return bundle.getString("page.users.type.employee");
             case USER:
                 return bundle.getString("page.users.type.user");
-            case EMPTY:
-                    return " - ";
         }
 
         throw new IllegalArgumentException("Mapping not found!");
