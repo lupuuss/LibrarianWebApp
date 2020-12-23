@@ -57,6 +57,15 @@ input[type="text"] {
     margin: 5px;
 }
 
+
+.current-button {
+    background-color: #32C0AE !important;
+    text-decoration: underline !important;
+    color: #4D626B !important;
+
+}
+
+
 input[type="submit"],
 input[type="button"] {
     width: 200px;
@@ -108,9 +117,6 @@ table {
     text-align: center;
 }
 
-.current-button {
-    background-color: #dd531d !important;
-}
 
 
 td, tr {
